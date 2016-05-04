@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<!-- 只在hibernate逆向工程时，启用；平时注释 -->
+		<!-- <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+			<property name="connection.url">jdbc:mysql://123.56.125.93:3306/weixin_shop_dev</property>
+			<property name="connection.username">weixin_shop</property>
+			<property name="connection.password">weixin_shop</property>   -->
+
+		<!-- 1，数据库连接信息 -->
+		<property name="dialect">
+			org.hibernate.dialect.MySQL5InnoDBDialect
+		</property>
+		<!-- 2，其他配置 -->
+		<property name="show_sql">true</property>
+		<property name="format_sql">true</property>
+		<property name="jdbc.fetch_size">25</property>
+		<property name="jdbc.batch_size">50</property>
+		<property name="connection.release_mode">
+			after_transaction
+		</property>
+		<property name="autoReconnect">true</property>
+		<property name="autoReconnectForPools">true</property>
+		<property name="is-connection-validation-required">
+			true
+		</property>
+		<property name="transaction.coordinator_class">jdbc</property>
+		<property name="hbm2ddl.auto">none</property>
+		<!-- 3，导入映射文件,我使用的的是hibernate的注解，如果你用到是配置文件 -->
+		<!-- <mapping resource="org/pk/ssh/model/User" /> 配置文件 -->
+	</session-factory>
+</hibernate-configuration>
