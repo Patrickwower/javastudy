@@ -86,6 +86,7 @@ public class RespCode implements Serializable{
 	
 	public static String USER_NOT_XIAJI = "222";
 	public static String PARAM_EMPTY = "223";
+	public static String HEADER_PARAM_ERROR = "224";
 	
 	static{
 		respCodeMap.put(SUCESS,new RespCode(SUCESS,"操作成功"));
@@ -103,6 +104,8 @@ public class RespCode implements Serializable{
 		respCodeMap.put(NO_MORE_FOCUS,new RespCode(NO_MORE_FOCUS,"没有焦点了"));
 		respCodeMap.put(USER_NOT_XIAJI,new RespCode(USER_NOT_XIAJI,"该员工没有下级"));
 		respCodeMap.put(PARAM_EMPTY,new RespCode(PARAM_EMPTY,"参数不能为空"));
+		
+		respCodeMap.put(HEADER_PARAM_ERROR,new RespCode(HEADER_PARAM_ERROR,"请求头参数异常"));
 		
 		respCodeMap.put(USER_NOT_EXIST,new RespCode(USER_NOT_EXIST,"用户不存在"));
 		respCodeMap.put(LOGIN_PWD_ERROR,new RespCode(LOGIN_PWD_ERROR,"密码错误"));

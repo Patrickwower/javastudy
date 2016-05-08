@@ -27,7 +27,7 @@
 		<Logger name="org.springframework" level="info">
 			<AppenderRef ref="Console" />
 		</Logger>
-		<Logger name="com.longinf" level="trace"
+		<Logger name="com.dengyuecang.api" level="trace"
 			additivity="true">
 			<AppenderRef ref="running-log" />
 		</Logger>
