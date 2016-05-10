@@ -7,7 +7,7 @@ import com.dengyuecang.api.entity.Weixin;
 public class MemberRegisterRequest {
 
 	private Weixin weixin;
-	private Weibo weibo;
+	private Object weibo;
 	private Qq qq;
 	
 	private MemberInfoRequest memberInfo;
@@ -16,7 +16,7 @@ public class MemberRegisterRequest {
 		super();
 	}
 
-	public MemberRegisterRequest(Weixin weixin, Weibo weibo, Qq qq,
+	public MemberRegisterRequest(Weixin weixin, Object weibo, Qq qq,
 			MemberInfoRequest memberInfo) {
 		super();
 		this.weixin = weixin;
@@ -33,11 +33,11 @@ public class MemberRegisterRequest {
 		this.weixin = weixin;
 	}
 
-	public Weibo getWeibo() {
+	public Object getWeibo() {
 		return weibo;
 	}
 
-	public void setWeibo(Weibo weibo) {
+	public void setWeibo(Object weibo) {
 		this.weibo = weibo;
 	}
 

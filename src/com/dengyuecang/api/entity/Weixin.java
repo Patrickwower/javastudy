@@ -26,7 +26,7 @@ public class Weixin implements Serializable{
 	private String headimgurl;
 	private String language;
 	private String nickname;
-	private String openid;
+	private String openId;
 	private String unionid;
 	private Object[] privilege;
 	public Weixin() {
@@ -38,7 +38,7 @@ public class Weixin implements Serializable{
 
 	public Weixin(String id, Member member, String country, String city,
 			String province, String sex, String headimgurl, String language,
-			String nickname, String openid, String unionid) {
+			String nickname, String openId, String unionid) {
 		super();
 		this.id = id;
 		this.member = member;
@@ -49,7 +49,7 @@ public class Weixin implements Serializable{
 		this.headimgurl = headimgurl;
 		this.language = language;
 		this.nickname = nickname;
-		this.openid = openid;
+		this.openId = openId;
 		this.unionid = unionid;
 	}
 
@@ -169,14 +169,14 @@ public class Weixin implements Serializable{
 
 
 
-	public String getOpenid() {
-		return openid;
+	public String getOpenId() {
+		return openId;
 	}
 
 
 
-	public void setOpenid(String openid) {
-		this.openid = openid;
+	public void setOpenId(String openId) {
+		this.openId = openId;
 	}
 
 

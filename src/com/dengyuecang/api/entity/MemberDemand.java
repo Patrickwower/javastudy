@@ -6,30 +6,38 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="dyc_member_weibo")
-public class Weibo implements Serializable{
+@Table(name="dyc_member_demand")
+public class MemberDemand implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private String id;
+	
 	private Member member;
 	
-	private String openId;
+	private Demand demand;
 	
-	private String weibo_info;
-	
-	public Weibo() {
+	public MemberDemand() {
 		super();
 	}
-	public Weibo(String id, Member member) {
+
+	public MemberDemand(String id, Member member, Demand demand) {
 		super();
 		this.id = id;
 		this.member = member;
+		this.demand = demand;
 	}
+
 	@GenericGenerator(name = "generator", strategy = "uuid")
 	@Id
 	@GeneratedValue(generator = "generator")
@@ -38,39 +46,31 @@ public class Weibo implements Serializable{
 	public String getId() {
 		return id;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	@Transient
+
+	@OneToOne
+	@JoinColumn(name="memberId")
 	public Member getMember() {
 		return member;
 	}
+
 	public void setMember(Member member) {
 		this.member = member;
 	}
 
-	public String getOpenId() {
-		return openId;
-	}
-	public void setOpenId(String openId) {
-		this.openId = openId;
-	}
-
-	private String memberId;
-
-	public String getMemberId() {
-		return memberId;
+	@OneToOne
+	@JoinColumn(name="demandId")
+	public Demand getDemand() {
+		return demand;
 	}
 
-	public void setMemberId(String memberId) {
-		this.memberId = memberId;
+	public void setDemand(Demand demand) {
+		this.demand = demand;
 	}
-	public String getWeibo_info() {
-		return weibo_info;
-	}
-	public void setWeibo_info(String weibo_info) {
-		this.weibo_info = weibo_info;
-	}
+	
+	
 	
 }

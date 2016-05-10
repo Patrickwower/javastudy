@@ -6,30 +6,38 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="dyc_member_weibo")
-public class Weibo implements Serializable{
+@Table(name="dyc_member_function")
+public class MemberFunction implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private String id;
+	
 	private Member member;
 	
-	private String openId;
-	
-	private String weibo_info;
-	
-	public Weibo() {
+	private Function function;
+
+	public MemberFunction() {
 		super();
 	}
-	public Weibo(String id, Member member) {
+
+	public MemberFunction(String id, Member member, Function function) {
 		super();
 		this.id = id;
 		this.member = member;
+		this.function = function;
 	}
+
 	@GenericGenerator(name = "generator", strategy = "uuid")
 	@Id
 	@GeneratedValue(generator = "generator")
@@ -38,39 +46,30 @@ public class Weibo implements Serializable{
 	public String getId() {
 		return id;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	@Transient
+
+	@OneToOne
+	@JoinColumn(name="memberId")
 	public Member getMember() {
 		return member;
 	}
+
 	public void setMember(Member member) {
 		this.member = member;
 	}
 
-	public String getOpenId() {
-		return openId;
-	}
-	public void setOpenId(String openId) {
-		this.openId = openId;
-	}
-
-	private String memberId;
-
-	public String getMemberId() {
-		return memberId;
+	@OneToOne
+	@JoinColumn(name="functionId")
+	public Function getFunction() {
+		return function;
 	}
 
-	public void setMemberId(String memberId) {
-		this.memberId = memberId;
+	public void setFunction(Function function) {
+		this.function = function;
 	}
-	public String getWeibo_info() {
-		return weibo_info;
-	}
-	public void setWeibo_info(String weibo_info) {
-		this.weibo_info = weibo_info;
-	}
+	
 	
 }

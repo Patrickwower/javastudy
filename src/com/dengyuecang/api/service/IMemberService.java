@@ -14,10 +14,17 @@ public interface IMemberService extends IBaseService<Member>{
 	
 	public RespData registerAndLogin(String json,HttpHeaders headers);
 	
-	public Member register(String json,HttpHeaders headers);
+	public Member saveMember(String json,HttpHeaders headers);
 	
 	public RespData login(String json,HttpHeaders headers);
 	
-	public RespData getMemberByUserid(String memberId);
+	public Member getMemberByUserid(String memberId);
 	
+	public RespData getAllInfo(HttpHeaders headers);
+	
+	public RespData setAllInfo(HttpHeaders headers,String json);
+	
+	public RespData getBasicInfo();
+	
+	public RespData bindMobile(HttpHeaders headers, String json);
 }

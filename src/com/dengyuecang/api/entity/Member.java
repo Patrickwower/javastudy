@@ -1,6 +1,8 @@
 package com.dengyuecang.api.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -114,6 +116,36 @@ public class Member implements Serializable{
 		this.memberInfo = memberInfo;
 	}
 	
-	
+	private List<Identity> identityList = new ArrayList<Identity>();
+	private List<Demand> demandList = new ArrayList<Demand>();
+	private List<Function> functionList = new ArrayList<Function>();
+
+	@Transient
+	public List<Identity> getIdentityList() {
+		return identityList;
+	}
+
+	public void setIdentityList(List<Identity> identityList) {
+		this.identityList = identityList;
+	}
+
+	@Transient
+	public List<Demand> getDemandList() {
+		return demandList;
+	}
+
+	public void setDemandList(List<Demand> demandList) {
+		this.demandList = demandList;
+	}
+
+	@Transient
+	public List<Function> getFunctionList() {
+		return functionList;
+	}
+
+	public void setFunctionList(List<Function> functionList) {
+		this.functionList = functionList;
+	}
+
 	
 }
