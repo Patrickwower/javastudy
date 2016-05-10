@@ -147,5 +147,18 @@ public class Member implements Serializable{
 		this.functionList = functionList;
 	}
 
+	/**
+	 * 是否已反馈 0 未反馈, 1 已反馈
+	 */
+	private String ifFeedBack = "0";
+
+	@Transient
+	public String getIfFeedBack() {
+		return ifFeedBack;
+	}
+
+	public void setIfFeedBack(String ifFeedBack) {
+		this.ifFeedBack = ifFeedBack;
+	}
 	
 }

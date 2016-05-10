@@ -20,7 +20,7 @@ public class HibernateBaseDao<T extends Serializable> implements BaseDao<T> {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	private Session getSession() {
+	public Session getSession() {
 		return sessionFactory.getCurrentSession();
 	}
 

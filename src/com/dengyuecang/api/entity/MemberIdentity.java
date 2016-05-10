@@ -138,6 +138,15 @@ public class MemberIdentity implements Serializable{
 		IP = iP;
 	}
 	
-	
+//	状态: 101 正常 ， 201  废弃
+	private String status;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	
 }

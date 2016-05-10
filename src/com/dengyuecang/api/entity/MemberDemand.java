@@ -1,6 +1,7 @@
 package com.dengyuecang.api.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -71,6 +72,25 @@ public class MemberDemand implements Serializable{
 		this.demand = demand;
 	}
 	
+	private Date ctime;
 	
+	public Date getCtime() {
+		return ctime;
+	}
+
+	public void setCtime(Date ctime) {
+		this.ctime = ctime;
+	}
+	
+//	状态: 101 正常 ， 201  废弃
+	private String status;
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	
 }

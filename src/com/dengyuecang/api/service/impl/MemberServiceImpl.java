@@ -353,23 +353,29 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		
 		Member member = this.getMemberByUserid(memberId);
 		
+		
+		
 		//身份信息
 		List<Identity> identityList = 
-				identityDao.createQuery("select a from Identity a,MemberIdentity b where a.id=b.identity.id and b.member.id='"+memberId+"'").list();
+				identityDao.createQuery("select a from Identity a,MemberIdentity b where a.id=b.identity.id and b.status='101' and b.member.id='"+memberId+"'").list();
 		
 		member.setIdentityList(identityList);
 		
 		//需求信息
 		List<Demand> demandList = 
-				demandDao.createQuery("select a from Demand a,MemberDemand b where a.id=b.demand.id and b.member.id='"+memberId+"'").list();
+				demandDao.createQuery("select a from Demand a,MemberDemand b where a.id=b.demand.id and b.status='101' and b.member.id='"+memberId+"'").list();
 		
 		member.setDemandList(demandList);
 		
 		//功能信息
 		List<Function> functionList = 
-				functionDao.createQuery("select a from Function a,MemberFunction b where a.id=b.function.id and b.member.id='"+memberId+"'").list();
+				functionDao.createQuery("select a from Function a,MemberFunction b where a.id=b.function.id and b.status='101' and b.member.id='"+memberId+"'").list();
 		
 		member.setFunctionList(functionList);
+		
+		if (identityList.size()>0) {
+			member.setIfFeedBack("1");
+		}
 		
 		return RespCode.getRespData(RespCode.SUCESS,member);
 		
@@ -412,6 +418,9 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		
 		List<Identity> iList = new ArrayList<Identity>();
 		try {
+			
+			memberIdentityDao.createQuery("update MemberIdentity a set a.status=201 where a.member.id='"+member.getId()+"' ").executeUpdate();
+			
 			for (IdentityRequest identity : idenList) {
 				
 				Identity iden = (Identity) identityDao.createQuery("from Identity a where a.name='"+identity.getName()+"'").uniqueResult();
@@ -430,18 +439,15 @@ public class MemberServiceImpl extends BaseService<Member> implements
 				identityDao.saveOrUpdate(iden);
 				iList.add(iden);
 				
-				MemberIdentity mi = (MemberIdentity) memberIdentityDao.createQuery("from MemberIdentity a where a.identity='"+iden.getId()+"' and a.member.id='"+member.getId()+"' ").uniqueResult();
-			
-				if (mi!=null) {
-					
-				}else {
-					mi = new MemberIdentity();
-					
-					mi.setIdentity(iden);
-					mi.setMember(member);
-					
-				}
 				
+				
+//				MemberIdentity mi = (MemberIdentity) memberIdentityDao.createQuery("from MemberIdentity a where a.identity='"+iden.getId()+"' and a.member.id='"+member.getId()+"' ").uniqueResult();
+			
+				MemberIdentity mi = new MemberIdentity();
+				
+				mi.setIdentity(iden);
+				mi.setMember(member);
+				mi.setStatus("101");
 				mi.setCity(identity.getCity());
 				mi.setCtime(new Date());
 				mi.setIP("");
@@ -465,6 +471,9 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		
 		List<Demand> dList = new ArrayList<Demand>();
 		try {
+			
+			memberDemandDao.createQuery("update MemberDemand a set a.status=201 where a.member.id='"+member.getId()+"' ").executeUpdate();
+			
 			for (DemandRequest demand : demandList) {
 				
 				Demand d = (Demand) demandDao.createQuery("from Demand a where a.name='"+demand.getName()+"'").uniqueResult();
@@ -483,17 +492,13 @@ public class MemberServiceImpl extends BaseService<Member> implements
 				demandDao.saveOrUpdate(d);
 				dList.add(d);
 				
-				MemberDemand md = (MemberDemand) memberDemandDao.createQuery("from MemberDemand a where a.demand='"+d.getId()+"' and a.member.id='"+member.getId()+"' ").uniqueResult();
-			
-				if (md!=null) {
+				MemberDemand md  = new MemberDemand();
 					
-				}else {
-					md = new MemberDemand();
+				md.setDemand(d);
+				md.setMember(member);
 					
-					md.setDemand(d);
-					md.setMember(member);
-					
-				}
+				md.setCtime(new Date());
+				md.setStatus("101");
 				
 				memberDemandDao.saveOrUpdate(md);
 				
@@ -515,6 +520,9 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		
 		List<Function> fList = new ArrayList<Function>();
 		try {
+			
+			memberFunctionDao.createQuery("update MemberFunction a set a.status=201 where a.member.id='"+member.getId()+"' ").executeUpdate();
+			
 			for (FunctionRequest function : functionList) {
 				
 				Function f = (Function) functionDao.createQuery("from Function a where a.name='"+function.getName()+"'").uniqueResult();
@@ -533,17 +541,12 @@ public class MemberServiceImpl extends BaseService<Member> implements
 				functionDao.saveOrUpdate(f);
 				fList.add(f);
 				
-				MemberFunction mf = (MemberFunction) memberFunctionDao.createQuery("from MemberFunction a where a.function='"+f.getId()+"' and a.member.id='"+member.getId()+"' ").uniqueResult();
-			
-				if (mf!=null) {
+				MemberFunction mf = new MemberFunction();
 					
-				}else {
-					mf = new MemberFunction();
-					
-					mf.setFunction(f);
-					mf.setMember(member);
-					
-				}
+				mf.setFunction(f);
+				mf.setMember(member);
+				mf.setCtime(new Date());
+				mf.setStatus("101");
 				
 				memberFunctionDao.saveOrUpdate(mf);
 				
@@ -561,13 +564,13 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		
 		Map<String, List> datas = new HashMap<String, List>();
 		
-		List<Identity> identityList = identityDao.createQuery("SELECT	a FROM	Identity a LEFT JOIN MemberIdentity b ON a.id = b.identity.id GROUP BY	a.id order by count(b.id) DESC").list();
+		List<Identity> identityList = identityDao.createQuery("SELECT	a FROM	Identity a LEFT JOIN MemberIdentity b ON a.id = b.identity.id and a.status='1' GROUP BY	a.id order by count(b.id) DESC").list();
 		datas.put("identity",identityList);
 		
-		List<Demand> demandList = demandDao.createQuery("SELECT	a FROM	Identity a LEFT JOIN MemberDemand b ON a.id = b.demand.id GROUP BY	a.id order by count(b.id) DESC").list();
+		List<Demand> demandList = demandDao.createQuery("SELECT	a FROM	Identity a LEFT JOIN MemberDemand b ON a.id = b.demand.id and a.status='1' GROUP BY	a.id order by count(b.id) DESC").list();
 		datas.put("demand",demandList);
 		
-		List<Function> functionList = functionDao.createQuery("SELECT	a FROM	Function a LEFT JOIN MemberFunction b ON a.id = b.function.id GROUP BY	a.id order by count(b.id) DESC").list();
+		List<Function> functionList = functionDao.createQuery("SELECT	a FROM	Function a LEFT JOIN MemberFunction b ON a.id = b.function.id and a.status='1' GROUP BY	a.id order by count(b.id) DESC").list();
 		datas.put("function",functionList);
 		
 		
@@ -606,6 +609,13 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		
 		memberInfoDao.saveOrUpdate(info);
 		
+	}
+
+	private String getCurrentMemberNum(){
+		
+		
+		
+		return null;
 	}
 	
 }

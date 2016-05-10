@@ -2,6 +2,8 @@ package com.dengyuecang.api.controller;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,8 @@ import com.dengyuecang.api.utils.RespData;
 @RestController
 @RequestMapping("/member")
 public class MemberController {
+	
+	Logger log = LoggerFactory.getLogger(MemberController.class);
 	
 	@Resource
 	private IMemberService memberServiceImpl;
@@ -98,8 +102,8 @@ public class MemberController {
 	 */
 	@RequestMapping(value="/memberInfo",method=RequestMethod.POST)
 	@ResponseBody
-	public RespData getAllMemberInfo(@RequestHeader HttpHeaders headers){
-		
+	public RespData getAllMemberInfo(@RequestHeader HttpHeaders headers,String abc){
+		log.info("这是入参abc:"+abc);
 		RespData resp = RespCode.getRespData(RespCode.HEADER_PARAM_ERROR);
 		
 		String headCheck = HeaderUtils.checkHeader(headers,false);
