@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 import net.sf.json.JSONObject;
 
+import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
@@ -111,15 +112,18 @@ public class MemberServiceImpl extends BaseService<Member> implements
 			Object weibo_obj = request.getWeibo();
 			Qq qq = request.getQq();
 
+			boolean flag = false;
+			
 			//weixin
 			if (weixin != null) {
 				
-				Member m = getMemberByUniqueIdAndChannel(weixin.getOpenId(),CommonConstant.REGISTER_CHANNEL_WEIXIN);
+				Member m = getMemberByUniqueIdAndChannel(infoRequest.getOpenId(),CommonConstant.REGISTER_CHANNEL_WEIXIN);
 				if (m!=null) {
 					return m;
 				}
 				weixinDao.save(weixin);
 				info.setCreateChannel(CommonConstant.REGISTER_CHANNEL_WEIXIN);
+				flag = true;
 			}
 
 			//qq
@@ -131,6 +135,7 @@ public class MemberServiceImpl extends BaseService<Member> implements
 				qq.setOpenId(infoRequest.getOpenId());
 				qqDao.save(qq);
 				info.setCreateChannel(CommonConstant.REGISTER_CHANNEL_QQ);
+				flag = true;
 			}
 
 			//weibo
@@ -145,6 +150,7 @@ public class MemberServiceImpl extends BaseService<Member> implements
 				weibo.setOpenId(infoRequest.getOpenId());
 				weiboDao.save(weibo);
 				info.setCreateChannel(CommonConstant.REGISTER_CHANNEL_WEIBO);
+				flag = true;
 			}
 
 			//app
@@ -168,17 +174,21 @@ public class MemberServiceImpl extends BaseService<Member> implements
 				info.setCreateTime(new Date());
 				
 				memberInfoDao.save(info);
+				flag = true;
 			}
 
 			Member member = new Member();
-			member.setMemberInfo(info);
-			member.setPwd(infoRequest.getPwd());
-			member.setWeixin(weixin);
-			member.setWeibo(weibo);
-			member.setQq(qq);
-			memberDao.save(member);
+			
+			if (flag) {
+				member.setMemberInfo(info);
+				member.setPwd(infoRequest.getPwd());
+				member.setWeixin(weixin);
+				member.setWeibo(weibo);
+				member.setQq(qq);
+				memberDao.save(member);				
+				return member;
+			}
 
-			return member;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -337,13 +347,31 @@ public class MemberServiceImpl extends BaseService<Member> implements
 	@Override
 	public RespData registerAndLogin(String json, HttpHeaders headers) {
 		
+		JSONObject jsonObject = JsonUtils.toJSONObject(json);
+		
+		MemberRegisterRequest request = JsonUtils.toBean(jsonObject, MemberRegisterRequest.class);
+		
+		if (request!=null) {
+			MemberInfoRequest infoRequest = request.getMemberInfo();
+			
+			if (infoRequest!=null&&infoRequest.getMobile()!=null) {
+				Member member = this.getMemberByUniqueIdAndChannel(infoRequest.getMobile(), CommonConstant.REGISTER_CHANNEL_APP);
+				
+				if (member!=null) {
+					return RespCode.getRespData(RespCode.REG_MOBILE_EXISTS,"该手机已注册，请登录");
+				}
+			}
+		}
+		
+		
+		
 		Member member = this.saveMember(json, headers);
 		
 		if (member!=null) {
 			return RespCode.getRespData(RespCode.SUCESS,member);
 		}
 		
-		return RespCode.getRespData(RespCode.ERROR);
+		return RespCode.getRespData(RespCode.JSON_ERROR);
 	}
 
 	@Override
@@ -408,6 +436,10 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		member = this.saveDemand(request, member, headers);
 		
 		member = this.saveFunction(request, member, headers);
+		
+		if (member.getIdentityList().size()>0) {
+			member.setIfFeedBack("1");
+		}
 		
 		return RespCode.getRespData(RespCode.SUCESS,member);
 	}
@@ -587,6 +619,10 @@ public class MemberServiceImpl extends BaseService<Member> implements
 			
 			String mobile = (String)jsonObject.get("mobile");
 			
+			if (ifMobileExist(mobile)) {
+				return RespCode.getRespData(RespCode.REG_MOBILE_EXISTS,"该手机号码已绑定其他账号，请更换其他手机号码");
+			}
+			
 			this.updateMobile(memberId, mobile);
 			
 			return RespCode.getRespData(RespCode.SUCESS,mobile);
@@ -597,6 +633,21 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		
 		
 		return RespCode.getRespData(RespCode.ERROR);
+	}
+	
+	private boolean ifMobileExist(String mobile){
+		
+		Query q = memberInfoDao.createQuery("from MemberInfo a where a.mobile=?");
+		
+		q.setString(0,mobile);
+		
+		MemberInfo memberInfo = (MemberInfo)q.uniqueResult();
+		
+		if (memberInfo!=null) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	private void updateMobile(String memberId,String mobile){
