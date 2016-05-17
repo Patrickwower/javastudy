@@ -23,9 +23,11 @@ import com.dengyuecang.api.entity.MemberFunction;
 import com.dengyuecang.api.entity.MemberIdentity;
 import com.dengyuecang.api.entity.MemberInfo;
 import com.dengyuecang.api.entity.Qq;
+import com.dengyuecang.api.entity.StaticResource;
 import com.dengyuecang.api.entity.Weibo;
 import com.dengyuecang.api.entity.Weixin;
 import com.dengyuecang.api.service.IMemberService;
+import com.dengyuecang.api.service.IStaticResourceService;
 import com.dengyuecang.api.service.common.CommonConstant;
 import com.dengyuecang.api.service.model.DemandRequest;
 import com.dengyuecang.api.service.model.FunctionRequest;
@@ -77,7 +79,12 @@ public class MemberServiceImpl extends BaseService<Member> implements
 	@Resource(name = "hibernateBaseDao")
 	private BaseDao<MemberFunction> memberFunctionDao;
 	
+	@Resource(name = "hibernateBaseDao")
+	private BaseDao<StaticResource> staticResourceDao;
 
+	@Resource
+	private IStaticResourceService staticResourceServiceImpl;
+	
 	@Override
 	public List<Member> queryAll() {
 
@@ -185,7 +192,10 @@ public class MemberServiceImpl extends BaseService<Member> implements
 				member.setWeixin(weixin);
 				member.setWeibo(weibo);
 				member.setQq(qq);
-				memberDao.save(member);				
+				memberDao.save(member);
+				
+				
+				
 				return member;
 			}
 
@@ -403,6 +413,9 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		
 		if (identityList.size()>0) {
 			member.setIfFeedBack("1");
+		}
+		if (member.getMemberInfo().getQr()==null) {
+			staticResourceServiceImpl.saveQr(member.getId());			
 		}
 		
 		return RespCode.getRespData(RespCode.SUCESS,member);
@@ -662,11 +675,82 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		
 	}
 
-	private String getCurrentMemberNum(){
+	@Override
+	public RespData updateHead(String imgId, HttpHeaders headers) {
+		// TODO Auto-generated method stub
+		
+		StaticResource sr = staticResourceDao.get(StaticResource.class, imgId);
+		
+		if (sr!=null) {
+			
+			String memberId = headers.getFirst("memberId");
+			
+			updateHead(memberId, sr.getUrlPath(),imgId);
+			
+			return RespCode.getRespData(RespCode.SUCESS,"头像修改成功");
+		}
 		
 		
+		
+		return RespCode.getRespData(RespCode.ERROR,"头像修改失败");
+	}
+
+	private void updateHead(String memberId,String imgPath,String imgId){
+		
+		Member member = memberDao.get(Member.class, memberId);
+		
+		MemberInfo info = member.getMemberInfo();
+		
+		info.setIcon(imgPath);
+		
+		info.setImgId(imgId);
+		
+		memberInfoDao.saveOrUpdate(info);
+		
+	}
+	
+	@Override
+	public RespData updateNickname(HttpHeaders headers, String nickname) {
+		
+		try {
+			
+			String memberId = headers.getFirst("memberId");
+			
+			this.updateNickname(memberId, nickname);
+			
+			return RespCode.getRespData(RespCode.SUCESS,"昵称修改成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return RespCode.getRespData(RespCode.ERROR,"昵称修改失败");
+	}
+	
+	private void updateNickname(String memberId,String nickname){
+		
+		Member member = memberDao.get(Member.class, memberId);
+		
+		MemberInfo info = member.getMemberInfo();
+		
+		info.setNickname(nickname);
+		
+		memberInfoDao.saveOrUpdate(info);
+		
+	}
+
+	@Override
+	public String updateQr(String memberId, String img_source, String realPath) {
+		
+		
+		
+		
+		
+		if (img_source!=null) {
+			
+		}
 		
 		return null;
 	}
+	
 	
 }

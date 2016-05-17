@@ -18,6 +18,11 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name="dyc_member_info")
 public class MemberInfo implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private String id;
 	
 	private Member member;
@@ -33,6 +38,12 @@ public class MemberInfo implements Serializable{
 	private String nickname;
 	
 	private String icon;
+	
+	private String imgId;
+	
+	private String qr;
+	
+	private String qrId;
 	
 	private String gender;
 	
@@ -132,6 +143,30 @@ public class MemberInfo implements Serializable{
 
 	public void setIcon(String icon) {
 		this.icon = icon;
+	}
+
+	public String getImgId() {
+		return imgId;
+	}
+
+	public void setImgId(String imgId) {
+		this.imgId = imgId;
+	}
+
+	public String getQr() {
+		return qr;
+	}
+
+	public void setQr(String qr) {
+		this.qr = qr;
+	}
+
+	public String getQrId() {
+		return qrId;
+	}
+
+	public void setQrId(String qrId) {
+		this.qrId = qrId;
 	}
 
 	public String getGender() {

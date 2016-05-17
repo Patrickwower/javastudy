@@ -27,4 +27,10 @@ public interface IMemberService extends IBaseService<Member>{
 	public RespData getBasicInfo();
 	
 	public RespData bindMobile(HttpHeaders headers, String json);
+
+	public RespData updateHead(String imgId,HttpHeaders headers);
+	
+	public RespData updateNickname(HttpHeaders headers,String nickname);
+
+	public String updateQr(String memberId,String img_source, String realPath);
 }

@@ -136,6 +136,47 @@ public class MemberController {
 		
 	}
 	
+	/**
+	 * 修改昵称
+	 */
+	@RequestMapping(value="/updateNickname",method=RequestMethod.POST)
+	@ResponseBody
+	public RespData updateNickname(@RequestHeader HttpHeaders headers, String nickname){
+		
+		RespData resp = RespCode.getRespData(RespCode.ERROR);
+		
+		String headCheck = HeaderUtils.checkHeader(headers,false);
+		
+		if (!"ok".equals(headCheck)) {
+			resp = RespCode.getRespData(RespCode.HEADER_PARAM_ERROR);
+			resp.setData(headCheck);
+			return resp;
+		}
+		
+		return memberServiceImpl.updateNickname(headers, nickname);	
+		
+	}
+	
+	/**
+	 * 修改头像
+	 */
+	@RequestMapping(value="/updateHead",method=RequestMethod.POST)
+	@ResponseBody
+	public RespData updateHead(@RequestHeader HttpHeaders headers, String imgId){
+		
+		RespData resp = RespCode.getRespData(RespCode.ERROR);
+		
+		String headCheck = HeaderUtils.checkHeader(headers,false);
+		
+		if (!"ok".equals(headCheck)) {
+			resp = RespCode.getRespData(RespCode.HEADER_PARAM_ERROR);
+			resp.setData(headCheck);
+			return resp;
+		}
+		
+		return memberServiceImpl.updateHead(imgId,headers);	
+		
+	}
 	
 	
 }
