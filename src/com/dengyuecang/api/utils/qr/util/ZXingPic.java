@@ -211,7 +211,7 @@ public class ZXingPic {
 			// 开始利用二维码数据创建Bitmap图片，分别设为黑（0xFFFFFFFF）白（0xFF000000）两色
 			for (int x = 0; x < w; x++) {
 				for (int y = 0; y < h; y++) {
-					image.setRGB(x, y, bm.get(x, y) ? 0xFF000000 : 0xFFCCDDEE);
+					image.setRGB(x, y, bm.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
 				}
 			}
 		} catch (WriterException e) {
@@ -251,10 +251,10 @@ public class ZXingPic {
 			int h = bm.getHeight();
 			image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 			
-			// 开始利用二维码数据创建Bitmap图片，分别设为黑（0xFFFFFFFF）白（0xFF000000）两色
+			// 开始利用二维码数据创建Bitmap图片，分别设为白（0xFFFFFFFF）黑（0xFF000000）两色
 			for (int x = 0; x < w; x++) {
 				for (int y = 0; y < h; y++) {
-					image.setRGB(x, y, bm.get(x, y) ? 0xFF000000 : 0xFFCCDDEE);
+					image.setRGB(x, y, bm.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
 				}
 			}
 			ImageIO.write(image, "jpeg", outFile);
@@ -277,6 +277,7 @@ public class ZXingPic {
 		hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
 		// 设置编码方式
 		hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+		hints.put(EncodeHintType.MARGIN, 1);
 		return hints;
 	}
 

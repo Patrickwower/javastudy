@@ -40,6 +40,7 @@ public class Qq implements Serializable{
 	private String figureurl_qq_1;
 	private String figureurl_qq_2;
 	
+	private String qq_info;
 	
 	public Qq() {
 		super();
@@ -211,6 +212,12 @@ public class Qq implements Serializable{
 
 	public void setMemberId(String memberId) {
 		this.memberId = memberId;
+	}
+	public String getQq_info() {
+		return qq_info;
+	}
+	public void setQq_info(String qq_info) {
+		this.qq_info = qq_info;
 	}
 	
 	

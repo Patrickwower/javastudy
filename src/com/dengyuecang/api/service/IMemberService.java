@@ -20,7 +20,7 @@ public interface IMemberService extends IBaseService<Member>{
 	
 	public Member getMemberByUserid(String memberId);
 	
-	public RespData getAllInfo(HttpHeaders headers);
+	public RespData allInfo(HttpHeaders headers);
 	
 	public RespData setAllInfo(HttpHeaders headers,String json);
 	
@@ -32,5 +32,4 @@ public interface IMemberService extends IBaseService<Member>{
 	
 	public RespData updateNickname(HttpHeaders headers,String nickname);
 
-	public String updateQr(String memberId,String img_source, String realPath);
 }

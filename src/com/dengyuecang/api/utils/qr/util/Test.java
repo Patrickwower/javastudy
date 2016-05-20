@@ -15,7 +15,7 @@ public class Test {
 		
 		String source_img = "dyc.jpg";
 		
-		String content = "登月舱舱证码:dyc_100000001";
+		String content = "http://fir.im/dengyuecang";
 		
 		
 		try {

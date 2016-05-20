@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>My JSP 'index.jsp' starting page</title>
+    <title>正在跳转。。。</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -21,7 +21,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-   我是登月人员，编号:${memberId }，正在准备登录。。。。。。。。<br>
+   我是登月人员，编号:${memberId }，正在准备登陆。。。。。。。。<br>
   </body>
   <script type="text/javascript">
   	window.open("http://fir.im/dengyuecang","_self");

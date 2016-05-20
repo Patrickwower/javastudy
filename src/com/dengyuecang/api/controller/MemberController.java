@@ -113,7 +113,7 @@ public class MemberController {
 			return resp;
 		}
 		
-		return memberServiceImpl.getAllInfo(headers);	
+		return memberServiceImpl.allInfo(headers);	
 	}
 	
 	/**

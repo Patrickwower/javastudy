@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -188,7 +189,7 @@ public class MemberServiceImpl extends BaseService<Member> implements
 			
 			if (flag) {
 				member.setMemberInfo(info);
-				member.setPwd(infoRequest.getPwd());
+				member.setPwd(infoRequest.getPwd()==null?"":infoRequest.getPwd());
 				member.setWeixin(weixin);
 				member.setWeibo(weibo);
 				member.setQq(qq);
@@ -385,7 +386,7 @@ public class MemberServiceImpl extends BaseService<Member> implements
 	}
 
 	@Override
-	public RespData getAllInfo(HttpHeaders headers) {
+	public RespData allInfo(HttpHeaders headers) {
 		
 		String memberId = headers.getFirst("memberId");
 		
@@ -413,9 +414,19 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		
 		if (identityList.size()>0) {
 			member.setIfFeedBack("1");
+			
+			Query q = memberIdentityDao.createQuery("select b from MemberIdentity b where b.status='101' and b.member.id='"+memberId+"' order by b.ctime desc");
+			
+			q.setFirstResult(0);
+			q.setMaxResults(0);
+			
+			MemberIdentity mi = (MemberIdentity)q.uniqueResult();
+			
+			member.setCity(mi.getCity());
+			member.setOrganization(mi.getOrganization());
 		}
-		if (member.getMemberInfo().getQr()==null) {
-			staticResourceServiceImpl.saveQr(member.getId());			
+		if (StringUtils.isEmpty(member.getMemberInfo().getQr())) {
+			staticResourceServiceImpl.saveQr(member.getId());
 		}
 		
 		return RespCode.getRespData(RespCode.SUCESS,member);
@@ -686,8 +697,14 @@ public class MemberServiceImpl extends BaseService<Member> implements
 			String memberId = headers.getFirst("memberId");
 			
 			updateHead(memberId, sr.getUrlPath(),imgId);
+			//?为什么不行
+//			return RespCode.getRespData(RespCode.SUCESS,new HashMap<String,String>().put("urlPath", sr.getUrlPath()));
 			
-			return RespCode.getRespData(RespCode.SUCESS,"头像修改成功");
+			Map<String, String> result = new HashMap<String,String>();
+			
+			result.put("urlPath", sr.getUrlPath());
+			
+			return RespCode.getRespData(RespCode.SUCESS,result);
 		}
 		
 		
@@ -738,19 +755,5 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		
 	}
 
-	@Override
-	public String updateQr(String memberId, String img_source, String realPath) {
-		
-		
-		
-		
-		
-		if (img_source!=null) {
-			
-		}
-		
-		return null;
-	}
-	
 	
 }

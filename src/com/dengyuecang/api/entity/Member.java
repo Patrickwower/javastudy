@@ -161,4 +161,27 @@ public class Member implements Serializable{
 		this.ifFeedBack = ifFeedBack;
 	}
 	
+	//城市
+	private String city;
+	//组织
+	private String organization;
+
+	@Transient
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	@Transient
+	public String getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(String organization) {
+		this.organization = organization;
+	}
+	
 }

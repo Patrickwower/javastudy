@@ -257,10 +257,12 @@ public class StaticResourceImpl extends BaseService<StaticResource> implements I
 		
 		Member member = memberDao.get(Member.class, memberId);
 		
-		member.getMemberInfo().setQr(sr.getUrlPath());
-		member.getMemberInfo().setQrId(sr.getId());
+		MemberInfo info = member.getMemberInfo();
 		
-		infoDao.save(member.getMemberInfo());
+		info.setQr(sr.getUrlPath());
+		info.setQrId(sr.getId());
+		
+		infoDao.saveOrUpdate(info);
 		
 	}
 	
