@@ -1,8 +1,10 @@
 package com.dengyuecang.api.utils;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -187,43 +189,82 @@ public class ImgUtils {
 //	    }
 
 	
+	    
+	    public static final void overlapImage(String bigPath, String smallPath) {
+	    	try {
+	    		BufferedImage big = ImageIO.read(new File(bigPath));
+	    		BufferedImage small = ImageIO.read(new File(smallPath));
+	    		Graphics2D g = big.createGraphics();
+	    		int x = (big.getWidth() - small.getWidth()) / 2;
+	    		int y = (big.getHeight() - small.getHeight()) / 2;
+	    		g.drawImage(small, x, y, small.getWidth(), small.getHeight(), null);
+	    		g.dispose();
+	    		ImageIO.write(big, "jpg", new File("/Users/acang/Downloads/BigSmall.jpg"));
+	    	} catch (Exception e) {
+	    		e.printStackTrace();
+	    	}
+	    }
     
     public static void createImage(int width, int height) throws IOException{
     	
-        BufferedImage src = ImageIO.read(new File("/Users/acang/Downloads/2531170_150741007350_2.jpg"));
+        BufferedImage src = ImageIO.read(new File("/Users/acang/Downloads/982e521d-5297-46fb-97ed-82064f7ce5da.png"));
         
-        BufferedImage tag = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);  
+        BufferedImage tag = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_INT_RGB);  
         //绘制放大后的图片
-        tag.getGraphics().drawImage(src, 0, 0, width, height, null);  
+        tag.getGraphics().drawImage(src, 0, 0, src.getWidth(), src.getHeight(), null);  
         
+//        tag.getGraphics().drawImage(src.getScaledInstance(440, (int) 100,  Image.SCALE_SMOOTH), 0, 0,  null);  
         
-        Iterator<ImageWriter> it = ImageIO.getImageWritersByFormatName("png");
+        Iterator<ImageWriter> it = ImageIO.getImageWritersByFormatName("jpg");
         ImageWriter writer = it.next();
-        File f = new File("/Users/acang/Downloads/test02.png");
+        File f = new File("/Users/acang/Downloads/test02.jpg");
         ImageOutputStream ios = ImageIO.createImageOutputStream(f);
         writer.setOutput(ios);
         
         writer.write(tag);
     }
-	
-    public static final void overlapImage(String bigPath, String smallPath) {
-        try {
-          BufferedImage big = ImageIO.read(new File(bigPath));
-          BufferedImage small = ImageIO.read(new File(smallPath));
-          Graphics2D g = big.createGraphics();
-          int x = (big.getWidth() - small.getWidth()) / 2;
-          int y = (big.getHeight() - small.getHeight()) / 2;
-          g.drawImage(small, x, y, small.getWidth(), small.getHeight(), null);
-          g.dispose();
-          ImageIO.write(big, "jpg", new File("/Users/acang/Downloads/BigSmall.jpg"));
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
-      }
+    
+//    public static void ZoomTheImage(String fileUrl, String newUrl, int width,  
+//            int height) {  
+//        java.io.File file = new java.io.File(fileUrl); // 读入刚才上传的文件  
+//        Image src = null;  
+//        try {  
+//            src = javax.imageio.ImageIO.read(file);  
+//            // 构造Image对象  
+//            BufferedImage tag = new BufferedImage(width, height,  
+//                    BufferedImage.TYPE_INT_RGB);  
+//            // tag.getGraphics().drawImage(src, 0, 0, width, height, null); //  
+//            // 绘制缩小后的图  
+//            tag.getGraphics().drawImage(  
+//                    src.getScaledInstance(width, height, Image.SCALE_SMOOTH),  
+//                    0, 0, null);  
+//            FileOutputStream newimage = new FileOutputStream(newUrl); // 输出到文件流  
+//            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(newimage);  
+//            JPEGEncodeParam jep = JPEGCodec.getDefaultJPEGEncodeParam(tag);  
+//            jep.setQuality((float) 1.0, true);  
+//            encoder.encode(tag, jep);  
+//            newimage.close();  
+//        } catch (Exception e) {  
+//            e.printStackTrace();  
+//        }  
+//    }  
      
+    public static void main(String[] args) {
+		
+    	
+    	try {
+			ImgUtils.createImage(100, 100);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	
+	}
+    
       /** the main method */
-      public static final void main(String[] args) {
-        overlapImage("/Users/acang/Downloads/2531170_150741007350_2.jpg", "/Users/acang/Downloads/100.jpeg");
-      }
+//      public static final void main(String[] args) {
+//        overlapImage("/Users/acang/Downloads/2531170_150741007350_2.jpg", "/Users/acang/Downloads/100.jpeg");
+//      }
 	
 }

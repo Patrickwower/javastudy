@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpHeaders;
 
-import com.dengyuecang.api.controller.members.model.MemberRegisterRequest;
+import com.dengyuecang.api.controller.members.model.request.MemberRegisterRequest;
 import com.dengyuecang.api.entity.Member;
 import com.dengyuecang.api.utils.RespData;
 import com.longinf.lxcommon.service.IBaseService;
@@ -73,4 +73,8 @@ public interface IMembersService extends IBaseService<Member>{
 	 */
 	public RespData updateQr(String memberId);
 	
+	/**
+	 * 验证memberToken
+	 */
+	public RespData checkToken(HttpServletRequest request);
 }

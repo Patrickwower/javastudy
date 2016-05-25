@@ -333,6 +333,8 @@ public class MemberServiceImpl extends BaseService<Member> implements
 			
 			if (member!=null) {
 				return RespCode.getRespData(RespCode.SUCESS,member);
+			}else {
+				return RespCode.getRespData(RespCode.LOGIN_PWD_ERROR,"用户不存在或密码错误");
 			}
 			
 		}else {

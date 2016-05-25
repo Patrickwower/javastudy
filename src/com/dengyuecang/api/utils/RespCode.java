@@ -19,9 +19,74 @@ public class RespCode implements Serializable{
 		this.msg=msg;
 	}
 	
+	//头部类
+	
+	public static String HEADER_DEVICE_AGENT_NEEDED = "102";
+	
+	public static String HEADER_DEVICE_TYPE_NEEDED = "103";
+	
+	public static String HEADER_DEVICE_VERSION_NEEDED = "104";
+	
+	public static String HEADER_DEVICE_ID_NEEDED = "105";
+	
+	public static String HEADER_CHANNEL_NEEDED = "106";
+	
+	public static String HEADER_VERSION_NEEDED = "107";
+	
+	public static String HEADER_MEMBERID_NEEDED = "108";
+	
+	public static String HEADER_MEMBERTOKEN_NEEDED = "109";
+	
+	public static String HEADER_MEMBERTOKEN_ERROR = "110";
+	
+	public static String HEADER_MEMBERTOKEN_TIMEOUT = "111";
+	
+	//通用类
 	public static String ERROR="-1";
 	
 	public static String SUCESS="0";
+	
+	public static String UNKNOW_EXCEPTION = "-2";
+	
+	public static String MEMBER_NOT_EXIST = "1002";
+	
+	public static String STATIC_RESOURCE_NOTFOUND = "1012";
+	
+	
+	//注册类
+	public static String MOBILE_REGISTERED = "1003";
+	
+	public static String MOBILE_BOUND = "1004";
+	
+	public static String MOBILE_OPENID = "1006";
+	
+	//注册时的数据验证
+	public static String PWD_NEEDED= "1007";
+	
+	public static String NICKNAME_NEEDED = "1008";
+	
+	public static String ICON_NEEDED = "1009";
+	
+	public static String GENDER_NEEDED = "1010";
+	
+	public static String WEIBO_WEIXIN_QQ_NEEDED = "1011";
+	
+	
+	
+	
+	
+	//登录类
+	public static String LOGIN_MOBILE_NEEDED = "2001";
+	
+	public static String LOGIN_PWD_NEEDED = "2002";
+	
+	public static String MEMBER_NOT_EXIST_OR_PWD_ERROR = "10";
+	
+	//修改会员信息类
+	public static String UPDATE_NICKNAME_EXCEPTION = "2101";
+	
+	public static String UPDATE_HEAD_EXCEPTION = "2102";
+	
 	
 	public static String MOBILE_NOVALID="11";
 	
@@ -89,6 +154,51 @@ public class RespCode implements Serializable{
 	public static String HEADER_PARAM_ERROR = "224";
 	
 	static{
+		
+		respCodeMap.put(HEADER_CHANNEL_NEEDED,new RespCode(HEADER_CHANNEL_NEEDED,"header中 channel 不能为空"));
+		respCodeMap.put(HEADER_DEVICE_AGENT_NEEDED,new RespCode(HEADER_DEVICE_AGENT_NEEDED,"header中 deviceAgent不能为空"));
+		respCodeMap.put(HEADER_DEVICE_ID_NEEDED,new RespCode(HEADER_DEVICE_ID_NEEDED,"header中 deviceId不能为空"));
+		respCodeMap.put(HEADER_DEVICE_TYPE_NEEDED,new RespCode(HEADER_DEVICE_TYPE_NEEDED,"header中 deviceType不能为空"));
+		respCodeMap.put(HEADER_DEVICE_VERSION_NEEDED,new RespCode(HEADER_DEVICE_VERSION_NEEDED,"header中 deviceVersion不能为空"));
+		respCodeMap.put(HEADER_VERSION_NEEDED,new RespCode(HEADER_VERSION_NEEDED,"header中 version不能为空"));
+		respCodeMap.put(HEADER_MEMBERID_NEEDED,new RespCode(HEADER_MEMBERID_NEEDED,"header中 memberId不能为空"));
+		respCodeMap.put(HEADER_MEMBERTOKEN_NEEDED,new RespCode(HEADER_MEMBERTOKEN_NEEDED,"header中 memberToken不能为空"));
+		respCodeMap.put(HEADER_MEMBERTOKEN_ERROR,new RespCode(HEADER_MEMBERTOKEN_ERROR,"memberToken验证失败"));
+		respCodeMap.put(HEADER_MEMBERTOKEN_TIMEOUT,new RespCode(HEADER_MEMBERTOKEN_TIMEOUT,"memberToken过期失效"));
+		
+		
+		respCodeMap.put(UNKNOW_EXCEPTION,new RespCode(UNKNOW_EXCEPTION,"未知异常"));
+		respCodeMap.put(MEMBER_NOT_EXIST,new RespCode(MEMBER_NOT_EXIST,"会员不存在，请先注册"));
+		respCodeMap.put(MOBILE_REGISTERED,new RespCode(MOBILE_REGISTERED,"手机已注册，请登录"));
+		respCodeMap.put(MOBILE_BOUND,new RespCode(MOBILE_BOUND,"手机已绑定其他会员"));
+		respCodeMap.put(MOBILE_OPENID,new RespCode(MOBILE_OPENID,"mobile和openId必须有一项不为空"));
+		
+
+		
+		respCodeMap.put(PWD_NEEDED,new RespCode(PWD_NEEDED,"密码不能为空"));
+		
+		respCodeMap.put(NICKNAME_NEEDED,new RespCode(NICKNAME_NEEDED,"昵称不能为空"));
+		
+		respCodeMap.put(ICON_NEEDED,new RespCode(ICON_NEEDED,"头像不能为空"));
+		
+		respCodeMap.put(GENDER_NEEDED,new RespCode(GENDER_NEEDED,"性别不能为空"));
+		
+		respCodeMap.put(WEIBO_WEIXIN_QQ_NEEDED,new RespCode(WEIBO_WEIXIN_QQ_NEEDED,"微博，微信，qq授权登录信息，必须有一项不为空"));
+		
+		respCodeMap.put(LOGIN_MOBILE_NEEDED,new RespCode(LOGIN_MOBILE_NEEDED,"mobile不能为空"));
+
+		respCodeMap.put(LOGIN_PWD_NEEDED,new RespCode(LOGIN_PWD_NEEDED,"pwd不能为空"));
+		
+		respCodeMap.put(MEMBER_NOT_EXIST_OR_PWD_ERROR,new RespCode(MEMBER_NOT_EXIST_OR_PWD_ERROR,"用户不存在或密码错误"));
+		
+		respCodeMap.put(UPDATE_NICKNAME_EXCEPTION,new RespCode(UPDATE_NICKNAME_EXCEPTION,"昵称修改发生异常"));
+		
+		respCodeMap.put(UPDATE_HEAD_EXCEPTION,new RespCode(UPDATE_HEAD_EXCEPTION,"头像修改发生异常"));
+		
+		
+		
+		
+		
 		respCodeMap.put(SUCESS,new RespCode(SUCESS,"操作成功"));
 		respCodeMap.put(MOBILE_NOVALID,new RespCode(MOBILE_NOVALID,"手机号码不符合规则"));
 		respCodeMap.put(PWD_NOVALID,new RespCode(PWD_NOVALID,"密码不符合规则"));

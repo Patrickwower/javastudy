@@ -14,10 +14,12 @@ http://www.springframework.org/schema/context/spring-context.xsd">
 	</context:component-scan>
 	<mvc:annotation-driven />
 	<mvc:resources location="/css/" mapping="/css/**"></mvc:resources>
-	<mvc:resources location="/fonts/" mapping="/fonts/**"></mvc:resources>
+	<mvc:resources location="/font/" mapping="/font/**"></mvc:resources>
 	<mvc:resources location="/js/" mapping="/js/**"></mvc:resources>
 	<mvc:resources location="/images/" mapping="/images/**"></mvc:resources>
+	<mvc:resources location="/img/" mapping="/img/**"></mvc:resources>
 	<mvc:resources location="/resources/" mapping="/resources/**"></mvc:resources>
+	<mvc:resources location="/html/" mapping="/html/**"></mvc:resources>
 	<bean
 		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 		<property name="viewResolvers">
@@ -47,6 +49,16 @@ http://www.springframework.org/schema/context/spring-context.xsd">
 			<mvc:exclude-mapping path="/admin/**" />
 			<bean class="org.springframework.web.servlet.theme.ThemeChangeInterceptor" />
 		</mvc:interceptor>
+		
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/members/register/**" />
+			<mvc:exclude-mapping path="/members/login/**" />
+			<mvc:exclude-mapping path="/member/**" />
+			<mvc:exclude-mapping path="/bg*/**" />
+			<bean class="com.dengyuecang.api.interceptors.APIInterceptor" />
+		</mvc:interceptor>
+		
 		<mvc:interceptor>
 			<mvc:mapping path="/bg*/*" />
 			<bean class="com.dengyuecang.api.interceptors.SecurityInterceptor" />

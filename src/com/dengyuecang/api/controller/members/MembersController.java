@@ -1,5 +1,6 @@
 package com.dengyuecang.api.controller.members;
 
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dengyuecang.api.controller.members.model.MemberRegisterRequest;
-import com.dengyuecang.api.service.IMemberService;
+import com.dengyuecang.api.controller.members.model.request.MemberRegisterRequest;
 import com.dengyuecang.api.service.members.IMembersService;
-import com.dengyuecang.api.utils.HeaderUtils;
 import com.dengyuecang.api.utils.RespCode;
 import com.dengyuecang.api.utils.RespData;
 
@@ -32,41 +31,28 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 	@ResponseBody
 	public RespData register(@RequestHeader HttpHeaders headers, MemberRegisterRequest request){
 		
-		RespData resp = RespCode.getRespData(RespCode.HEADER_PARAM_ERROR);
-		
-		String headCheck = HeaderUtils.checkHeader(headers,false);
-		
-		if (!"ok".equals(headCheck)) {
-			resp.setData(headCheck);
-			return resp;
-		}
-		
 		try {
 			
-			resp = membersServiceImpl.register(headers, request);
+			return membersServiceImpl.register(headers, request);
 		
 		} catch (Exception e) {
-			resp = RespCode.getRespData(RespCode.ERROR);
+			
 		}
 		
-		return resp;
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
 	}
 	
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	@ResponseBody
 	public RespData login(@RequestHeader HttpHeaders headers,HttpServletRequest request){
 		
-		RespData resp = RespCode.getRespData(RespCode.HEADER_PARAM_ERROR);
-		
-		String headCheck = HeaderUtils.checkHeader(headers,false);
-		
-		if (!"ok".equals(headCheck)) {
-			resp.setData(headCheck);
-			return resp;
+		try {
+			return membersServiceImpl.login(headers,request);
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 		
-		return membersServiceImpl.login(headers,request);
-		
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
 	}
 	
 	/**
@@ -76,23 +62,14 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 	@ResponseBody
 	public RespData setMemberInfo(@RequestHeader HttpHeaders headers,HttpServletRequest request){
 		
-		RespData resp = RespCode.getRespData(RespCode.HEADER_PARAM_ERROR);
-		
-		String headCheck = HeaderUtils.checkHeader(headers,false);
-		
-		if (!"ok".equals(headCheck)) {
-			resp.setData(headCheck);
-			return resp;
-		}
-		
 		try {
-			resp = membersServiceImpl.updateMemberInfo(headers, request);
+			return membersServiceImpl.updateMemberInfo(headers, request);
 		} catch (Exception e) {
 			
 		}
 		
 		
-		return resp;
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
 	}
 	
 	
@@ -100,19 +77,16 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 	 * 获取所有信息
 	 * @return
 	 */
-	@RequestMapping(value="/memberInfo",method=RequestMethod.POST)
+	@RequestMapping(value = "/memberInfo", method = RequestMethod.POST)
 	@ResponseBody
-	public RespData getAllMemberInfo(@RequestHeader HttpHeaders headers){
-		RespData resp = RespCode.getRespData(RespCode.HEADER_PARAM_ERROR);
-		
-		String headCheck = HeaderUtils.checkHeader(headers,false);
-		
-		if (!"ok".equals(headCheck)) {
-			resp.setData(headCheck);
-			return resp;
+	public RespData getAllMemberInfo(@RequestHeader HttpHeaders headers) {
+
+		try {
+			return membersServiceImpl.memberInfo(headers);
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
-		
-		return membersServiceImpl.memberInfo(headers);	
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
 	}
 	
 	/**
@@ -122,16 +96,14 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 	@ResponseBody
 	public RespData bindMobile(@RequestHeader HttpHeaders headers,String mobile){
 		
-		RespData resp = RespCode.getRespData(RespCode.HEADER_PARAM_ERROR);
-		
-		String headCheck = HeaderUtils.checkHeader(headers,false);
-		
-		if (!"ok".equals(headCheck)) {
-			resp.setData(headCheck);
-			return resp;
+		try {
+			return membersServiceImpl.bindMobile(headers,mobile);	
+			
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 		
-		return membersServiceImpl.bindMobile(headers,mobile);	
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
 		
 	}
 	
@@ -141,19 +113,12 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 	@RequestMapping(value="/updateNickname",method=RequestMethod.POST)
 	@ResponseBody
 	public RespData updateNickname(@RequestHeader HttpHeaders headers, String nickname){
-		
-		RespData resp = RespCode.getRespData(RespCode.ERROR);
-		
-		String headCheck = HeaderUtils.checkHeader(headers,false);
-		
-		if (!"ok".equals(headCheck)) {
-			resp = RespCode.getRespData(RespCode.HEADER_PARAM_ERROR);
-			resp.setData(headCheck);
-			return resp;
+		try {
+			return membersServiceImpl.updateNickname(headers, nickname);				
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
-		
-		return membersServiceImpl.updateNickname(headers, nickname);	
-		
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
 	}
 	
 	/**
@@ -163,18 +128,12 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 	@ResponseBody
 	public RespData updateHead(@RequestHeader HttpHeaders headers, String imgId){
 		
-		RespData resp = RespCode.getRespData(RespCode.ERROR);
-		
-		String headCheck = HeaderUtils.checkHeader(headers,false);
-		
-		if (!"ok".equals(headCheck)) {
-			resp = RespCode.getRespData(RespCode.HEADER_PARAM_ERROR);
-			resp.setData(headCheck);
-			return resp;
+		try {
+			return membersServiceImpl.updateHead(headers, imgId);				
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
-		
-		return membersServiceImpl.updateHead(headers, imgId);	
-		
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
 	}
 	
 }

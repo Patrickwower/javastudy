@@ -2,9 +2,11 @@ package com.dengyuecang.api.service.members.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +20,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import com.dengyuecang.api.controller.members.model.MemberRegisterRequest;
+import com.dengyuecang.api.controller.members.model.request.MemberRegisterRequest;
+import com.dengyuecang.api.controller.members.model.response.DemandResponse;
+import com.dengyuecang.api.controller.members.model.response.FunctionResponse;
+import com.dengyuecang.api.controller.members.model.response.IdentityResponse;
+import com.dengyuecang.api.controller.members.model.response.InfoResponse;
+import com.dengyuecang.api.controller.members.model.response.MemberResponse;
 import com.dengyuecang.api.entity.Demand;
 import com.dengyuecang.api.entity.Function;
 import com.dengyuecang.api.entity.Identity;
@@ -43,6 +50,7 @@ import com.dengyuecang.api.utils.RespCode;
 import com.dengyuecang.api.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
 import com.longinf.lxcommon.service.BaseService;
+import com.longinf.lxframework.util.security.MD5Util;
 
 @Service
 public class MembersServiceImpl extends BaseService<Member> implements IMembersService{
@@ -92,14 +100,51 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 	public RespData register(HttpHeaders headers,MemberRegisterRequest request) {
 		
 		Member member = new Member();
+		//数据验证
+		if(StringUtils.isEmpty(request.getMobile())&&StringUtils.isEmpty(request.getOpenId())){
+			return RespCode.getRespData(RespCode.MOBILE_OPENID, new HashMap<>());
+		}
+		
+		if (StringUtils.isEmpty(request.getOpenId())&&StringUtils.isNotEmpty(request.getMobile())) {
+			if (StringUtils.isEmpty(request.getPwd())) {
+				return RespCode.getRespData(RespCode.PWD_NEEDED, new HashMap<>());
+			}
+		}
+		if (StringUtils.isEmpty(request.getMobile())&&StringUtils.isNotEmpty(request.getOpenId())) {
+			
+			if (StringUtils.isEmpty(request.getNickname())) {
+				return RespCode.getRespData(RespCode.NICKNAME_NEEDED, new HashMap<>());
+			}
+			
+			if (StringUtils.isEmpty(request.getIcon())) {
+				return RespCode.getRespData(RespCode.ICON_NEEDED, new HashMap<>());
+			}
+			
+			if (StringUtils.isEmpty(request.getGender())) {
+				return RespCode.getRespData(RespCode.GENDER_NEEDED, new HashMap<>());
+			}
+			
+			
+			if (StringUtils.isEmpty(request.getWeixin())&&StringUtils.isEmpty(request.getWeibo())&&StringUtils.isEmpty(request.getQq())) {
+				return RespCode.getRespData(RespCode.WEIBO_WEIXIN_QQ_NEEDED, new HashMap<>());
+			}
+			
+		}
 		
 		if (StringUtils.isNotEmpty(request.getMobile())) {
 			
 			String mobile = request.getMobile();
 			
-			boolean mobileExits = ifMemberExits(mobile, CommonConstant.REGISTER_CHANNEL_APP);
-			if (mobileExits) {
-				return RespCode.getRespData(RespCode.REG_MOBILE_EXISTS, "手机号已存在，请更换");
+			Member memberExist = getMemberByMobile(mobile);
+			if (memberExist!=null) {
+				
+				if (CommonConstant.REGISTER_CHANNEL_APP.equals(memberExist.getMemberInfo().getCreateChannel())) {
+					
+					return RespCode.getRespData(RespCode.MOBILE_REGISTERED, new HashMap<String, String>());
+				}else {
+					return RespCode.getRespData(RespCode.MOBILE_BOUND, new HashMap<String, String>());
+				}
+				
 			}
 			
 			member = saveMemberApp(headers, request);
@@ -132,15 +177,22 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		}
 		
 		if (StringUtils.isNotEmpty(member.getId())) {
+			//待有了id后，生成token，回填token
+			if (StringUtils.isEmpty(member.getToken())) {
+				headers.set("memberId", member.getId());
+				member.setToken(this.makeToken(headers, null));
+				memberDao.saveOrUpdate(member);
+			}
+			
 			Map<String, String> loginResponse = new HashMap<String, String>();
 			
 			loginResponse.put("memberId", member.getId());
 			
-			loginResponse.put("token", member.getToken());
+			loginResponse.put("token", StringUtils.isEmpty(member.getToken())?"":member.getToken());
 			
 			return RespCode.getRespData(RespCode.SUCESS,loginResponse);
 		}
-		return RespCode.getRespData(RespCode.ERROR,"注册时发生问题，请重新注册");
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<>());
 	}
 	
 	private Member saveMemberApp(HttpHeaders headers,MemberRegisterRequest request){
@@ -269,6 +321,23 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		return member;
 	}
 	
+	private Member getMemberByMobile(String mobile){
+		
+		Query query = memberDao.createQuery("select a from Member a,MemberInfo b where a.memberInfo.id=b.id and b.mobile=?");
+		
+		query.setString(0, mobile);
+		
+		try {
+			Member member = (Member)query.uniqueResult();
+			return member;
+		} catch (Exception e) {
+			e.printStackTrace();		
+		}
+		return null;
+	}
+	
+	
+	
 	private boolean ifMemberExits(String openId,String channel){
 		
 		if (CommonConstant.REGISTER_CHANNEL_APP.equals(channel)) {
@@ -286,42 +355,40 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 	@Override
 	public RespData login(HttpHeaders headers, HttpServletRequest request) {
 
-//		Map<String, String[]> params = request.getParameterMap();
-		
 		String mobile = (String)request.getParameter("mobile");
 		String pwd = request.getParameter("pwd");
 		
 		if (StringUtils.isEmpty(mobile)) {
-			return RespCode.getRespData(RespCode.JSON_ERROR,"需要mobile参数");
+			return RespCode.getRespData(RespCode.LOGIN_MOBILE_NEEDED,new HashMap<>());
 		}
 		
 		if (StringUtils.isEmpty(pwd)) {
-			return RespCode.getRespData(RespCode.JSON_ERROR,"需要pwd参数");
+			return RespCode.getRespData(RespCode.LOGIN_PWD_NEEDED,new HashMap<>());
 		}
 		
 		Member member = (Member)memberDao.createQuery("select a from Member a,MemberInfo b where a.memberInfo.id=b.id and a.pwd='"+pwd+"' and b.mobile='"+mobile+"' ").uniqueResult();
 		
 		if (member!=null) {
 			
+			//方便旧数据未生成token的，在这里补充
+			if (StringUtils.isEmpty(member.getToken())) {
+				headers.set("memberId", member.getId());
+				member.setToken(this.makeToken(headers, request));
+				memberDao.saveOrUpdate(member);
+			}
+			
 			Map<String, String> loginResponse = new HashMap<String, String>();
 			
 			loginResponse.put("memberId", member.getId());
 			
-			loginResponse.put("token", member.getToken());
+			loginResponse.put("token", StringUtils.isEmpty(member.getToken())?"":member.getToken());
 			
 			return RespCode.getRespData(RespCode.SUCESS,loginResponse);
 		}
 		
-		return RespCode.getRespData(RespCode.USER_NOT_EXIST,"用户不存在，请重新注册");
+		return RespCode.getRespData(RespCode.MEMBER_NOT_EXIST_OR_PWD_ERROR,new HashMap<>());
 	}
 
-//	private Member getMemberByMobileAndPwd(String mobile, String pwd){
-//		
-//		Member member = (Member)memberDao.createQuery("select a from Member a,MemberInfo b where a.memberInfo.id=b.id and a.pwd='"+pwd+"' and b.mobile='"+mobile+"' ").uniqueResult();
-//		
-//		return member;
-//	}
-	
 	/**
 	 * 获取用户信息
 	 * 有待继续整改重构
@@ -368,10 +435,69 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			staticResourceServiceImpl.saveQr(member.getId());
 		}
 		
-		return RespCode.getRespData(RespCode.SUCESS,member);
+		return fromModelToResponse(member);
 		
 	}
 
+	/**
+	 * model转化为输出对象，member
+	 * @return
+	 */
+	private RespData fromModelToResponse(Member member){
+		
+		MemberResponse mr = new MemberResponse();
+		
+		mr.setMemberId(member.getId());
+		
+		mr.setStatus("");
+		
+		InfoResponse ir = new InfoResponse();
+		
+		ir.setGender(member.getMemberInfo().getGender()==null?"":member.getMemberInfo().getGender());
+		ir.setIcon(member.getMemberInfo().getIcon()==null?"":member.getMemberInfo().getIcon());
+		ir.setMobile(member.getMemberInfo().getMobile()==null?"":member.getMemberInfo().getMobile());
+		ir.setNickname(member.getMemberInfo().getNickname()==null?"":member.getMemberInfo().getNickname());
+		ir.setQr(member.getMemberInfo().getQr()==null?"":member.getMemberInfo().getQr());
+		ir.setCity(member.getCity()==null?"":member.getCity());
+		ir.setOrganization(member.getOrganization()==null?"":member.getOrganization());
+		ir.setIsFeedBack(member.getIfFeedBack());
+		
+		for (Identity identity : member.getIdentityList()) {
+			IdentityResponse idr = new IdentityResponse();
+			
+			idr.setId(identity.getId());
+			idr.setName(identity.getName());
+			
+			mr.getIdentitys().add(idr);
+		};
+		
+		mr.setMemberInfo(ir);
+		
+		for (Demand demand : member.getDemandList()) {
+			
+			DemandResponse dr = new DemandResponse();
+			
+			dr.setId(demand.getId());
+			dr.setName(demand.getName());
+			
+			mr.getDemands().add(dr);
+			
+		}
+		
+		for (Function function : member.getFunctionList()) {
+			
+			FunctionResponse fr = new FunctionResponse();
+			
+			fr.setId(function.getId());
+			fr.setName(function.getName());
+			
+			mr.getFunctions().add(fr);
+			
+		}
+		
+		return RespCode.getRespData(RespCode.SUCESS,mr);
+	}
+	
 	@Override
 	public RespData updateMemberInfo(HttpHeaders headers, HttpServletRequest request) {
 
@@ -391,12 +517,8 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		
 		map.put("functionList", FunctionRequest.class);
 		
-//		MemberRequest request = (MemberRequest)JSONObject.toBean(jsonObject, MemberRequest.class, map);
 		
 		MemberInfoRequest infoRequest = (MemberInfoRequest)JSONObject.toBean(jsonObject,MemberInfoRequest.class,map);
-		
-		
-//		MemberRequest request = JsonUtils.toBean(json, MemberRequest.class, map);
 		
 		member = this.saveIdentity(infoRequest, member, headers);
 		
@@ -404,7 +526,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		
 		member = this.saveFunction(infoRequest, member, headers);
 		
-		return RespCode.getRespData(RespCode.SUCESS,"保存成功");
+		return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
 		
 	}
 
@@ -562,18 +684,18 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			String memberId = headers.getFirst("memberId");
 			
 			if (ifMobileExist(mobile)) {
-				return RespCode.getRespData(RespCode.REG_MOBILE_EXISTS,"该手机号码已存在，请更换其他手机号码");
+				return RespCode.getRespData(RespCode.MOBILE_BOUND);
 			}
 			
 			this.updateMobile(memberId, mobile);
 			
-			return RespCode.getRespData(RespCode.SUCESS,mobile);
+			return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}		
 		
-		return RespCode.getRespData(RespCode.ERROR);
+		return RespCode.getRespData(RespCode.ERROR,new HashMap<>());
 		
 	}
 	
@@ -619,6 +741,11 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		// TODO Auto-generated method stub
 		log.info("更新头像");
 		log.info("头像的资源id:"+imgId);
+		
+		if (StringUtils.isEmpty(imgId)) {
+			return RespCode.getRespData(RespCode.ICON_NEEDED, new HashMap<>());
+		}
+		
 		StaticResource sr = staticResourceDao.get(StaticResource.class, imgId);
 		
 		if (sr!=null) {
@@ -632,9 +759,10 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			result.put("urlPath", sr.getUrlPath());
 			
 			return RespCode.getRespData(RespCode.SUCESS,result);
+		}else {
+			return RespCode.getRespData(RespCode.STATIC_RESOURCE_NOTFOUND,new HashMap<>());
 		}
 		
-		return RespCode.getRespData(RespCode.ERROR,"头像修改失败");
 	}
 	
 	/**
@@ -663,16 +791,20 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		log.info("更新昵称为："+nickname);
 		try {
 			
+			if (StringUtils.isEmpty(nickname)) {
+				return RespCode.getRespData(RespCode.NICKNAME_NEEDED,new HashMap<>());
+			}
+			
 			String memberId = headers.getFirst("memberId");
 			log.info("更新昵称的ID："+memberId);
 			this.updateNickname(memberId, nickname);
 			log.info("更新完成");
-			return RespCode.getRespData(RespCode.SUCESS,"昵称修改成功");
+			return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return RespCode.getRespData(RespCode.ERROR,"昵称修改失败");
+		return RespCode.getRespData(RespCode.UPDATE_NICKNAME_EXCEPTION,new HashMap<>());
 		
 	}
 	
@@ -705,6 +837,62 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 	public BaseDao<Member> getSuperDao() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public RespData checkToken(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		
+		String memberId = request.getHeader("memberId");
+		
+		String memberToken = request.getHeader("memberToken");
+		
+		if (StringUtils.isEmpty(memberId)) {
+			return RespCode.getRespData(RespCode.HEADER_MEMBERID_NEEDED,new HashMap<>());
+		}
+		
+		if (StringUtils.isEmpty(memberToken)) {
+			return RespCode.getRespData(RespCode.HEADER_MEMBERTOKEN_NEEDED,new HashMap<>());
+		}
+		
+		Member member = memberDao.get(Member.class, memberId);
+		
+		if (member!=null) {
+			if (!memberToken.equals(member.getToken())) {
+				return RespCode.getRespData(RespCode.HEADER_MEMBERTOKEN_ERROR,new HashMap<>());
+			}
+		}else {
+			return RespCode.getRespData(RespCode.MEMBER_NOT_EXIST,new HashMap<>());
+		}
+		
+		return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
+	}
+	
+	/**
+	 * memberToken的生成机制，header中的所有参数除token外k=v的形式自然顺序连接，做md5加密
+	 * @param headers
+	 * @param request
+	 * @return
+	 */
+	private String makeToken(HttpHeaders headers,HttpServletRequest request){
+		
+		Set<String> headerKeys = headers.keySet();
+		
+		String str = "";
+		
+		for (String key : headerKeys) {
+			if ("memberToken".equals(key)) {
+				continue;
+			}
+			String value = headers.getFirst(key);
+			
+			String kv = key+"="+value;
+			str += kv;
+		}
+		
+		str = MD5Util.encode(str);
+		
+		return str;
 	}
 
 }
