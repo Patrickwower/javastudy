@@ -177,18 +177,21 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		}
 		
 		if (StringUtils.isNotEmpty(member.getId())) {
+			
+			String token = member.getToken();
+			
 			//待有了id后，生成token，回填token
 			if (StringUtils.isEmpty(member.getToken())) {
 				headers.set("memberId", member.getId());
-				member.setToken(this.makeToken(headers, null));
-				memberDao.saveOrUpdate(member);
+				token = this.makeToken(headers, null);
+				memberDao.createQuery("update Member set token='"+token+"' where id='"+member.getId()+"' ").executeUpdate();
 			}
 			
 			Map<String, String> loginResponse = new HashMap<String, String>();
 			
 			loginResponse.put("memberId", member.getId());
 			
-			loginResponse.put("token", StringUtils.isEmpty(member.getToken())?"":member.getToken());
+			loginResponse.put("token", token);
 			
 			return RespCode.getRespData(RespCode.SUCESS,loginResponse);
 		}

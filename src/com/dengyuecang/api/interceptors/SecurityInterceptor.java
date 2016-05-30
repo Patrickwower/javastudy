@@ -12,7 +12,7 @@ public class SecurityInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		if (request.getSession().getAttribute("loginedUser") != null) {
+		if (request.getSession().getAttribute("currentUser") != null) {
 			return super.preHandle(request, response, handler);
 		} else {
 			

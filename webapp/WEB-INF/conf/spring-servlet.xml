@@ -27,7 +27,7 @@ http://www.springframework.org/schema/context/spring-context.xsd">
 				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
 				<bean
 					class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-					<property name="prefix" value="/WEB-INF/" />
+					<property name="prefix" value="/WEB-INF/jsp/" />
 					<property name="suffix" value=".jsp" />
 				</bean>
 			</list>
@@ -60,7 +60,7 @@ http://www.springframework.org/schema/context/spring-context.xsd">
 		</mvc:interceptor>
 		
 		<mvc:interceptor>
-			<mvc:mapping path="/bg*/*" />
+			<mvc:mapping path="/bg*/**" />
 			<bean class="com.dengyuecang.api.interceptors.SecurityInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>

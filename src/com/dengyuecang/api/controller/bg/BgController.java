@@ -1,7 +1,11 @@
 package com.dengyuecang.api.controller.bg;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +31,13 @@ public class BgController {
 	Logger log = LoggerFactory.getLogger(BgController.class);
 
 	@RequestMapping("/login")
-	public ModelAndView login(){
+	public ModelAndView login(HttpSession session){
+		
+		Map<String, String> currentUser = new HashMap<String,String>();
+		
+		currentUser.put("acang", "dengyuecang");
+		
+		session.setAttribute("currentUser",currentUser);
 		
 		return index();
 	}
@@ -37,7 +47,7 @@ public class BgController {
 		
 		ModelAndView mav = new ModelAndView();
 		
-		mav.setViewName("jsp/index");
+		mav.setViewName("index");
 		
 		return mav;
 	}
