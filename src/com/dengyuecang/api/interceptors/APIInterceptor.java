@@ -51,9 +51,9 @@ public class APIInterceptor extends HandlerInterceptorAdapter {
 		    PrintWriter out = null;  
 		    try {  
 		        out = response.getWriter();  
-		        out.append(JsonUtils.toJSONString(rd));  
+		        out.append(JsonUtils.toJSONString(JsonUtils.toJSONObject(rd)));
 		        logger.debug("返回是\n");  
-		        logger.debug(JsonUtils.toJSONString(rd));  
+		        logger.debug(JsonUtils.toJSONString(JsonUtils.toJSONObject(rd)));
 		    } catch (IOException e) {  
 		        e.printStackTrace();  
 		    } finally {  
