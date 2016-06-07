@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="war" build-on-make="true" name="dyc">
+    <output-path>$USER_HOME$/Desktop</output-path>
+    <root id="archive" name="dyc.war">
+      <element id="artifact" artifact-name="dyc:war exploded" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes" />
+        <element id="directory" name="lib" />
+      </element>
+    </root>
+  </artifact>
+</component>
