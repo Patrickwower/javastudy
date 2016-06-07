@@ -47,6 +47,7 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 	public RespData login(@RequestHeader HttpHeaders headers,HttpServletRequest request){
 		
 		try {
+			log.info("11111");
 			return membersServiceImpl.login(headers,request);
 		} catch (Exception e) {
 			// TODO: handle exception
