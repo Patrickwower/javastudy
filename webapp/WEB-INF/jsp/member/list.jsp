@@ -25,7 +25,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link href="<%=path %>/css/bootstrap-responsive.min.css" rel="stylesheet">
 	<link id="base-style" href="<%=path %>/css/style.css" rel="stylesheet">
 	<link id="base-style-responsive" href="<%=path %>/css/style-responsive.css" rel="stylesheet">
+<%--
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
+--%>
 	<!-- end: CSS -->
 	
 </head>
@@ -44,7 +46,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<noscript>
 				<div class="alert alert-block span10">
 					<h4 class="alert-heading">Warning!</h4>
+<%--
 					<p>You need to have <a href="http://en.wikipedia.org/wiki/JavaScript" target="_blank">JavaScript</a> enabled to use this site.</p>
+--%>
 				</div>
 			</noscript>
 			
