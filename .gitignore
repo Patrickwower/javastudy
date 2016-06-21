@@ -2,3 +2,16 @@
 dyc.iml
 dyc/.idea/
 rebel.xml
+
+/target
+/.idea
+*.iml
+*.ipr
+*.iws
+.idea
+*/*.log
+*/target/
+*.DS_Store
+*.classpath
+*.settings
+*.project
