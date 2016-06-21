@@ -1631,9 +1631,17 @@ function charts() {
 	{ label: "Safari",  data: 85},
 	{ label: "Opera",  data: 64},
 	{ label: "Firefox",  data: 90},
-	{ label: "Chrome",  data: 112}
+	{ label: "Chrome",  data: 112},
+	{ label: "360",  data: 52}
 	];
-	
+
+	var data = [
+		{ label: "mobile",  data: 28},
+		{ label: "qq",  data: 8},
+		{ label: "weibo",  data: 5},
+		{ label: "weixin",  data: 54}
+	];
+
 	if($("#piechart").length)
 	{
 		$.plot($("#piechart"), data,

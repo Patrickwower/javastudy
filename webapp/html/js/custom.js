@@ -1633,7 +1633,7 @@ function charts() {
 	{ label: "Firefox",  data: 90},
 	{ label: "Chrome",  data: 112}
 	];
-	
+
 	if($("#piechart").length)
 	{
 		$.plot($("#piechart"), data,
