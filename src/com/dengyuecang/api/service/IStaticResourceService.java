@@ -26,6 +26,16 @@ public interface IStaticResourceService extends IBaseService<StaticResource>{
 	public RespData imgUpload(HttpHeaders headers, MultipartFile file, HttpServletRequest request,FileUploadRequest fileUploadRequest);
 
 	/**
+	 * 图片上传
+	 * @param headers
+	 * @param file
+	 * @param request
+	 * @param fileUploadRequest
+	 * @return
+	 */
+	public String imgUploadUrl(HttpHeaders headers, MultipartFile file, HttpServletRequest request, FileUploadRequest fileUploadRequest);
+
+	/**
 	 * 生成二维码
 	 * 返回真实地址realPath和网络地址urlPath
 	 */

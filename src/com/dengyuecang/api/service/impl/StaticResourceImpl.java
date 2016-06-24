@@ -115,7 +115,74 @@ public class StaticResourceImpl extends BaseService<StaticResource> implements I
 		
 		return RespCode.getRespData(RespCode.ERROR);
 	}
-	
+
+	@Override
+	public String imgUploadUrl(HttpHeaders headers, MultipartFile file, HttpServletRequest request, FileUploadRequest fileUploadRequest) {
+
+		log.info("上传图片开始");
+
+		try {
+			//获取文件名
+			String fileName = this.getFileName(file.getOriginalFilename().toString());
+
+			//获取网络路径
+			String urlPath = CommonConstant.STATIC_URL;
+
+			//获取服务器实际路径
+			String realPath = getRealPath(request, fileUploadRequest);
+
+			//二阶目录
+
+			String secondPath = getSecondPath(fileUploadRequest.getUsefor());
+
+			urlPath += secondPath;
+			realPath += secondPath;
+
+
+			File targetFile = new File(realPath,fileName);
+
+			if(!targetFile.exists()){
+				targetFile.mkdirs();
+			}
+
+			try {
+				file.transferTo(targetFile);
+				log.info("上传图片保存完成");
+
+				urlPath += fileName;
+				realPath += fileName;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+
+			StaticResource sr = new StaticResource();
+
+			String memberId = headers.getFirst("memberId");
+
+			sr.setCreater(memberId);
+
+			sr.setCtime(new Date());
+
+			sr.setUrlPath(urlPath);
+
+			sr.setPath(realPath);
+
+			sr.setType(fileUploadRequest.getType());
+
+			sr.setUseFor(fileUploadRequest.getUsefor());
+
+			staticResourceDao.save(sr);
+
+			return sr.getUrlPath();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
 	/**
 	 * 设置文件名
 	 * @param file

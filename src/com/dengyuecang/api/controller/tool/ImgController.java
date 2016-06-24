@@ -51,6 +51,30 @@ public class ImgController {
 		return resp;
 		
 	}
-	
+
+	@RequestMapping(value="/uploadForArticle",method=RequestMethod.POST)
+	@ResponseBody
+	public String uploadForArticle(@RequestHeader HttpHeaders headers, @RequestParam(value = "file", required = true) MultipartFile file, HttpServletRequest request, FileUploadRequest fileUploadRequest){
+
+
+		try {
+
+			String type = headers.getFirst("type");
+
+			String usefor = headers.getFirst("usefor");
+
+			fileUploadRequest.setType(type);
+
+			fileUploadRequest.setUsefor(usefor);
+
+			return staticResourceServiceImpl.imgUploadUrl(headers, file, request, fileUploadRequest);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
 	
 }
