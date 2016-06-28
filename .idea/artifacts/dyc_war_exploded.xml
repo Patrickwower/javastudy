@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" build-on-make="true" name="dyc:war exploded">
-    <output-path>$PROJECT_DIR$/webapp</output-path>
+    <output-path>/Applications/apache-tomcat-7.0.69/webapps/dyc</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
