@@ -7,7 +7,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <base href="<%=basePath%>">
 
     <head>
     <meta http-equiv="pragma" content="no-cache">
@@ -79,7 +78,7 @@
                         <td><a href="" class="white-text templatemo-sort-by">First Name <span class="caret"></span></a></td>
                         <td><a href="" class="white-text templatemo-sort-by">Last Name <span class="caret"></span></a></td>
                         <td><a href="" class="white-text templatemo-sort-by">User Name <span class="caret"></span></a></td>
-                        <td><a href="" class="white-text templatemo-sort-by">Email <span class="caret"></span></a></td>
+                        <td><a href="" class="white-text templatemo-sort-by">Topic <span class="caret"></span></a></td>
                         <td>Edit</td>
                         <td>Action</td>
                         <td>Delete</td>
@@ -94,7 +93,11 @@
                             <td>${article.title}</td>
                             <td>${article.ctime}</td>
                             <td>${article.member.memberInfo.nickname}</td>
-                            <td>js@company.com</td>
+                            <td>
+                            <c:forEach items="${article.tags}" var="tag">
+                                #${tag.name}#
+                            </c:forEach>
+                            </td>
                             <td><a href="" class="templatemo-edit-btn">Edit</a></td>
                             <td><a href="<%=path%>/community/article/detail?articleId=${article.id}" target="_blank" class="templatemo-link">查看</a></td>
                             <td><a href="" class="templatemo-link">Delete</a></td>
