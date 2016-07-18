@@ -131,5 +131,38 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 		}
 		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
 	}
-	
+
+	/**
+	 * 修改个人介绍
+	 */
+	@RequestMapping(value = "",method = RequestMethod.POST)
+	@ResponseBody
+	public RespData updatePersonnalIntroduction(@RequestHeader HttpHeaders headers, String introduction){
+
+		try {
+			return membersServiceImpl.updateIntroduction(headers, introduction);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+	}
+
+	/**
+	 * 获取个人信息
+	 */
+	@RequestMapping(value = "/information",method = RequestMethod.POST)
+	@ResponseBody
+	public RespData information(@RequestHeader HttpHeaders headers,String memberId){
+
+		try {
+			return membersServiceImpl.information(headers, memberId);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+	}
+
+
 }

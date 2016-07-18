@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by acang on 16/7/5.
@@ -14,29 +15,15 @@ public class Category {
 
     private String id;
 
-    private String pid;
-
     private String name;
-
-    private String level;
 
     private String creater;
 
-    private Date createTime;
+    private Date ctime;
 
-    private String sort;
+    private String pid;
 
     public Category() {
-    }
-
-    public Category(String id, String pid, String name, String level, String creater, Date createTime, String sort) {
-        this.id = id;
-        this.pid = pid;
-        this.name = name;
-        this.level = level;
-        this.creater = creater;
-        this.createTime = createTime;
-        this.sort = sort;
     }
 
     @GenericGenerator(name = "generator", strategy = "uuid")
@@ -68,14 +55,6 @@ public class Category {
         this.name = name;
     }
 
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
     public String getCreater() {
         return creater;
     }
@@ -84,19 +63,22 @@ public class Category {
         this.creater = creater;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCtime() {
+        return ctime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCtime(Date ctime) {
+        this.ctime = ctime;
     }
 
-    public String getSort() {
-        return sort;
+    public List<Article> articles;
+
+    @ManyToMany(mappedBy="categories",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    public List<Article> getArticles() {
+        return articles;
     }
 
-    public void setSort(String sort) {
-        this.sort = sort;
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
     }
 }

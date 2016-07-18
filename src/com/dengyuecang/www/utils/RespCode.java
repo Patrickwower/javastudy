@@ -51,7 +51,8 @@ public class RespCode implements Serializable{
 	public static String MEMBER_NOT_EXIST = "1002";
 	
 	public static String STATIC_RESOURCE_NOTFOUND = "1012";
-	
+
+	public static String UNLOGIN = "1113";
 	
 	//注册类
 	public static String MOBILE_REGISTERED = "1003";
@@ -86,7 +87,17 @@ public class RespCode implements Serializable{
 	public static String UPDATE_NICKNAME_EXCEPTION = "2101";
 	
 	public static String UPDATE_HEAD_EXCEPTION = "2102";
-	
+
+	public static String UPDATE_INTRODUCTION_EXCEPTION = "2102";
+
+	//社区类
+	//社区话题
+//	public static String
+
+
+
+
+
 	
 	public static String MOBILE_NOVALID="11";
 	
@@ -172,7 +183,10 @@ public class RespCode implements Serializable{
 		respCodeMap.put(MOBILE_REGISTERED,new RespCode(MOBILE_REGISTERED,"手机已注册，请登录"));
 		respCodeMap.put(MOBILE_BOUND,new RespCode(MOBILE_BOUND,"手机已绑定其他会员"));
 		respCodeMap.put(MOBILE_OPENID,new RespCode(MOBILE_OPENID,"mobile和openId必须有一项不为空"));
-		
+		respCodeMap.put(UNLOGIN,new RespCode(UNLOGIN,"请先登陆"));
+
+
+
 
 		
 		respCodeMap.put(PWD_NEEDED,new RespCode(PWD_NEEDED,"密码不能为空"));
@@ -194,7 +208,8 @@ public class RespCode implements Serializable{
 		respCodeMap.put(UPDATE_NICKNAME_EXCEPTION,new RespCode(UPDATE_NICKNAME_EXCEPTION,"昵称修改发生异常"));
 		
 		respCodeMap.put(UPDATE_HEAD_EXCEPTION,new RespCode(UPDATE_HEAD_EXCEPTION,"头像修改发生异常"));
-		
+
+		respCodeMap.put(UPDATE_INTRODUCTION_EXCEPTION,new RespCode(UPDATE_INTRODUCTION_EXCEPTION,"介绍修改发生异常"));
 		
 		
 		

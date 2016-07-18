@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.dengyuecang.www.service.members.model.*;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -40,10 +41,6 @@ import com.dengyuecang.www.entity.Weixin;
 import com.dengyuecang.www.service.IStaticResourceService;
 import com.dengyuecang.www.service.common.CommonConstant;
 import com.dengyuecang.www.service.members.IMembersService;
-import com.dengyuecang.www.service.members.model.DemandRequest;
-import com.dengyuecang.www.service.members.model.FunctionRequest;
-import com.dengyuecang.www.service.members.model.IdentityRequest;
-import com.dengyuecang.www.service.members.model.MemberInfoRequest;
 import com.dengyuecang.www.utils.JsonUtils;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
@@ -641,7 +638,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		List<Function> fList = new ArrayList<Function>();
 		try {
 			
-			memberFunctionDao.createQuery("update MemberFunction a set a.status=201 where a.member.id='"+member.getId()+"' ").executeUpdate();
+			memberFunctionDao.createQuery("update MemberFunctio n a set a.status=201 where a.member.id='"+member.getId()+"' ").executeUpdate();
 			
 			for (FunctionRequest function : functionList) {
 				
@@ -809,7 +806,31 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		return RespCode.getRespData(RespCode.UPDATE_NICKNAME_EXCEPTION,new HashMap<>());
 		
 	}
-	
+
+	@Override
+	public RespData updateIntroduction(HttpHeaders headers, String introduction) {
+
+		log.info("更新个人简介为："+introduction);
+		try {
+
+			if (StringUtils.isEmpty(introduction)) {
+				introduction = "";
+//				return RespCode.getRespData(RespCode.NICKNAME_NEEDED,new HashMap<>());
+			}
+
+			String memberId = headers.getFirst("memberId");
+			log.info("更新介绍的ID："+memberId);
+			this.updateNickname(memberId, introduction);
+			log.info("更新完成");
+			return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return RespCode.getRespData(RespCode.UPDATE_INTRODUCTION_EXCEPTION,new HashMap<>());
+
+	}
+
 	/**
 	 * 更新昵称
 	 * @param memberId
@@ -869,7 +890,37 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		
 		return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
 	}
-	
+
+	@Override
+	public RespData information(HttpHeaders headers, String memberId) {
+
+		CommunityMemberResponse cMemberResponse = new CommunityMemberResponse();
+
+		if (StringUtils.isEmpty(memberId)){
+
+			memberId = headers.getFirst("memberId");
+
+		}
+
+		Member member = memberDao.get(Member.class,memberId);
+
+		cMemberResponse.setNickname(member.getMemberInfo().getNickname());
+
+		cMemberResponse.setId(member.getId());
+
+		cMemberResponse.setHead(member.getMemberInfo().getIcon());
+
+		cMemberResponse.setCtime(member.getMemberInfo().getCreateTime());
+
+		cMemberResponse.setIntroduction(member.getMemberInfo().getIntroduction());
+
+		Map<String, Object> response = new HashMap<String, Object>();
+
+		response.put("memberinfo",cMemberResponse);
+
+		return RespCode.getRespData(RespCode.SUCESS,response);
+	}
+
 	/**
 	 * memberToken的生成机制，header中的所有参数除token外k=v的形式自然顺序连接，做md5加密
 	 * @param headers

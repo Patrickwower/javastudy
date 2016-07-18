@@ -78,7 +78,7 @@
                         <td><a href="" class="white-text templatemo-sort-by">First Name <span class="caret"></span></a></td>
                         <td><a href="" class="white-text templatemo-sort-by">Last Name <span class="caret"></span></a></td>
                         <td><a href="" class="white-text templatemo-sort-by">User Name <span class="caret"></span></a></td>
-                        <td><a href="" class="white-text templatemo-sort-by">Topic <span class="caret"></span></a></td>
+                        <td><a href="" class="white-text templatemo-sort-by">Tag <span class="caret"></span></a></td>
                         <td>Edit</td>
                         <td>Action</td>
                         <td>Delete</td>
@@ -94,6 +94,9 @@
                             <td>${article.ctime}</td>
                             <td>${article.member.memberInfo.nickname}</td>
                             <td>
+                            <c:forEach items="${article.categories}" var="category">
+                                #${category.name}#
+                            </c:forEach>
                             <c:forEach items="${article.tags}" var="tag">
                                 #${tag.name}#
                             </c:forEach>

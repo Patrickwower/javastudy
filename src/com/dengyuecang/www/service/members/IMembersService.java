@@ -67,6 +67,14 @@ public interface IMembersService extends IBaseService<Member>{
 	public RespData updateNickname(HttpHeaders headers, String nickname);
 
 	/**
+	 * 更新个人介绍
+	 * @param headers
+	 * @param introduction
+	 * @return
+	 */
+	public RespData updateIntroduction(HttpHeaders headers, String introduction);
+
+	/**
 	 * 更新分享用二维码
 	 * @param memberId
 	 * @return
@@ -77,4 +85,10 @@ public interface IMembersService extends IBaseService<Member>{
 	 * 验证memberToken
 	 */
 	public RespData checkToken(HttpServletRequest request);
+
+	/**
+	 * 获取用户信息
+	 */
+	public RespData information(HttpHeaders headers, String memberId);
+
 }

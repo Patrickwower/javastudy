@@ -8,30 +8,33 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by acang on 16/7/5.
+ * Created by acang on 16/7/12.
  */
+
 @Entity
-@Table(name="community_focus_member")
-public class FocusMember implements Serializable {
+@Table(name="community_topic_comment")
+public class TopicComment implements Serializable{
 
     private String id;
 
-    private Member member;
+    private Topic topic;
 
-    private Member focus;
+    private String comment;
+
+    private Member discussant;
 
     private Date ctime;
 
     private long timestamp;
 
-    public FocusMember() {
+    public TopicComment() {
     }
 
-    public FocusMember(String id, Member member, Member focus, Date ctime) {
+    public TopicComment(String id, Topic topic, String comment, Member discussant) {
         this.id = id;
-        this.member = member;
-        this.focus = focus;
-        this.ctime = ctime;
+        this.topic = topic;
+        this.comment = comment;
+        this.discussant = discussant;
     }
 
     @GenericGenerator(name = "generator", strategy = "uuid")
@@ -48,23 +51,31 @@ public class FocusMember implements Serializable {
     }
 
     @OneToOne
-    @JoinColumn(name="member_id")
-    public Member getMember() {
-        return member;
+    @JoinColumn(name="topic_id")
+    public Topic getTopic() {
+        return topic;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
+    public void setTopic(Topic topic) {
+        this.topic = topic;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     @OneToOne
-    @JoinColumn(name="focus_id")
-    public Member getFocus() {
-        return focus;
+    @JoinColumn(name="discussant")
+    public Member getDiscussant() {
+        return discussant;
     }
 
-    public void setFocus(Member focus) {
-        this.focus = focus;
+    public void setDiscussant(Member discussant) {
+        this.discussant = discussant;
     }
 
     public Date getCtime() {

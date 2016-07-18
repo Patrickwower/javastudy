@@ -4,34 +4,29 @@ import com.dengyuecang.www.entity.Member;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by acang on 16/7/5.
  */
 @Entity
-@Table(name="community_article_evaluatef")
-public class ArticleEvaluate {
+@Table(name="community_article_evaluate")
+public class ArticleEvaluate implements Serializable {
 
     private String id;
 
-    private String evaluate;
+    private String evaluation;
 
     private Article article;
 
-    private Member member;
+    private Member discussant;
 
     private Date ctime;
 
-    public ArticleEvaluate() {
-    }
+    private long timestamp;
 
-    public ArticleEvaluate(String id, String evaluate, Article article, Member member, Date ctime) {
-        this.id = id;
-        this.evaluate = evaluate;
-        this.article = article;
-        this.member = member;
-        this.ctime = ctime;
+    public ArticleEvaluate() {
     }
 
     @GenericGenerator(name = "generator", strategy = "uuid")
@@ -58,21 +53,29 @@ public class ArticleEvaluate {
     }
 
     @OneToOne
-    @JoinColumn(name="member_id")
-    public Member getMember() {
-        return member;
+    @JoinColumn(name="discussant")
+    public Member getDiscussant() {
+        return discussant;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
+    public void setDiscussant(Member discussant) {
+        this.discussant = discussant;
     }
 
-    public String getEvaluate() {
-        return evaluate;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public void setEvaluate(String evaluate) {
-        this.evaluate = evaluate;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(String evaluation) {
+        this.evaluation = evaluation;
     }
 
     public Date getCtime() {

@@ -1,17 +1,17 @@
 package com.dengyuecang.www.controller.api.community.model;
 
 /**
- * Created by acang on 16/7/8.
+ * Created by acang on 16/7/12.
  */
-public class ArticleRequest {
+public class ArticleCommentRequest {
 
     public String timestamp;
 
     public String pageSize = "10";
 
-    public String memberId;
+    public String articleId = "";
 
-    public ArticleRequest() {
+    public ArticleCommentRequest() {
     }
 
     public String getPageSize() {
@@ -30,11 +30,11 @@ public class ArticleRequest {
         this.timestamp = timestamp;
     }
 
-    public String getMemberId() {
-        return memberId;
+    public String getArticleId() {
+        return articleId;
     }
 
-    public void setMemberId(String memberId) {
-        this.memberId = memberId;
+    public void setArticleId(String articleId) {
+        this.articleId = articleId;
     }
 }

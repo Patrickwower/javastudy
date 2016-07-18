@@ -13,14 +13,15 @@ public class IndexTopic {
 
     private String month;
 
-    public IndexTopic() {
-    }
+    private String year;
 
-    public IndexTopic(String id, String name, String day, String month) {
-        this.id = id;
-        this.name = name;
-        this.day = day;
-        this.month = month;
+    private String bgimg;
+
+    private String zanCount;
+
+    private String ifZan;
+
+    public IndexTopic() {
     }
 
     public String getId() {
@@ -53,5 +54,37 @@ public class IndexTopic {
 
     public void setMonth(String month) {
         this.month = month;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getBgimg() {
+        return bgimg;
+    }
+
+    public void setBgimg(String bgimg) {
+        this.bgimg = bgimg;
+    }
+
+    public String getZanCount() {
+        return zanCount;
+    }
+
+    public void setZanCount(String zanCount) {
+        this.zanCount = zanCount;
+    }
+
+    public String getIfZan() {
+        return ifZan;
+    }
+
+    public void setIfZan(String ifZan) {
+        this.ifZan = ifZan;
     }
 }

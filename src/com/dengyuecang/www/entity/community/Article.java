@@ -108,19 +108,6 @@ public class Article implements Serializable{
         this.utime = utime;
     }
 
-    private List<Tag> tags;
-
-    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE},fetch=FetchType.EAGER)
-    @JoinTable(name="community_tag_article",joinColumns={@JoinColumn(name="article_id")},inverseJoinColumns={@JoinColumn(name="tag_id")})
-    @OrderBy("ctime")
-    public List<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -139,5 +126,31 @@ public class Article implements Serializable{
 
     public static void main(String[] args) {
         System.out.println(System.currentTimeMillis());
+    }
+
+    private List<Tag> tags;
+
+    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE},fetch=FetchType.EAGER)
+    @JoinTable(name="community_tag_article",joinColumns={@JoinColumn(name="article_id")},inverseJoinColumns={@JoinColumn(name="tag_id")})
+    @OrderBy("ctime")
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    private List<Category> categories;
+
+    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE},fetch=FetchType.EAGER)
+    @JoinTable(name="community_category_article",joinColumns={@JoinColumn(name="article_id")},inverseJoinColumns={@JoinColumn(name="cid")})
+    @OrderBy("ctime")
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 }

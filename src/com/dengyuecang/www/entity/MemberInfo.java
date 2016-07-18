@@ -44,7 +44,8 @@ public class MemberInfo implements Serializable{
 	private String qrId;
 	
 	private String gender;
-	
+
+	private String introduction;
 
 	public MemberInfo() {
 		super();
@@ -174,6 +175,12 @@ public class MemberInfo implements Serializable{
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	
-	
+
+	public String getIntroduction() {
+		return introduction;
+	}
+
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
+	}
 }

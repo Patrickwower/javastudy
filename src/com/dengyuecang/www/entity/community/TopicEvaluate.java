@@ -8,30 +8,25 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by acang on 16/7/5.
+ * Created by acang on 16/7/13.
  */
 @Entity
-@Table(name="community_focus_member")
-public class FocusMember implements Serializable {
+@Table(name="community_topic_evaluate")
+public class TopicEvaluate implements Serializable{
 
     private String id;
 
-    private Member member;
+    private Topic topic;
 
-    private Member focus;
+    private String evaluation;
 
     private Date ctime;
 
     private long timestamp;
 
-    public FocusMember() {
-    }
+    private Member discussant;
 
-    public FocusMember(String id, Member member, Member focus, Date ctime) {
-        this.id = id;
-        this.member = member;
-        this.focus = focus;
-        this.ctime = ctime;
+    public TopicEvaluate() {
     }
 
     @GenericGenerator(name = "generator", strategy = "uuid")
@@ -48,23 +43,21 @@ public class FocusMember implements Serializable {
     }
 
     @OneToOne
-    @JoinColumn(name="member_id")
-    public Member getMember() {
-        return member;
+    @JoinColumn(name="topic_id")
+    public Topic getTopic() {
+        return topic;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
+    public void setTopic(Topic topic) {
+        this.topic = topic;
     }
 
-    @OneToOne
-    @JoinColumn(name="focus_id")
-    public Member getFocus() {
-        return focus;
+    public String getEvaluation() {
+        return evaluation;
     }
 
-    public void setFocus(Member focus) {
-        this.focus = focus;
+    public void setEvaluation(String evaluation) {
+        this.evaluation = evaluation;
     }
 
     public Date getCtime() {
@@ -81,5 +74,15 @@ public class FocusMember implements Serializable {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @OneToOne
+    @JoinColumn(name="discussant")
+    public Member getDiscussant() {
+        return discussant;
+    }
+
+    public void setDiscussant(Member discussant) {
+        this.discussant = discussant;
     }
 }

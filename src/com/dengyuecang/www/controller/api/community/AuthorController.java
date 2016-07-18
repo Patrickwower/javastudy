@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-@RequestMapping("/api/author")
+@RequestMapping("/api/community/author")
 public class AuthorController {
 
     public RespData detail(){
