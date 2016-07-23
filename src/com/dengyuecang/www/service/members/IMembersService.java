@@ -3,6 +3,7 @@ package com.dengyuecang.www.service.members;
 import javax.servlet.http.HttpServletRequest;
 
 import com.dengyuecang.www.controller.api.members.model.request.MemberRegisterRequest;
+import com.dengyuecang.www.controller.api.members.model.request.VerifyRequest;
 import org.springframework.http.HttpHeaders;
 
 import com.dengyuecang.www.entity.Member;
@@ -26,7 +27,15 @@ public interface IMembersService extends IBaseService<Member>{
 	 * @return
 	 */
 	public RespData login(HttpHeaders headers, HttpServletRequest request);
-	
+
+	/**
+	 * 用户验证手机验证码并登录
+	 * @param request
+	 * @param headers
+	 * @return
+	 */
+	public RespData verify(HttpHeaders headers, VerifyRequest request);
+
 	/**
 	 * 获取用户所有基础信息
 	 * @param headers

@@ -60,25 +60,27 @@ public class RespCode implements Serializable{
 	public static String MOBILE_BOUND = "1004";
 	
 	public static String MOBILE_OPENID = "1006";
-	
+
 	//注册时的数据验证
 	public static String PWD_NEEDED= "1007";
-	
+
 	public static String NICKNAME_NEEDED = "1008";
-	
+
 	public static String ICON_NEEDED = "1009";
-	
+
 	public static String GENDER_NEEDED = "1010";
-	
+
 	public static String WEIBO_WEIXIN_QQ_NEEDED = "1011";
-	
-	
-	
-	
-	
+
+	public static String MOBILE_CODE_RROR = "1012";
+
+
+
+
+
 	//登录类
 	public static String LOGIN_MOBILE_NEEDED = "2001";
-	
+
 	public static String LOGIN_PWD_NEEDED = "2002";
 	
 	public static String MEMBER_NOT_EXIST_OR_PWD_ERROR = "10";
@@ -198,6 +200,8 @@ public class RespCode implements Serializable{
 		respCodeMap.put(GENDER_NEEDED,new RespCode(GENDER_NEEDED,"性别不能为空"));
 		
 		respCodeMap.put(WEIBO_WEIXIN_QQ_NEEDED,new RespCode(WEIBO_WEIXIN_QQ_NEEDED,"微博，微信，qq授权登录信息，必须有一项不为空"));
+
+		respCodeMap.put(MOBILE_CODE_RROR,new RespCode(MOBILE_CODE_RROR,"短信验证码错误"));
 		
 		respCodeMap.put(LOGIN_MOBILE_NEEDED,new RespCode(LOGIN_MOBILE_NEEDED,"mobile不能为空"));
 

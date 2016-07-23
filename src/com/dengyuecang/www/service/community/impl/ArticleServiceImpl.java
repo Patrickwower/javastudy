@@ -264,13 +264,13 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         int limit = 10;
 
-        if (articleRequest.getPageSize()!=null){
+        if (StringUtils.isNotEmpty(articleRequest.getPageSize())){
             limit = Integer.valueOf(articleRequest.getPageSize());
         }
 
         long timestamp = System.currentTimeMillis();
 
-        if (articleRequest.getTimestamp()!=null){
+        if (StringUtils.isNotEmpty(articleRequest.getTimestamp())){
             timestamp = Long.valueOf(articleRequest.getTimestamp());
         }
 
@@ -312,13 +312,13 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         int limit = 10;
 
-        if (request.getPageSize()!=null){
+        if (StringUtils.isNotEmpty(request.getPageSize())){
             limit = Integer.valueOf(request.getPageSize());
         }
 
         long timestamp = System.currentTimeMillis();
 
-        if (request.getTimestamp()!=null){
+        if (StringUtils.isNotEmpty(request.getTimestamp())){
             timestamp = Long.valueOf(request.getTimestamp());
         }
 
@@ -607,7 +607,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         }
 
         //查询文章列表
-        Query q = articleDao.createQuery("from Article where status='100' and timestamp<"+timestamp+" and member.id=? order by timestamp desc ");
+        Query q = articleDao.createQuery("from Article a where a.status='100' and a.timestamp<"+timestamp+" and a.member.id=? order by a.timestamp desc ");
 
         q.setString(0,memberId);
 
@@ -639,17 +639,17 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         int limit = 10;
 
-        if (focusRequest.getPageSize()!=null){
+        if (StringUtils.isNotEmpty(focusRequest.getPageSize())){
             limit = Integer.valueOf(focusRequest.getPageSize());
         }
 
         long timestamp = System.currentTimeMillis();
 
-        if (focusRequest.getTimestamp()!=null){
+        if (StringUtils.isNotEmpty(focusRequest.getTimestamp())){
             timestamp = Long.valueOf(focusRequest.getTimestamp());
         }
 
-        String hql = "from FocusMember fm where fm.member.id=? and fm.timestamp<"+focusRequest.getTimestamp()+" order by fm.timestamp desc";
+        String hql = "from FocusMember fm where fm.member.id=? and fm.timestamp<"+timestamp+" order by fm.timestamp desc";
 
         Query q = focusDao.createQuery(hql);
 

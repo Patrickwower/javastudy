@@ -7,6 +7,7 @@ import com.dengyuecang.www.utils.RespData;
 import org.omg.CORBA.Request;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.xml.stream.events.Comment;
@@ -137,6 +138,16 @@ public class APIArticleController {
 
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
 
+    }
+
+    @RequestMapping("/test")
+    public ModelAndView test(){
+
+        ModelAndView mav = new ModelAndView();
+
+        mav.setViewName("redirect:http://www.baidu.com?abc=123");
+
+        return mav;
     }
 
 }

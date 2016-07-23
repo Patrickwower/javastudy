@@ -11,6 +11,7 @@ import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
 import com.longinf.lxcommon.service.BaseService;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -111,13 +112,13 @@ public class TopicServiceImpl extends BaseService<Topic> implements ITopicServic
 
         int limit = 10;
 
-        if (request.getPageSize()!=null){
+        if (StringUtils.isNotEmpty(request.getPageSize())){
             limit = Integer.valueOf(request.getPageSize());
         }
 
         long timestamp = System.currentTimeMillis();
 
-        if (request.getTimestamp()!=null){
+        if (StringUtils.isNotEmpty(request.getTimestamp())){
             timestamp = Long.valueOf(request.getTimestamp());
         }
 

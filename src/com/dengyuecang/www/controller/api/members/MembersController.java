@@ -2,6 +2,7 @@ package com.dengyuecang.www.controller.api.members;
 
 
 import com.dengyuecang.www.controller.api.members.model.request.MemberRegisterRequest;
+import com.dengyuecang.www.controller.api.members.model.request.VerifyRequest;
 import com.dengyuecang.www.service.members.IMembersService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
@@ -36,7 +37,22 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 		
 		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
 	}
-	
+
+	@RequestMapping(value="/verify",method=RequestMethod.POST)
+	@ResponseBody
+	public RespData verify(@RequestHeader HttpHeaders headers,VerifyRequest request){
+
+		try {
+
+			return membersServiceImpl.verify(headers,request);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
+	}
+
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	@ResponseBody
 	public RespData login(@RequestHeader HttpHeaders headers,HttpServletRequest request){
@@ -135,9 +151,9 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 	/**
 	 * 修改个人介绍
 	 */
-	@RequestMapping(value = "",method = RequestMethod.POST)
+	@RequestMapping(value = "/updateIntroduction",method = RequestMethod.POST)
 	@ResponseBody
-	public RespData updatePersonnalIntroduction(@RequestHeader HttpHeaders headers, String introduction){
+	public RespData updateIntroduction(@RequestHeader HttpHeaders headers, String introduction){
 
 		try {
 			return membersServiceImpl.updateIntroduction(headers, introduction);

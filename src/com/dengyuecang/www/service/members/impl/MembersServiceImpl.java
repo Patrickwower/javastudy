@@ -10,7 +10,10 @@ import java.util.Set;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.dengyuecang.www.controller.api.members.model.request.VerifyRequest;
 import com.dengyuecang.www.service.members.model.*;
+import com.dengyuecang.www.utils.sharesdk.SmsUtil;
+import com.dengyuecang.www.utils.sharesdk.SmsVerifyRequest;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -202,7 +205,8 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		info.setCreateChannel(CommonConstant.REGISTER_CHANNEL_APP);
 		info.setOpenId(request.getMobile());
 		info.setCreateTime(new Date());
-		
+		info.setIntroduction("");
+
 		memberInfoDao.save(info);
 		
 		Member member = new Member();
@@ -386,6 +390,83 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		}
 		
 		return RespCode.getRespData(RespCode.MEMBER_NOT_EXIST_OR_PWD_ERROR,new HashMap<>());
+	}
+
+	@Override
+	public RespData verify(HttpHeaders headers, VerifyRequest request) {
+
+
+		//数据验证
+		if(StringUtils.isEmpty(request.getMobile())&&StringUtils.isEmpty(request.getMobile())){
+			return RespCode.getRespData(RespCode.LOGIN_MOBILE_NEEDED, new HashMap<>());
+		}
+
+		//验证码校验
+
+		SmsVerifyRequest smsVerifyRequest = new SmsVerifyRequest();
+
+		smsVerifyRequest.setAppkey(request.getAppkey());
+
+		smsVerifyRequest.setPhone(request.getMobile());
+
+		smsVerifyRequest.setZone(request.getZone());
+
+		smsVerifyRequest.setCode(request.getCode());
+
+		String verifyResult = SmsUtil.requestData(SmsUtil.SMS_VERIFY_URL,smsVerifyRequest.getParams());
+
+//		if (!"200".equals(verifyResult)){
+//
+//			return RespCode.getRespData(RespCode.MOBILE_CODE_RROR, new HashMap<String, String>());
+//
+//		}
+
+		Member member = new Member();
+
+		if (StringUtils.isNotEmpty(request.getMobile())) {
+
+			String mobile = request.getMobile();
+
+			Member memberExist = getMemberByMobile(mobile);
+			if (memberExist!=null) {
+
+				member = memberExist;
+
+			}else{
+
+				MemberRegisterRequest registerRequest = new MemberRegisterRequest();
+
+				registerRequest.setMobile(request.getMobile());
+
+				registerRequest.setOpenId(request.getMobile());
+
+				member = saveMemberApp(headers, registerRequest);
+			}
+
+
+		}
+
+		if (StringUtils.isNotEmpty(member.getId())) {
+
+			String token = member.getToken();
+
+			//待有了id后，生成token，回填token
+			if (StringUtils.isEmpty(member.getToken())) {
+				headers.set("memberId", member.getId());
+				token = this.makeToken(headers, null);
+				memberDao.createQuery("update Member set token='"+token+"' where id='"+member.getId()+"' ").executeUpdate();
+			}
+
+			Map<String, String> loginResponse = new HashMap<String, String>();
+
+			loginResponse.put("memberId", member.getId());
+
+			loginResponse.put("token", token);
+
+			return RespCode.getRespData(RespCode.SUCESS,loginResponse);
+		}
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<>());
+
 	}
 
 	/**
@@ -820,7 +901,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 			String memberId = headers.getFirst("memberId");
 			log.info("更新介绍的ID："+memberId);
-			this.updateNickname(memberId, introduction);
+			this.updateIntroduction(memberId, introduction);
 			log.info("更新完成");
 			return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
 		} catch (Exception e) {
@@ -846,6 +927,23 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		
 		memberInfoDao.saveOrUpdate(info);
 		
+	}
+
+	/**
+	 * 更新简介
+	 * @param memberId
+	 * @param introduction
+	 */
+	private void updateIntroduction(String memberId,String introduction){
+
+		Member member = memberDao.get(Member.class, memberId);
+
+		MemberInfo info = member.getMemberInfo();
+
+		info.setIntroduction(introduction);
+
+		memberInfoDao.saveOrUpdate(info);
+
 	}
 
 	@Override
@@ -898,7 +996,11 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		if (StringUtils.isEmpty(memberId)){
 
+
+
 			memberId = headers.getFirst("memberId");
+		}else{
+
 
 		}
 
