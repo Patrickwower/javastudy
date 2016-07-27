@@ -183,5 +183,18 @@ public class Member implements Serializable{
 	public void setOrganization(String organization) {
 		this.organization = organization;
 	}
-	
+
+	private String inviteCode;
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	public String getInviteCode() {
+		return inviteCode;
+	}
+
+	public void setInviteCode(String inviteCode) {
+		this.inviteCode = inviteCode;
+	}
 }

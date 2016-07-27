@@ -20,7 +20,7 @@
 
         <div class="container">
             <div class="related-avatar-group activities"></div>
-            <div class="article">
+            <div class="article" style="padding:10px 40px 10px">
                 <div class="show-content">
 ${article.content}
                 </div>

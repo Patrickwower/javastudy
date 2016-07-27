@@ -3,6 +3,7 @@ package com.dengyuecang.www.controller.tool;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,15 +32,17 @@ public class ImgController {
 		RespData resp = RespCode.getRespData(RespCode.ERROR);
 		
 		try {
-			
-			String type = headers.getFirst("type");
-			
-			String usefor = headers.getFirst("usefor");
-		
-			fileUploadRequest.setType(type);
-			
-			fileUploadRequest.setUsefor(usefor);
-			
+
+			if (StringUtils.isEmpty(fileUploadRequest.getType())){
+				String type = headers.getFirst("type");
+				fileUploadRequest.setType(type);
+			}
+
+			if (StringUtils.isEmpty(fileUploadRequest.getUsefor())){
+				String usefor = headers.getFirst("usefor");
+				fileUploadRequest.setUsefor(usefor);
+			}
+
 			return staticResourceServiceImpl.imgUpload(headers, file, request, fileUploadRequest);
 			
 		

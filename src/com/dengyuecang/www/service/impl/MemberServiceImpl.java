@@ -175,7 +175,7 @@ public class MemberServiceImpl extends BaseService<Member> implements
 					info.setIcon(infoRequest.getIcon());
 					info.setGender(infoRequest.getGender());
 					info.setNickname(infoRequest.getNickname());
-					info.setOpenId(infoRequest.getOpenId());					
+					info.setAppId(infoRequest.getOpenId());
 				}
 				
 				

@@ -596,13 +596,13 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         int limit = 10;
 
-        if (articleRequest.getPageSize()!=null){
+        if (StringUtils.isNotEmpty(articleRequest.getPageSize())){
             limit = Integer.valueOf(articleRequest.getPageSize());
         }
 
         long timestamp = System.currentTimeMillis();
 
-        if (articleRequest.getTimestamp()!=null){
+        if (StringUtils.isNotEmpty(articleRequest.getTimestamp())){
             timestamp = Long.valueOf(articleRequest.getTimestamp());
         }
 

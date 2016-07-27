@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.dengyuecang.www.controller.api.members.model.request.MemberRegisterRequest;
 import com.dengyuecang.www.controller.api.members.model.request.VerifyRequest;
+import com.dengyuecang.www.controller.api.publish.model.PublishLoginRequest;
 import org.springframework.http.HttpHeaders;
 
 import com.dengyuecang.www.entity.Member;
@@ -99,5 +100,10 @@ public interface IMembersService extends IBaseService<Member>{
 	 * 获取用户信息
 	 */
 	public RespData information(HttpHeaders headers, String memberId);
+
+	/**
+	 * 发布系统用的登录接口
+	 */
+	public RespData publishLogin(HttpHeaders headers, PublishLoginRequest loginRequest);
 
 }

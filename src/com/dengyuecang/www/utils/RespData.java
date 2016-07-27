@@ -1,6 +1,7 @@
 package com.dengyuecang.www.utils;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 
 public class RespData implements Serializable{
@@ -10,7 +11,7 @@ public class RespData implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String respCode="1";
 	private String respDesc="操作成功！";
-	private Object data;
+	private Object data = new HashMap<Object,Object>();
 	
 	private Object rows;
 	private Long total;

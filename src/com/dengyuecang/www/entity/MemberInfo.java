@@ -31,7 +31,7 @@ public class MemberInfo implements Serializable{
 	
 	private String createChannel;
 	
-	private String openId;
+	private String appId;
 	
 	private String nickname;
 	
@@ -120,12 +120,12 @@ public class MemberInfo implements Serializable{
 		this.memberId = memberId;
 	}
 
-	public String getOpenId() {
-		return openId;
+	public String getAppId() {
+		return appId;
 	}
 
-	public void setOpenId(String openId) {
-		this.openId = openId;
+	public void setAppId(String appId) {
+		this.appId = appId;
 	}
 
 	public String getNickname() {

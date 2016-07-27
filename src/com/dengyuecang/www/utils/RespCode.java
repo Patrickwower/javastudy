@@ -72,8 +72,16 @@ public class RespCode implements Serializable{
 
 	public static String WEIBO_WEIXIN_QQ_NEEDED = "1011";
 
-	public static String MOBILE_CODE_RROR = "1012";
+	public static String MOBILE_CODE_ERROR = "1013";
 
+	//发布系统登录异常
+	public static String INVATE_CODE_NEED = "1201";
+
+	public static String INVATE_CODE_USED = "1202";
+
+	public static String INVATE_CODE_NOT_PUBLISH = "1203";
+
+	public static String INVATE_CODE_NOT_EXIST = "1204";
 
 
 
@@ -201,7 +209,7 @@ public class RespCode implements Serializable{
 		
 		respCodeMap.put(WEIBO_WEIXIN_QQ_NEEDED,new RespCode(WEIBO_WEIXIN_QQ_NEEDED,"微博，微信，qq授权登录信息，必须有一项不为空"));
 
-		respCodeMap.put(MOBILE_CODE_RROR,new RespCode(MOBILE_CODE_RROR,"短信验证码错误"));
+		respCodeMap.put(MOBILE_CODE_ERROR,new RespCode(MOBILE_CODE_ERROR,"短信验证码错误"));
 		
 		respCodeMap.put(LOGIN_MOBILE_NEEDED,new RespCode(LOGIN_MOBILE_NEEDED,"mobile不能为空"));
 
@@ -215,7 +223,14 @@ public class RespCode implements Serializable{
 
 		respCodeMap.put(UPDATE_INTRODUCTION_EXCEPTION,new RespCode(UPDATE_INTRODUCTION_EXCEPTION,"介绍修改发生异常"));
 		
-		
+
+		respCodeMap.put(INVATE_CODE_NEED,new RespCode(INVATE_CODE_NEED,"邀请码必须提供"));
+
+		respCodeMap.put(INVATE_CODE_NOT_PUBLISH,new RespCode(INVATE_CODE_NOT_PUBLISH,"邀请码未发布"));
+
+		respCodeMap.put(INVATE_CODE_USED,new RespCode(INVATE_CODE_USED,"邀请码已使用"));
+
+		respCodeMap.put(INVATE_CODE_NOT_EXIST,new RespCode(INVATE_CODE_NOT_EXIST,"邀请码不存在,请核对后输入"));
 		
 		
 		respCodeMap.put(SUCESS,new RespCode(SUCESS,"操作成功"));

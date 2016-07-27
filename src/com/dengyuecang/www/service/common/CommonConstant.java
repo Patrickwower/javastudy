@@ -7,7 +7,7 @@ package com.dengyuecang.www.service.common;
  *
  */
 public class CommonConstant {
-	
+//	af32b7f0c2fd22319eb877923fbf99c1
 	
 	/**
 	 * 注册途径

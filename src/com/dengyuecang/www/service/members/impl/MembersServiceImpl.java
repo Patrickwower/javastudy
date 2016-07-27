@@ -11,7 +11,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import com.dengyuecang.www.controller.api.members.model.request.VerifyRequest;
+import com.dengyuecang.www.controller.api.publish.model.PublishLoginRequest;
 import com.dengyuecang.www.service.members.model.*;
+import com.dengyuecang.www.service.model.MemberLoginRequest;
 import com.dengyuecang.www.utils.sharesdk.SmsUtil;
 import com.dengyuecang.www.utils.sharesdk.SmsVerifyRequest;
 import net.sf.json.JSONObject;
@@ -203,7 +205,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		
 		info.setMobile(request.getMobile());
 		info.setCreateChannel(CommonConstant.REGISTER_CHANNEL_APP);
-		info.setOpenId(request.getMobile());
+		info.setAppId(request.getMobile());
 		info.setCreateTime(new Date());
 		info.setIntroduction("");
 
@@ -236,7 +238,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		
 		info.setCreateTime(new Date());
 		
-		info.setOpenId(openId);
+		info.setAppId(openId);
 		info.setGender(gender);
 		info.setIcon(icon);
 		info.setNickname(nickname);
@@ -254,7 +256,11 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			JSONObject jsonObject = JsonUtils.toJSONObject(weixin_info);
 			
 			Weixin weixin = JsonUtils.toBean(jsonObject, Weixin.class);
-			
+
+			openId = weixin.getUnionid();
+
+			info.setAppId(openId);
+
 			weixin.setWeixin_info(weixin_info);
 			
 			weixinDao.save(weixin);
@@ -1021,6 +1027,30 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		response.put("memberinfo",cMemberResponse);
 
 		return RespCode.getRespData(RespCode.SUCESS,response);
+	}
+
+	@Override
+	public RespData publishLogin(HttpHeaders headers, PublishLoginRequest loginRequest) {
+
+		MemberRegisterRequest memberRegisterRequest = new MemberRegisterRequest();
+
+		memberRegisterRequest.setOpenId(loginRequest.getOpenId());
+
+		memberRegisterRequest.setGender(loginRequest.getSex());
+
+		memberRegisterRequest.setIcon(loginRequest.getHeadimgurl());
+
+		memberRegisterRequest.setNickname(loginRequest.getNickname());
+
+		String weixin = JsonUtils.toJSONString(loginRequest);
+
+		memberRegisterRequest.setWeixin(weixin);
+
+		RespData r = new RespData();
+
+		Map<String,Object> m = (Map<String,Object>)r.getData();
+
+		return this.register(headers,memberRegisterRequest);
 	}
 
 	/**

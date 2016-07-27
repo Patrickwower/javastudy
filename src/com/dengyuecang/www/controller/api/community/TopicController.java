@@ -6,11 +6,9 @@ import com.dengyuecang.www.controller.api.community.model.TopicCommentRequest;
 import com.dengyuecang.www.service.community.ITopicService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
+import org.omg.CORBA.Request;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -61,7 +59,8 @@ public class TopicController {
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
     }
 
-    @RequestMapping("/comment")
+    @RequestMapping(value = "/comment",method = RequestMethod.POST)
+    @ResponseBody
     public RespData comment(@RequestHeader HttpHeaders headers,CommentRequest request){
 
         try{
