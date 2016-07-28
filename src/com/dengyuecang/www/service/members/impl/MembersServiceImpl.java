@@ -313,7 +313,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 	private Member getMemberByOpenId(String openId,String channel){
 		
-		Query query = memberDao.createQuery("select a from Member a,MemberInfo b where a.memberInfo.id=b.id and b.openId=? and b.createChannel=?");
+		Query query = memberDao.createQuery("select a from Member a,MemberInfo b where a.memberInfo.id=b.id and b.appId=? and b.createChannel=?");
 		
 		query.setString(0, openId);
 		

@@ -27,7 +27,7 @@ public class WriteController {
 		log.info("书写首页");
 		ModelAndView mav = new ModelAndView();
 
-		List<Article> articleList = articleServiceImpl.queryArticle("8a2a67a25505963401550a65958a000f");
+		List<Article> articleList = articleServiceImpl.queryArticle("8a2a67a256257f66015625d0859c0017");
 
 		mav.addObject("articles",articleList);
 

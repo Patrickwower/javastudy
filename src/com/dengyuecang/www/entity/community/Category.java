@@ -3,6 +3,7 @@ package com.dengyuecang.www.entity.community;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="community_category")
-public class Category {
+public class Category implements Serializable {
 
     private String id;
 

@@ -3,6 +3,7 @@ package com.dengyuecang.www.controller.api.publish;
 import com.dengyuecang.www.controller.api.community.model.ArticleRequest;
 import com.dengyuecang.www.controller.api.publish.model.ArticlePublishRequest;
 import com.dengyuecang.www.service.community.IArticleService;
+import com.dengyuecang.www.service.publish.IPublishArticleService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import org.springframework.http.HttpHeaders;
@@ -20,11 +21,22 @@ public class PublishArticleController {
     @Resource
     private IArticleService articleServiceImpl;
 
+    @Resource
+    private IPublishArticleService publishArticleServiceImpl;
+
+    @RequestMapping(value = "/save",method = RequestMethod.POST)
+    @ResponseBody
     public RespData save(@RequestHeader HttpHeaders headers, ArticlePublishRequest articlePublishRequest){
 
+        try {
 
+            return publishArticleServiceImpl.articleAdd(headers,articlePublishRequest);
 
-        return null;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
     }
 
     public RespData update(@RequestHeader HttpHeaders headers, ArticlePublishRequest articlePublishRequest){

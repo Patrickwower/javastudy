@@ -44,5 +44,14 @@ public class CommonConstant {
 	 * 分享下载地址
 	 */
 	public static final String DOWNLOADURL = "http://api.dengyuecang.com/qr/index";
-	
+
+
+	/**
+	 * 文章详情地址
+	 */
+	public static final String ARTICLE_DETAIL_URL = "http://test.manager.dengyuecang.com/dyc/community/article/detail?articleId=";
+
+//	public static final String ARTICLE_DETAIL_URL = "http://manager.dengyuecang.com/dyc/community/article/detail?articleId=4028829a557b5deb01557babcb4d0001";
+
+
 }
