@@ -15,6 +15,6 @@ public interface IPublishArticleService extends IBaseService<Article>{
 
     public RespData articleUpdate(HttpHeaders headers, ArticlePublishRequest articlePublishRequest);
 
-
+    public RespData categoryList();
 
 }

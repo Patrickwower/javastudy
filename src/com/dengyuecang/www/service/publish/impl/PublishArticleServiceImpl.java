@@ -7,11 +7,11 @@ import com.dengyuecang.www.entity.community.Category;
 import com.dengyuecang.www.entity.community.Tag;
 import com.dengyuecang.www.service.common.CommonConstant;
 import com.dengyuecang.www.service.publish.IPublishArticleService;
+import com.dengyuecang.www.service.publish.model.CategoryResponse;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
 import com.longinf.lxcommon.service.BaseService;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
@@ -129,7 +129,7 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
         Map<String,String> response = new HashMap<String,String>();
 
-        response.put("memberId",article.getId());
+        response.put("articleId",article.getId());
 
         return RespCode.getRespData(RespCode.SUCESS,response);
     }
@@ -145,5 +145,25 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
 
         return null;
+    }
+
+    @Override
+    public RespData categoryList() {
+
+        List<Category> categoryList = categoryDao.all(null);
+
+        List<CategoryResponse> categories = new ArrayList<CategoryResponse>();
+
+        for (Category category :
+                categoryList) {
+            CategoryResponse cr = new CategoryResponse();
+
+            cr.setId(category.getId());
+            cr.setName(category.getName());
+
+            categories.add(cr);
+        }
+
+        return RespCode.getRespData(RespCode.SUCESS,categories);
     }
 }

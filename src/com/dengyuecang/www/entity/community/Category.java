@@ -32,6 +32,7 @@ public class Category implements Serializable {
     @GeneratedValue(generator = "generator")
 
     @Column(name = "id", unique = true, nullable = false, length = 100)
+    @OrderBy("ctime desc")
     public String getId() {
         return id;
     }

@@ -1002,9 +1002,8 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		if (StringUtils.isEmpty(memberId)){
 
-
-
 			memberId = headers.getFirst("memberId");
+
 		}else{
 
 

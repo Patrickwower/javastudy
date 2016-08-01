@@ -60,6 +60,19 @@ public class PublishArticleController {
 
     }
 
-//    public RespData
+    @RequestMapping(value = "categories")
+    @ResponseBody
+    public RespData categorys(){
+
+        try {
+
+            return publishArticleServiceImpl.categoryList();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
 
 }
