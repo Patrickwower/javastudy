@@ -6,6 +6,8 @@ import com.dengyuecang.www.service.community.IArticleService;
 import com.dengyuecang.www.service.publish.IPublishArticleService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,8 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/api/publish/article")
 public class PublishArticleController {
+
+    private static final Logger log = LoggerFactory.getLogger(PublishArticleController.class);
 
     @Resource
     private IArticleService articleServiceImpl;
@@ -30,6 +34,11 @@ public class PublishArticleController {
 
         try {
 
+
+            log.info("保存文章接口,参数列表");
+            log.info("文章标题:"+articlePublishRequest.getTitle());
+            log.info("文章封面:"+articlePublishRequest.getCover());
+            log.info("文章内容:"+articlePublishRequest.getContent());
             return publishArticleServiceImpl.articleAdd(headers,articlePublishRequest);
 
         }catch (Exception e){
@@ -39,11 +48,21 @@ public class PublishArticleController {
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
     }
 
+
+    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    @ResponseBody
     public RespData update(@RequestHeader HttpHeaders headers, ArticlePublishRequest articlePublishRequest){
 
+        try {
 
+            return publishArticleServiceImpl.articleUpdate(headers,articlePublishRequest);
 
-        return null;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
     }
 
     @RequestMapping(value = "/myarticles",method = RequestMethod.POST)

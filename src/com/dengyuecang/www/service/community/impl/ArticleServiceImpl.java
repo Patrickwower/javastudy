@@ -183,75 +183,86 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         return RespCode.getRespData(RespCode.SUCESS,iResponse);
     }
 
+    private IndexArticle toIndexArticle(String memberId,Article article){
+
+        IndexArticle iArticle = new IndexArticle();
+
+        iArticle.setId(article.getId());
+
+        iArticle.setBgimg(article.getCover());
+
+        iArticle.setCategory("");
+
+        if (article.getCategories().size()>0){
+            iArticle.setCategory(article.getCategories().get(0).getName());
+        }
+
+        IndexAuthor iAuthor = new IndexAuthor();
+
+        iAuthor.setHead(article.getMember().getMemberInfo().getIcon());
+
+        iAuthor.setId(article.getMember().getId());
+
+        iAuthor.setNickname(article.getMember().getMemberInfo().getNickname());
+
+        iAuthor.setIfFocus("false");
+
+        if (StringUtils.isNotEmpty(memberId)){
+
+            String focusId = article.getMember().getId();
+
+            String hql = "from FocusMember fm where fm.member.id=? and fm.focus.id=? ";
+
+            Query q = focusDao.createQuery(hql);
+
+            q.setString(0,memberId);
+
+            q.setString(1,focusId);
+
+            FocusMember fm = (FocusMember) q.uniqueResult();
+
+            if (fm!=null){
+                iAuthor.setIfFocus("true");
+            }
+        }
+
+        iArticle.setAuthor(iAuthor);
+
+        List<String> tags = new ArrayList<String>();
+
+        if (article.getTags().size()>0){
+
+            for (Tag tag :
+                    article.getTags()) {
+                tags.add(tag.getName());
+            }
+
+        }else{
+            tags.add("其他");
+        }
+        iArticle.setTags(tags);
+
+        iArticle.setTitle(article.getTitle()==null?"":article.getTitle());
+
+        iArticle.setTimestamp(article.getTimestamp()+"");
+
+        iArticle.setZanCount(zanCount(article.getId()));
+
+        iArticle.setIfZan(ifZan(memberId,article.getId())+"");
+
+        iArticle.setUrl(article.getUrl()+article.getId());
+
+        iArticle.setContent(article.getContent());
+
+        return iArticle;
+    }
+
     private List<IndexArticle> toIndexArticleList(String memberId, List<IndexArticle> articles, List<Article> articleList){
 
         for (Article article :
                 articleList) {
 
-            IndexArticle iArticle = new IndexArticle();
-
-            iArticle.setId(article.getId());
-
-            iArticle.setBgimg(article.getCover());
-
-            iArticle.setCategory("");
-
-            if (article.getCategories().size()>0){
-                iArticle.setCategory(article.getCategories().get(0).getName());
-            }
-
-            IndexAuthor iAuthor = new IndexAuthor();
-
-            iAuthor.setHead(article.getMember().getMemberInfo().getIcon());
-
-            iAuthor.setId(article.getMember().getId());
-
-            iAuthor.setNickname(article.getMember().getMemberInfo().getNickname());
-
-            iAuthor.setIfFocus("false");
-
-            if (StringUtils.isNotEmpty(memberId)){
-
-                String focusId = article.getMember().getId();
-
-                String hql = "from FocusMember fm where fm.member.id=? and fm.focus.id=? ";
-
-                Query q = focusDao.createQuery(hql);
-
-                q.setString(0,memberId);
-
-                q.setString(1,focusId);
-
-                FocusMember fm = (FocusMember) q.uniqueResult();
-
-                if (fm!=null){
-                    iAuthor.setIfFocus("true");
-                }
-            }
-
-            iArticle.setAuthor(iAuthor);
-
-            List<String> tags = new ArrayList<String>();
-
-            if (article.getTags().size()>0){
-
-                for (Tag tag :
-                        article.getTags()) {
-                    tags.add(tag.getName());
-                }
-
-            }else{
-                tags.add("其他");
-            }
-            iArticle.setTags(tags);
-
-            iArticle.setTitle(article.getTitle()==null?"":article.getTitle());
-
-            iArticle.setTimestamp(article.getTimestamp()+"");
-
-            iArticle.setZanCount(zanCount(article.getId()));
-
-            iArticle.setIfZan(ifZan(memberId,article.getId())+"");
+            IndexArticle iArticle = toIndexArticle(memberId,article);
 
             articles.add(iArticle);
         }
@@ -476,23 +487,33 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
     }
 
     @Override
-    public RespData articleData(String articleId) {
-
-        //点赞数
-
-        String zanCount = this.zanCount(articleId);
-
-        //评论数
-
-        String commentCount = this.commentCount(articleId);
+    public RespData articleData(HttpHeaders headers,String articleId) {
 
         //浏览次数
+        Map<String,Object> response = new HashMap<String,Object>();
 
+        if (StringUtils.isNotEmpty(articleId)){
+            //数据
+            Article article = articleDao.get(Article.class,articleId);
 
-        Map<String,String> response = new HashMap<String,String>();
+            if (article!=null){
 
-        response.put("zanCount",zanCount);
-        response.put("commentCount",commentCount);
+                //点赞数
+                String zanCount = this.zanCount(articleId);
+
+                //评论数
+                String commentCount = this.commentCount(articleId);
+
+                IndexArticle iArticle = toIndexArticle(headers.getFirst("memberId"),article);
+
+                response.put("zanCount",zanCount);
+                response.put("commentCount",commentCount);
+
+                response.put("article",iArticle);
+
+            }
+
+        }
 
         return RespCode.getRespData(RespCode.SUCESS,response);
     }

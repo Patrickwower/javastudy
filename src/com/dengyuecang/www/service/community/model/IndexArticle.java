@@ -27,6 +27,8 @@ public class IndexArticle {
 
     private String zanCount;
 
+    private String content;
+
     public IndexArticle() {
     }
 
@@ -108,5 +110,13 @@ public class IndexArticle {
 
     public void setZanCount(String zanCount) {
         this.zanCount = zanCount;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

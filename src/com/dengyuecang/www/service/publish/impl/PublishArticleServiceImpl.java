@@ -3,6 +3,7 @@ package com.dengyuecang.www.service.publish.impl;
 import com.dengyuecang.www.controller.api.publish.model.ArticlePublishRequest;
 import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.community.Article;
+import com.dengyuecang.www.entity.community.ArticleUpdateLog;
 import com.dengyuecang.www.entity.community.Category;
 import com.dengyuecang.www.entity.community.Tag;
 import com.dengyuecang.www.service.common.CommonConstant;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.Time;
 import java.util.*;
 
 /**
@@ -38,6 +40,9 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
     @Resource(name = "hibernateBaseDao")
     private BaseDao<Article> articleDao;
+
+    @Resource(name = "hibernateBaseDao")
+    private BaseDao<ArticleUpdateLog> articleUpdateLogDao;
 
     @Override
     public RespData articleAdd(HttpHeaders headers,ArticlePublishRequest articlePublishRequest) {
@@ -142,15 +147,113 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
     @Override
     public RespData articleUpdate(HttpHeaders headers, ArticlePublishRequest articlePublishRequest) {
 
+        String articleId = articlePublishRequest.getArticleId();
 
+        Article article = articleDao.get(Article.class,articleId);
 
-        return null;
+        if (article!=null){
+
+            ArticleUpdateLog articleUpdateLog = new ArticleUpdateLog();
+
+            String[] tagArray = new String[(article.getTags().size())];
+
+            for (int i = 0; i <article.getTags().size(); i++) {
+                tagArray[i] = article.getTags().get(i).getName();
+            }
+
+            articleUpdateLog.setTags(StringUtils.join(tagArray,","));
+
+            articleUpdateLog.setCid(article.getCategories().get(0).getId());
+
+            articleUpdateLog.setCtime(new Date());
+
+            articleUpdateLog.setArticle_id(article.getId());
+
+            articleUpdateLog.setContent(article.getContent());
+
+            articleUpdateLog.setCover(article.getCover());
+
+            articleUpdateLog.setTitle(article.getTitle());
+
+            articleUpdateLog.setTimestamp(System.currentTimeMillis());
+
+            articleUpdateLogDao.save(articleUpdateLog);
+
+ //-------------------------------------------------------------------------------------
+            //标题
+            article.setTitle(articlePublishRequest.getTitle());
+            //封面
+            article.setCover(articlePublishRequest.getCover());
+
+            //内容
+            article.setContent(articlePublishRequest.getContent());
+
+            article.setUtime(new Date());
+
+//            article.setCategories(null);article.setTags(null);
+
+            articleDao.saveOrUpdate(article);
+
+            //tags标签
+            String tagstring = articlePublishRequest.getTags();
+
+            String[] tags = tagstring.split(",");
+
+            List<Tag> tagList = new ArrayList<Tag>();
+
+            for (String tag :
+                    tags) {
+
+                Query q = tagDao.createQuery("from Tag t where t.name=?");
+
+                q.setString(0,tag);
+
+                Tag tagModel = (Tag) q.uniqueResult();
+
+                if (tagModel==null){
+
+                    tagModel=new Tag();
+                    tagModel.setCtime(new Date());
+                    tagModel.setCreater(article.getMember().getId());
+                    tagModel.setName(tag);
+                    tagModel.setStatus("100");
+
+                    tagDao.save(tagModel);
+
+                }
+
+                tagList.add(tagModel);
+
+            }
+
+            article.setTags(tagList);
+
+            //分类
+            String catid = articlePublishRequest.getCategory();
+
+            if (StringUtils.isNotEmpty(catid)){
+
+                Category cat = categoryDao.get(Category.class,catid);
+
+                List<Category> catlist = new ArrayList<Category>();
+
+                catlist.add(cat);
+
+                article.setCategories(catlist);
+
+            }
+
+            return RespCode.getRespData(RespCode.SUCESS);
+
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
     }
 
     @Override
     public RespData categoryList() {
 
-        List<Category> categoryList = categoryDao.all(null);
+        List<Category> categoryList = categoryDao.createQuery("from Category ").list();
 
         List<CategoryResponse> categories = new ArrayList<CategoryResponse>();
 
@@ -165,5 +268,13 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
         }
 
         return RespCode.getRespData(RespCode.SUCESS,categories);
+    }
+
+    @Override
+    public RespData articleDel(HttpHeaders headers, ArticlePublishRequest articlePublishRequest) {
+
+
+
+        return null;
     }
 }

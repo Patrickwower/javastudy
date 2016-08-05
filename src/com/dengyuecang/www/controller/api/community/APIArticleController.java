@@ -55,7 +55,7 @@ public class APIArticleController {
     public RespData detail(@RequestHeader HttpHeaders headers, String articleId){
 
         try {
-            return articleServiceImpl.articleData(articleId);
+            return articleServiceImpl.articleData(headers,articleId);
         }catch (Exception e){
             e.printStackTrace();
         }

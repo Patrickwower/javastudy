@@ -17,4 +17,6 @@ public interface IPublishArticleService extends IBaseService<Article>{
 
     public RespData categoryList();
 
+    public RespData articleDel(HttpHeaders headers, ArticlePublishRequest articlePublishRequest);
+
 }

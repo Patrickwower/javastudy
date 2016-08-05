@@ -15,7 +15,7 @@
 			org.hibernate.dialect.MySQL5InnoDBDialect
 		</property>
 		<!-- 2，其他配置 -->
-		<property name="show_sql">true</property>
+		<property name="show_sql">false</property>
 		<property name="format_sql">true</property>
 		<property name="jdbc.fetch_size">25</property>
 		<property name="jdbc.batch_size">50</property>
