@@ -140,14 +140,28 @@ public class APIArticleController {
 
     }
 
-    @RequestMapping("/test")
-    public ModelAndView test(){
+//    @RequestMapping("/test")
+//    public ModelAndView test(){
+//
+//        ModelAndView mav = new ModelAndView();
+//
+//        mav.setViewName("redirect:http://www.baidu.com?abc=123");
+//
+//        return mav;
+//    }
 
-        ModelAndView mav = new ModelAndView();
+    @RequestMapping("/browse")
+    @ResponseBody
+    public RespData browse(@RequestHeader HttpHeaders headers, String  articleId){
 
-        mav.setViewName("redirect:http://www.baidu.com?abc=123");
+        try {
+            return articleServiceImpl.browse(headers,articleId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-        return mav;
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
     }
 
 }

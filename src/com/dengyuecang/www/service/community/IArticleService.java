@@ -42,4 +42,8 @@ public interface IArticleService extends IBaseService<Article>{
 
    public RespData focusList(HttpHeaders headers, FocusAuthorRequest focusRequest);
 
+   public Integer addBrowse(HttpHeaders headers,String articleId);
+
+   public RespData browse(HttpHeaders headers,String articleId);
+
 }

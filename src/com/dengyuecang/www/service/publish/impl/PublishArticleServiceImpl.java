@@ -9,10 +9,13 @@ import com.dengyuecang.www.entity.community.Tag;
 import com.dengyuecang.www.service.common.CommonConstant;
 import com.dengyuecang.www.service.publish.IPublishArticleService;
 import com.dengyuecang.www.service.publish.model.CategoryResponse;
+import com.dengyuecang.www.utils.JsonUtils;
+import com.dengyuecang.www.utils.RegexUtils;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
 import com.longinf.lxcommon.service.BaseService;
+import net.sf.json.util.JSONUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
@@ -54,6 +57,18 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
         article.setContent(StringUtils.isEmpty(articlePublishRequest.getContent())?"":articlePublishRequest.getContent());
 
         article.setCover(StringUtils.isEmpty(articlePublishRequest.getCover())?"":articlePublishRequest.getCover());
+
+        //如果没有设置封面,则从文本中取出第一张图片作为封面图
+        if (StringUtils.isEmpty(article.getCover())){
+
+            List<String> imgList = RegexUtils.getImgsFromHtml(article.getContent());
+
+            if (imgList.size()>0){
+                article.setCover(imgList.get(0));
+            }
+
+        }
+
         article.setCtime(new Date());
         article.setTitle(StringUtils.isEmpty(articlePublishRequest.getTitle())?"":articlePublishRequest.getTitle());
 

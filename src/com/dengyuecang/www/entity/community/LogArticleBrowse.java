@@ -4,6 +4,7 @@ import com.dengyuecang.www.entity.Member;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name="community_log_article_browse")
-public class LogArticleBrowse {
+public class LogArticleBrowse implements Serializable {
 
     private String id;
 

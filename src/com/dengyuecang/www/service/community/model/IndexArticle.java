@@ -1,5 +1,6 @@
 package com.dengyuecang.www.service.community.model;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,7 +28,13 @@ public class IndexArticle {
 
     private String zanCount;
 
+    private String commentCount;
+
+    private String browseCount;
+
     private String content;
+
+    private Date ctime;
 
     public IndexArticle() {
     }
@@ -118,5 +125,29 @@ public class IndexArticle {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(String commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public String getBrowseCount() {
+        return browseCount;
+    }
+
+    public void setBrowseCount(String browseCount) {
+        this.browseCount = browseCount;
+    }
+
+    public Date getCtime() {
+        return ctime;
+    }
+
+    public void setCtime(Date ctime) {
+        this.ctime = ctime;
     }
 }

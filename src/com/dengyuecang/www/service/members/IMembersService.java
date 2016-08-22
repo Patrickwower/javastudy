@@ -106,4 +106,15 @@ public interface IMembersService extends IBaseService<Member>{
 	 */
 	public RespData publishLogin(HttpHeaders headers, PublishLoginRequest loginRequest);
 
+	/**
+	 * 修改登录密码
+	 */
+	public RespData updatePwd(HttpHeaders headers, VerifyRequest verifyRequest);
+
+	/**
+	 * 验证手机验证码
+	 */
+
+	public RespData verifyCode(HttpHeaders headers, VerifyRequest verifyRequest);
+
 }

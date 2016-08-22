@@ -49,7 +49,8 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
     @Resource(name="hibernateBaseDao")
     private BaseDao<FocusMember> focusDao;
 
-
+    @Resource(name="hibernateBaseDao")
+    private BaseDao<LogArticleBrowse> logArticleBrowseDao;
 
     @Override
     public BaseDao<Article> getSuperDao() {
@@ -246,7 +247,13 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         iArticle.setTimestamp(article.getTimestamp()+"");
 
+        iArticle.setCtime(article.getCtime());
+
         iArticle.setZanCount(zanCount(article.getId()));
+
+        iArticle.setCommentCount(commentCount(article.getId()));
+
+        iArticle.setBrowseCount(browseCount(article.getId()));
 
         iArticle.setIfZan(ifZan(memberId,article.getId())+"");
 
@@ -412,6 +419,8 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         Map<String,String> response = new HashMap<String,String>();
 
+        response.put("commentCount",commentCount(request.getArticleId()));
+
         return RespCode.getRespData(RespCode.SUCESS, response);
 
     }
@@ -480,6 +489,8 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
 
         Map<String,String> response = new HashMap<String,String>();
+
+        response.put("zanCounrt",zanCount(articleId));
 
         return RespCode.getRespData(RespCode.SUCESS, response);
 
@@ -707,6 +718,47 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         return RespCode.getRespData(RespCode.SUCESS,response);
     }
 
+    @Override
+    public Integer addBrowse(HttpHeaders headers, String articleId) {
+
+        LogArticleBrowse logArticleBrowse = new LogArticleBrowse();
+
+        String memberId = headers.getFirst("memberId");
+
+        if (StringUtils.isNotEmpty(memberId)){
+
+            Member member = memberDao.get(Member.class,memberId);
+
+            if (member!=null){
+                logArticleBrowse.setMember(member);
+            }
+        }
+
+        Article article = articleDao.get(Article.class,articleId);
+
+        logArticleBrowse.setArticle(article);
+
+        logArticleBrowse.setCtime(new Date());
+
+        logArticleBrowseDao.save(logArticleBrowse);
+
+        String browseCount = this.browseCount(articleId);
+
+        return Integer.valueOf(browseCount);
+    }
+
+    @Override
+    public RespData browse(HttpHeaders headers, String articleId) {
+
+        Integer browseCount = this.addBrowse(headers,articleId);
+
+        Map<String,String> response = new HashMap<String,String>();
+
+        response.put("browseCount",browseCount+"");
+
+        return RespCode.getRespData(RespCode.SUCESS,response);
+    }
+
     private String zanCount(String articleId){
 
         String hqlZanCount = "select count(ae.id) from ArticleEvaluate ae where ae.article.id=? and ae.evaluation='0' ";
@@ -733,9 +785,17 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         return commentCount+"";
     }
 
-    private String viewCount(){
+    private String browseCount(String articleId){
 
-        return "";
+        String hqlBrowseCount = "select count(lab.id) from LogArticleBrowse lab where lab.article.id=? ";
+
+        Query q = logArticleBrowseDao.createQuery(hqlBrowseCount);
+
+        q.setString(0,articleId);
+
+        long browseCount = (long)q.uniqueResult();
+
+        return browseCount+"";
     }
 
     public boolean ifZan(String memberId,String articleId){

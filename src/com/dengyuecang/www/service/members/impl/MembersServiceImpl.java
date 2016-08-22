@@ -208,6 +208,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		info.setAppId(request.getMobile());
 		info.setCreateTime(new Date());
 		info.setIntroduction("");
+		info.setNickname(request.getNickname());
 
 		memberInfoDao.save(info);
 		
@@ -421,11 +422,11 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		String verifyResult = SmsUtil.requestData(SmsUtil.SMS_VERIFY_URL,smsVerifyRequest.getParams());
 
-//		if (!"200".equals(verifyResult)){
-//
-//			return RespCode.getRespData(RespCode.MOBILE_CODE_RROR, new HashMap<String, String>());
-//
-//		}
+		if (!"200".equals(verifyResult)){
+
+			return RespCode.getRespData(RespCode.MOBILE_CODE_ERROR, new HashMap<String, String>());
+
+		}
 
 		Member member = new Member();
 
@@ -445,6 +446,8 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 				registerRequest.setMobile(request.getMobile());
 
 				registerRequest.setOpenId(request.getMobile());
+
+				registerRequest.setNickname(request.getNickname());
 
 				member = saveMemberApp(headers, registerRequest);
 			}
@@ -1050,6 +1053,65 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		Map<String,Object> m = (Map<String,Object>)r.getData();
 
 		return this.register(headers,memberRegisterRequest);
+	}
+
+	@Override
+	public RespData updatePwd(HttpHeaders headers, VerifyRequest verifyRequest) {
+
+		try {
+			String mobile = verifyRequest.getMobile();
+
+			if (ifMobileExist(mobile)){
+
+				Member member = getMemberByMobile(mobile);
+
+				member.setPwd(verifyRequest.getPwd());
+
+				memberDao.save(member);
+
+				return RespCode.getRespData(RespCode.SUCESS, new HashMap<String, String>());
+
+			}else{
+
+				return RespCode.getRespData(RespCode.MEMBER_NOT_EXIST, new HashMap<String, String>());
+
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION, new HashMap<String, String>());
+	}
+
+	@Override
+	public RespData verifyCode(HttpHeaders headers, VerifyRequest request) {
+
+		//数据验证
+		if(StringUtils.isEmpty(request.getMobile())&&StringUtils.isEmpty(request.getMobile())){
+			return RespCode.getRespData(RespCode.LOGIN_MOBILE_NEEDED, new HashMap<>());
+		}
+
+		//验证码校验
+
+		SmsVerifyRequest smsVerifyRequest = new SmsVerifyRequest();
+
+		smsVerifyRequest.setAppkey(request.getAppkey());
+
+		smsVerifyRequest.setPhone(request.getMobile());
+
+		smsVerifyRequest.setZone(request.getZone());
+
+		smsVerifyRequest.setCode(request.getCode());
+
+		String verifyResult = SmsUtil.requestData(SmsUtil.SMS_VERIFY_URL,smsVerifyRequest.getParams());
+
+//		if (!"200".equals(verifyResult)){
+//
+//			return RespCode.getRespData(RespCode.MOBILE_CODE_ERROR, new HashMap<String, String>());
+//
+//		}
+
+		return RespCode.getRespData(RespCode.SUCESS, new HashMap<String, String>());
 	}
 
 	/**

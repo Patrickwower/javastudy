@@ -53,6 +53,23 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 
 	}
 
+	@RequestMapping(value="/verifyCode",method=RequestMethod.POST)
+	@ResponseBody
+	public RespData verifyCode(@RequestHeader HttpHeaders headers,VerifyRequest request){
+
+		try {
+
+			return membersServiceImpl.verifyCode(headers,request);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
+	}
+
+
+
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	@ResponseBody
 	public RespData login(@RequestHeader HttpHeaders headers,HttpServletRequest request){
@@ -179,6 +196,26 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 
 		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
 	}
+
+	/**
+	 * 修改密码
+	 */
+	@RequestMapping(value = "/updatePwd",method = RequestMethod.POST)
+	@ResponseBody
+	public RespData updatePwd(@RequestHeader HttpHeaders headers,VerifyRequest request){
+
+		try {
+
+			return membersServiceImpl.updatePwd(headers,request);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
+
+	}
+
 
 
 }

@@ -15,6 +15,8 @@ public class VerifyRequest {
 
     private String pwd;
 
+    private String nickname;
+
     public VerifyRequest() {
     }
 
@@ -56,5 +58,13 @@ public class VerifyRequest {
 
     public void setPwd(String pwd) {
         this.pwd = pwd;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }
