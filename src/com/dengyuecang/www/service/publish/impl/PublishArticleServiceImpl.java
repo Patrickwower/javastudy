@@ -196,6 +196,8 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
             articleUpdateLog.setTimestamp(System.currentTimeMillis());
 
+            articleUpdateLog.setWordCount(article.getWordCount());
+
             articleUpdateLogDao.save(articleUpdateLog);
 
  //-------------------------------------------------------------------------------------
@@ -206,6 +208,8 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
             //内容
             article.setContent(articlePublishRequest.getContent());
+            article.setWordCount(Integer.valueOf(articlePublishRequest.getWordCount()));
+
 
             article.setUtime(new Date());
 
