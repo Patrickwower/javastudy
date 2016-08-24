@@ -19,6 +19,8 @@ public class ArticlePublishRequest {
 
     private String category;
 
+    private String wordCount;
+
     public String getMemberId() {
         return memberId;
     }
@@ -73,6 +75,14 @@ public class ArticlePublishRequest {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getWordCount() {
+        return wordCount;
+    }
+
+    public void setWordCount(String wordCount) {
+        this.wordCount = wordCount;
     }
 
     public ArticlePublishRequest() {

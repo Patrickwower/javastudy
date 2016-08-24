@@ -34,7 +34,7 @@ public class RegexUtils {
 
 
 
-        String xmlString = "<p>默默</p><p><img src=\"http://test.static.dengyuecang.com/article/2016/08/22/16/50a5f65e-fd08-470c-a8c9-afc3bc994a2d.jpg\"/></p><p></p>";
+        String xmlString = "<p>啦咯啦咯啦咯啦</p><p><img src=\"http://test.static.dengyuecang.com/article/2016/08/23/12/2eeed3a7-b99a-475d-88f6-afbb8c1881a3.jpg\"></p>";
 
         List<String> l = RegexUtils.getImgsFromHtml(xmlString);
 

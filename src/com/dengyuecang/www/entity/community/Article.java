@@ -34,6 +34,8 @@ public class Article implements Serializable{
 
     private long timestamp;
 
+    private int wordCount;
+
     public Article() {
     }
 
@@ -162,5 +164,13 @@ public class Article implements Serializable{
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public int getWordCount() {
+        return wordCount;
+    }
+
+    public void setWordCount(int wordCount) {
+        this.wordCount = wordCount;
     }
 }

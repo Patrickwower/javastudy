@@ -34,11 +34,7 @@ public class PublishArticleController {
 
         try {
 
-
             log.info("保存文章接口,参数列表");
-            log.info("文章标题:"+articlePublishRequest.getTitle());
-            log.info("文章封面:"+articlePublishRequest.getCover());
-            log.info("文章内容:"+articlePublishRequest.getContent());
             return publishArticleServiceImpl.articleAdd(headers,articlePublishRequest);
 
         }catch (Exception e){

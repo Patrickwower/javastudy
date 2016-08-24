@@ -56,6 +56,8 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
         article.setTimestamp(System.currentTimeMillis());
         article.setContent(StringUtils.isEmpty(articlePublishRequest.getContent())?"":articlePublishRequest.getContent());
 
+        article.setWordCount(Integer.valueOf(articlePublishRequest.getWordCount()));
+
         article.setCover(StringUtils.isEmpty(articlePublishRequest.getCover())?"":articlePublishRequest.getCover());
 
         //如果没有设置封面,则从文本中取出第一张图片作为封面图
@@ -165,6 +167,8 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
         String articleId = articlePublishRequest.getArticleId();
 
         Article article = articleDao.get(Article.class,articleId);
+
+
 
         if (article!=null){
 

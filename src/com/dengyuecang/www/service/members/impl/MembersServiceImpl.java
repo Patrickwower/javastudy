@@ -1105,11 +1105,11 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		String verifyResult = SmsUtil.requestData(SmsUtil.SMS_VERIFY_URL,smsVerifyRequest.getParams());
 
-//		if (!"200".equals(verifyResult)){
-//
-//			return RespCode.getRespData(RespCode.MOBILE_CODE_ERROR, new HashMap<String, String>());
-//
-//		}
+		if (!"200".equals(verifyResult)){
+
+			return RespCode.getRespData(RespCode.MOBILE_CODE_ERROR, new HashMap<String, String>());
+
+		}
 
 		return RespCode.getRespData(RespCode.SUCESS, new HashMap<String, String>());
 	}

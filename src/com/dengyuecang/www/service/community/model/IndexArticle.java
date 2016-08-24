@@ -32,6 +32,8 @@ public class IndexArticle {
 
     private String browseCount;
 
+    private String wordCount;
+
     private String content;
 
     private Date ctime;
@@ -141,6 +143,14 @@ public class IndexArticle {
 
     public void setBrowseCount(String browseCount) {
         this.browseCount = browseCount;
+    }
+
+    public String getWordCount() {
+        return wordCount;
+    }
+
+    public void setWordCount(String wordCount) {
+        this.wordCount = wordCount;
     }
 
     public Date getCtime() {

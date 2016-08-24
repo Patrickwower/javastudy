@@ -13,7 +13,7 @@ import java.util.List;
  */
 
 @Entity
-@Table(name="community_article_update_log")
+@Table(name="community_log_article_update")
 public class ArticleUpdateLog implements Serializable{
 
     private String id;
@@ -29,6 +29,8 @@ public class ArticleUpdateLog implements Serializable{
     private Date ctime;
 
     private long timestamp;
+
+    private Integer wordCount;
 
     public ArticleUpdateLog() {
     }
@@ -126,4 +128,11 @@ public class ArticleUpdateLog implements Serializable{
         this.cid = cid;
     }
 
+    public Integer getWordCount() {
+        return wordCount;
+    }
+
+    public void setWordCount(Integer wordCount) {
+        this.wordCount = wordCount;
+    }
 }

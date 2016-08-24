@@ -255,6 +255,8 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         iArticle.setBrowseCount(browseCount(article.getId()));
 
+        iArticle.setWordCount(article.getWordCount()+"");
+
         iArticle.setIfZan(ifZan(memberId,article.getId())+"");
 
         iArticle.setUrl(article.getUrl()+article.getId());
