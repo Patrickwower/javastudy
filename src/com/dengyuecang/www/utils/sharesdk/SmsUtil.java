@@ -1,5 +1,7 @@
 package com.dengyuecang.www.utils.sharesdk;
 
+import com.dengyuecang.www.service.common.CommonConstant;
+
 import javax.net.ssl.*;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -31,10 +33,14 @@ public class SmsUtil {
     /**
      * 发起https 请求
      * @param address
-     * @param m
+     * @param params
      * @return
      */
     public  static String requestData(String address ,String params){
+
+        if (CommonConstant.SDK_MSG_LOCK){
+            return "200";
+        }
 
         HttpURLConnection conn = null;
         try {

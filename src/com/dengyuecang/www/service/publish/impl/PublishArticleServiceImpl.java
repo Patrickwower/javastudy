@@ -56,7 +56,11 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
         article.setTimestamp(System.currentTimeMillis());
         article.setContent(StringUtils.isEmpty(articlePublishRequest.getContent())?"":articlePublishRequest.getContent());
 
-        article.setWordCount(Integer.valueOf(articlePublishRequest.getWordCount()));
+        if (StringUtils.isNotEmpty(articlePublishRequest.getWordCount())){
+            article.setWordCount(Integer.valueOf(articlePublishRequest.getWordCount()));
+        }else{
+            article.setWordCount(0);
+        }
 
         article.setCover(StringUtils.isEmpty(articlePublishRequest.getCover())?"":articlePublishRequest.getCover());
 
@@ -208,8 +212,12 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
             //内容
             article.setContent(articlePublishRequest.getContent());
-            article.setWordCount(Integer.valueOf(articlePublishRequest.getWordCount()));
 
+            if (StringUtils.isNotEmpty(articlePublishRequest.getWordCount())){
+                article.setWordCount(Integer.valueOf(articlePublishRequest.getWordCount()));
+            }else{
+                article.setWordCount(0);
+            }
 
             article.setUtime(new Date());
 

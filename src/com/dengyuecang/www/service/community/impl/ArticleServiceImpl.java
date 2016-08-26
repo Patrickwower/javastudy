@@ -52,6 +52,9 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
     @Resource(name="hibernateBaseDao")
     private BaseDao<LogArticleBrowse> logArticleBrowseDao;
 
+    @Resource(name="hibernateBaseDao")
+    private BaseDao<ArticleCollection> collectionDao;
+
     @Override
     public BaseDao<Article> getSuperDao() {
         return null;
@@ -255,13 +258,15 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         iArticle.setBrowseCount(browseCount(article.getId()));
 
+        iArticle.setCollectionCount(collectionCount(article.getId()));
+
         iArticle.setWordCount(article.getWordCount()+"");
 
         iArticle.setIfZan(ifZan(memberId,article.getId())+"");
 
         iArticle.setUrl(article.getUrl()+article.getId());
 
-        iArticle.setContent(article.getContent());
+//        iArticle.setContent(article.getContent());
 
         return iArticle;
     }
@@ -496,6 +501,64 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         return RespCode.getRespData(RespCode.SUCESS, response);
 
+
+    }
+
+    @Override
+    public RespData collection(HttpHeaders headers, CollectionRequest collectionRequest) {
+
+        String memberId = headers.getFirst("memberId");
+
+        String articleId = collectionRequest.getArticleId();
+
+        String hql = "from ArticleCollection ac where ac.discussant.id=? and ac.article.id=? ";
+
+        Query q = articleEvaluateDao.createQuery(hql);
+
+        q.setString(0,memberId);
+
+        q.setString(1,articleId);
+
+        ArticleCollection ac = (ArticleCollection) q.uniqueResult();
+
+        if (ac!=null){
+
+
+                collectionDao.delete(ac);
+
+        }else{
+
+            Member discussant = memberDao.get(Member.class,memberId);
+
+            ac = new ArticleCollection();
+
+            ac.setDiscussant(discussant);
+
+            ac.setCtime(new Date());
+
+            ac.setTimestamp(System.currentTimeMillis());
+
+            Article article = new Article();
+
+            try{
+
+                article = articleDao.get(Article.class,collectionRequest.getArticleId());
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            ac.setArticle(article);
+
+            collectionDao.save(ac);
+        }
+
+
+        Map<String,String> response = new HashMap<String,String>();
+
+        response.put("collectionCounrt",collectionCount(articleId));
+
+        return RespCode.getRespData(RespCode.SUCESS, response);
 
     }
 
@@ -798,6 +861,19 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         long browseCount = (long)q.uniqueResult();
 
         return browseCount+"";
+    }
+
+    private String collectionCount(String articleId){
+
+        String hqlCollectionCount = "select count(ac.id) from ArticleCollection ac where ac.article.id=? ";
+
+        Query q = collectionDao.createQuery(hqlCollectionCount);
+
+        q.setString(0,articleId);
+
+        long collectionCount = (long)q.uniqueResult();
+
+        return collectionCount+"";
     }
 
     public boolean ifZan(String memberId,String articleId){

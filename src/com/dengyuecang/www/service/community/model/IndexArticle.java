@@ -32,6 +32,8 @@ public class IndexArticle {
 
     private String browseCount;
 
+    private String collectionCount;
+
     private String wordCount;
 
     private String content;
@@ -143,6 +145,14 @@ public class IndexArticle {
 
     public void setBrowseCount(String browseCount) {
         this.browseCount = browseCount;
+    }
+
+    public String getCollectionCount() {
+        return collectionCount;
+    }
+
+    public void setCollectionCount(String collectionCount) {
+        this.collectionCount = collectionCount;
     }
 
     public String getWordCount() {

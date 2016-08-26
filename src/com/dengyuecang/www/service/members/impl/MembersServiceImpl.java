@@ -208,6 +208,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		info.setAppId(request.getMobile());
 		info.setCreateTime(new Date());
 		info.setIntroduction("");
+		info.setIcon(request.getIcon()==null?"":request.getIcon());
 		info.setNickname(request.getNickname());
 
 		memberInfoDao.save(info);
@@ -437,7 +438,9 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			Member memberExist = getMemberByMobile(mobile);
 			if (memberExist!=null) {
 
-				member = memberExist;
+				return RespCode.getRespData(RespCode.MOBILE_REGISTERED,new HashMap<String,String>());
+
+//				member = memberExist;
 
 			}else{
 
@@ -448,6 +451,8 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 				registerRequest.setOpenId(request.getMobile());
 
 				registerRequest.setNickname(request.getNickname());
+
+				registerRequest.setPwd(request.getPwd());
 
 				member = saveMemberApp(headers, registerRequest);
 			}

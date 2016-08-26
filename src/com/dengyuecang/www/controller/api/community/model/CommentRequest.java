@@ -11,6 +11,10 @@ public class CommentRequest {
 
     private String comment;
 
+    private String commentId;
+
+    private String atMember;
+
     public CommentRequest() {
     }
 
@@ -36,5 +40,13 @@ public class CommentRequest {
 
     public void setArticleId(String articleId) {
         this.articleId = articleId;
+    }
+
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 }

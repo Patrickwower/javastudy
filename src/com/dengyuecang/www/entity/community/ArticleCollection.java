@@ -4,6 +4,7 @@ import com.dengyuecang.www.entity.Member;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,15 +12,17 @@ import java.util.Date;
  */
 @Entity
 @Table(name="community_article_collection")
-public class ArticleCollection {
+public class ArticleCollection implements Serializable {
 
     private String id;
 
     private Article article;
 
-    private Member member;
+    private Member discussant;
 
     private Date ctime;
+
+    private long timestamp;
 
     @GenericGenerator(name = "generator", strategy = "uuid")
     @Id
@@ -45,13 +48,13 @@ public class ArticleCollection {
     }
 
     @OneToOne
-    @JoinColumn(name="member_id")
-    public Member getMember() {
-        return member;
+    @JoinColumn(name="discussant")
+    public Member getDiscussant() {
+        return discussant;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
+    public void setDiscussant(Member discussant) {
+        this.discussant = discussant;
     }
 
     public Date getCtime() {
@@ -60,5 +63,13 @@ public class ArticleCollection {
 
     public void setCtime(Date ctime) {
         this.ctime = ctime;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

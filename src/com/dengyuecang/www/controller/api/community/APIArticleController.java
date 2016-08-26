@@ -101,6 +101,20 @@ public class APIArticleController {
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
     }
 
+    @RequestMapping("/collection")
+    public RespData collection(@RequestHeader HttpHeaders headers, CollectionRequest collectionRequest){
+
+        try {
+            return articleServiceImpl.collection(headers, collectionRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
+
+
+
     @RequestMapping("/focus")
     public RespData focusAuthor(@RequestHeader HttpHeaders headers, FocusAuthorRequest request){
 

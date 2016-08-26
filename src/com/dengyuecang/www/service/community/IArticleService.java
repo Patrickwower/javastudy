@@ -32,6 +32,8 @@ public interface IArticleService extends IBaseService<Article>{
 
    public RespData evalute(HttpHeaders headers, EvaluteRequest evaluteRequest);
 
+   public RespData collection(HttpHeaders headers, CollectionRequest collectionRequest);
+
    public RespData articleData(HttpHeaders headers, String articleId);
 
    public RespData focusAuthor(HttpHeaders headers, FocusAuthorRequest request);
