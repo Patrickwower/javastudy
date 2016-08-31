@@ -26,11 +26,13 @@ public interface IArticleService extends IBaseService<Article>{
 
    public RespData getArticle(String articleId);
 
-   public RespData comments(ArticleCommentRequest request);
+   public RespData comments(HttpHeaders headers,ArticleCommentRequest request);
 
    public RespData comment(HttpHeaders headers, CommentRequest request);
 
-   public RespData evalute(HttpHeaders headers, EvaluteRequest evaluteRequest);
+   public RespData evaluate(HttpHeaders headers, EvaluteRequest evaluteRequest);
+
+   public RespData comment_evaluate(HttpHeaders headers, EvaluteRequest evaluteRequest);
 
    public RespData collection(HttpHeaders headers, CollectionRequest collectionRequest);
 

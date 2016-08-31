@@ -15,6 +15,7 @@ import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
 import com.longinf.lxcommon.service.BaseService;
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import net.sf.json.util.JSONUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
@@ -55,6 +56,12 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
         article.setStatus("100");
         article.setTimestamp(System.currentTimeMillis());
         article.setContent(StringUtils.isEmpty(articlePublishRequest.getContent())?"":articlePublishRequest.getContent());
+
+        String regEx_html = "<[^>]+>";
+
+        String summary = article.getContent().replace(regEx_html,"");
+
+        article.setSummary(summary);
 
         if (StringUtils.isNotEmpty(articlePublishRequest.getWordCount())){
             article.setWordCount(Integer.valueOf(articlePublishRequest.getWordCount()));
@@ -193,6 +200,8 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
             articleUpdateLog.setArticle_id(article.getId());
 
             articleUpdateLog.setContent(article.getContent());
+
+
 
             articleUpdateLog.setCover(article.getCover());
 

@@ -1,11 +1,11 @@
 package com.dengyuecang.www.service.community.model;
 
 /**
- * Created by acang on 16/7/12.
+ * Created by acang on 16/8/26.
  */
-public class ArticleDiscussant {
+public class ArticleCommentAtMember {
 
-    private String id;
+    private String memberId;
 
     private String nickname;
 
@@ -13,15 +13,12 @@ public class ArticleDiscussant {
 
     private String ifAuthor;
 
-    public ArticleDiscussant() {
+    public String getMemberId() {
+        return memberId;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
     }
 
     public String getNickname() {

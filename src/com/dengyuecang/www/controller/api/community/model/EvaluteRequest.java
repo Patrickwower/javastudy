@@ -7,6 +7,8 @@ public class EvaluteRequest {
 
     private String articleId;
 
+    private String commentId;
+
     private String topicId;
 
     private String evaluation;
@@ -36,5 +38,13 @@ public class EvaluteRequest {
 
     public void setArticleId(String articleId) {
         this.articleId = articleId;
+    }
+
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 }

@@ -11,14 +11,16 @@ import java.util.Date;
  * Created by acang on 16/7/5.
  */
 @Entity
-@Table(name="community_article_comment")
-public class ArticleComment implements Serializable {
+@Table(name="community_article_comment_evaluate")
+public class ArticleCommentEvaluate implements Serializable {
 
     private String id;
 
+    private String evaluation;
+
     private Article article;
 
-    private String comment;
+    private ArticleComment comment;
 
     private Member discussant;
 
@@ -26,11 +28,8 @@ public class ArticleComment implements Serializable {
 
     private long timestamp;
 
-    private ArticleComment articleComment;
-
-    private ArticleComment fatherComment;
-
-    private String atMember;
+    public ArticleCommentEvaluate() {
+    }
 
     @GenericGenerator(name = "generator", strategy = "uuid")
     @Id
@@ -55,11 +54,13 @@ public class ArticleComment implements Serializable {
         this.article = article;
     }
 
-    public String getComment() {
+    @OneToOne
+    @JoinColumn(name="comment_id")
+    public ArticleComment getComment() {
         return comment;
     }
 
-    public void setComment(String comment) {
+    public void setComment(ArticleComment comment) {
         this.comment = comment;
     }
 
@@ -73,14 +74,6 @@ public class ArticleComment implements Serializable {
         this.discussant = discussant;
     }
 
-    public Date getCtime() {
-        return ctime;
-    }
-
-    public void setCtime(Date ctime) {
-        this.ctime = ctime;
-    }
-
     public long getTimestamp() {
         return timestamp;
     }
@@ -89,32 +82,19 @@ public class ArticleComment implements Serializable {
         this.timestamp = timestamp;
     }
 
-    @OneToOne
-    @JoinColumn(name="comment_id")
-    public ArticleComment getArticleComment() {
-        return articleComment;
+    public String getEvaluation() {
+        return evaluation;
     }
 
-    public void setArticleComment(ArticleComment articleComment) {
-        this.articleComment = articleComment;
+    public void setEvaluation(String evaluation) {
+        this.evaluation = evaluation;
     }
 
-    @OneToOne
-    @JoinColumn(name = "father_id")
-    public ArticleComment getFatherComment() {
-        return fatherComment;
+    public Date getCtime() {
+        return ctime;
     }
 
-    public void setFatherComment(ArticleComment fatherComment) {
-        this.fatherComment = fatherComment;
-    }
-
-    @Column(name = "at_member")
-    public String getAtMember() {
-        return atMember;
-    }
-
-    public void setAtMember(String atMember) {
-        this.atMember = atMember;
+    public void setCtime(Date ctime) {
+        this.ctime = ctime;
     }
 }

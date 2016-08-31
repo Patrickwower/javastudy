@@ -26,6 +26,8 @@ public class IndexArticle {
 
     private String ifZan;
 
+    private String ifCollection;
+
     private String zanCount;
 
     private String commentCount;
@@ -37,6 +39,8 @@ public class IndexArticle {
     private String wordCount;
 
     private String content;
+
+    private String summary;
 
     private Date ctime;
 
@@ -81,6 +85,14 @@ public class IndexArticle {
 
     public void setIfZan(String ifZan) {
         this.ifZan = ifZan;
+    }
+
+    public String getIfCollection() {
+        return ifCollection;
+    }
+
+    public void setIfCollection(String ifCollection) {
+        this.ifCollection = ifCollection;
     }
 
     public String getCategory() {
@@ -169,5 +181,13 @@ public class IndexArticle {
 
     public void setCtime(Date ctime) {
         this.ctime = ctime;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }

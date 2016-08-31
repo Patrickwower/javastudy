@@ -11,6 +11,8 @@ public class ArticleCommentRequest {
 
     public String articleId = "";
 
+    public String commentId = "";
+
     public ArticleCommentRequest() {
     }
 
@@ -36,5 +38,13 @@ public class ArticleCommentRequest {
 
     public void setArticleId(String articleId) {
         this.articleId = articleId;
+    }
+
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 }

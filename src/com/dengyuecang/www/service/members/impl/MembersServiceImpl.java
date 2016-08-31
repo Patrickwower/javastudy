@@ -1,5 +1,7 @@
 package com.dengyuecang.www.service.members.impl;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,8 +12,10 @@ import java.util.Set;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.dengyuecang.www.controller.api.members.model.request.UpdateMemberInformationRequest;
 import com.dengyuecang.www.controller.api.members.model.request.VerifyRequest;
 import com.dengyuecang.www.controller.api.publish.model.PublishLoginRequest;
+import com.dengyuecang.www.entity.community.FocusMember;
 import com.dengyuecang.www.service.members.model.*;
 import com.dengyuecang.www.service.model.MemberLoginRequest;
 import com.dengyuecang.www.utils.sharesdk.SmsUtil;
@@ -96,7 +100,10 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 	@Resource(name = "hibernateBaseDao")
 	private BaseDao<Qq> qqDao;
-	
+
+	@Resource(name = "hibernateBaseDao")
+	private BaseDao<FocusMember> focusMemberDao;
+
 	@Override
 	public RespData register(HttpHeaders headers,MemberRegisterRequest request) {
 		
@@ -1014,6 +1021,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		}else{
 
+			return RespCode.getRespData(RespCode.HEADER_MEMBERID_NEEDED,new HashMap<String,String>());
 
 		}
 
@@ -1029,11 +1037,228 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		cMemberResponse.setIntroduction(member.getMemberInfo().getIntroduction());
 
+		cMemberResponse.setSex(member.getMemberInfo().getGender()==null?"男":member.getMemberInfo().getGender());
+
+		cMemberResponse.setCity(member.getMemberInfo().getCity()==null?"":member.getMemberInfo().getCity());
+
+		cMemberResponse.setSchool(member.getMemberInfo().getSchool()==null?"":member.getMemberInfo().getSchool());
+
+//		cMemberResponse.setTimestamp(member.getMemberIn);
+
+		if (member.getMemberInfo().getEnrollmentDate()!=null){
+
+			Format f = new SimpleDateFormat("yyyy-mm-dd hh:min:ss");
+
+			cMemberResponse.setEnrollment(f.format(member.getMemberInfo().getEnrollmentDate()));
+
+		}
+
+		//计算总的关注人数      下一步关注列表接口
+
+		int fucosCount = 0;
+
+		fucosCount = fucosCount(memberId);
+
+		cMemberResponse.setFucosCount(fucosCount+"");
+
+		//计算总的被关注次数(粉丝数)   下一步关注我的人的列表
+
+		int fucosedCount = 0;
+
+		fucosedCount = fucosedCount(memberId);
+
+		cMemberResponse.setFucosedCount(fucosedCount+"");
+		//总的被赞数   包含文章和评论被赞
+
+		int zanCount = 0;
+
+		zanCount = zanCount(memberId);
+
+		cMemberResponse.setZanCount(zanCount+"");
+
+		//关联账号:微信,邮箱,手机
+
+		if (member.getWeixin()!=null){
+
+			Weixin weixin = member.getWeixin();
+
+			RelatedAccount ra = new RelatedAccount();
+
+			ra.setAccountId(weixin.getId());
+
+			ra.setAccountNickname(weixin.getNickname());
+
+			ra.setPlatform("weixin");
+
+			cMemberResponse.getAccounts().add(ra);
+		}
+
+		if (StringUtils.isNotEmpty(member.getMemberInfo().getMobile())){
+
+			RelatedAccount ra = new RelatedAccount();
+
+			ra.setAccountId(member.getMemberInfo().getId());
+
+			ra.setAccountNickname(member.getMemberInfo().getMobile());
+
+			ra.setPlatform("mobile");
+
+			cMemberResponse.getAccounts().add(ra);
+
+		}
+
 		Map<String, Object> response = new HashMap<String, Object>();
 
 		response.put("memberinfo",cMemberResponse);
 
 		return RespCode.getRespData(RespCode.SUCESS,response);
+	}
+
+	@Override
+	public RespData updateInformation(HttpHeaders headers, UpdateMemberInformationRequest updateRequest) {
+
+		String memberId = headers.getFirst("memberId");
+
+		if (StringUtils.isEmpty(memberId)){
+
+			return RespCode.getRespData(RespCode.HEADER_MEMBERID_NEEDED,new HashMap<String,String>());
+
+		}
+
+		Member member = memberDao.get(Member.class,memberId);
+
+		if (member==null){
+
+			return  RespCode.getRespData(RespCode.MEMBER_NOT_EXIST,new HashMap<String,String>());
+
+		}
+
+		if (StringUtils.isNotEmpty(updateRequest.getHead())){
+
+			member.getMemberInfo().setIcon(updateRequest.getHead());
+
+		}
+
+		if (StringUtils.isNotEmpty(updateRequest.getCity())){
+
+			member.getMemberInfo().setCity(updateRequest.getCity());
+
+		}
+
+		if (StringUtils.isNotEmpty(updateRequest.getEnrollment())){
+
+			try {
+
+				Format f = new SimpleDateFormat("yyyy-mm-dd");
+
+				member.getMemberInfo().setEnrollmentDate((Date) f.parseObject(updateRequest.getEnrollment()));
+
+			}catch (Exception e){
+
+			}
+
+		}
+
+		if (StringUtils.isNotEmpty(updateRequest.getIntroduction())){
+
+
+
+		}
+
+		if (StringUtils.isNotEmpty(updateRequest.getNickname())){
+
+
+
+		}
+
+		if (StringUtils.isNotEmpty(updateRequest.getSchool())){
+
+
+
+		}
+
+		if (StringUtils.isNotEmpty(updateRequest.getSex())){
+
+
+
+		}
+
+//		if (StringUtils.isNotEmpty(updateRequest.get)){
+//
+//
+//
+//		}
+
+		return null;
+	}
+
+	private int fucosCount(String memberId){
+
+		if (StringUtils.isNotEmpty(memberId)){
+
+			String hqlFucosCount = "select count(fm.id) from FocusMember fm where fm.focus.id=? ";
+
+			Query q = focusMemberDao.createQuery(hqlFucosCount);
+
+			q.setString(0,memberId);
+
+			long fucosCount = (long)q.uniqueResult();
+
+			return (int) fucosCount;
+
+		}
+
+		return 0;
+	}
+
+	private int fucosedCount(String memberId){
+
+		if (StringUtils.isNotEmpty(memberId)){
+
+			String hqlFucosCount = "select count(fm.id) from FocusMember fm where fm.member.id=? ";
+
+			Query q = focusMemberDao.createQuery(hqlFucosCount);
+
+			q.setString(0,memberId);
+
+			long fucosCount = (long)q.uniqueResult();
+
+			return (int) fucosCount;
+
+		}
+
+		return 0;
+	}
+
+	private int zanCount(String memberId){
+
+		return articleZanCount(memberId)+commentZanCount(memberId);
+	}
+
+	private int articleZanCount(String memberId){
+
+		String hqlArticleZanCount = "select count(b.id) from Article a,ArticleEvaluate b where a.member.id=? and a.id=b.article.id ";
+
+		Query q = memberDao.createQuery(hqlArticleZanCount);
+
+		q.setString(0,memberId);
+
+		long articleZanCount = (long)q.uniqueResult();
+
+		return (int)articleZanCount;
+	}
+
+	private int commentZanCount(String memberId){
+
+		String hqlCommentZanCount = "select count(b.id) from ArticleComment a,ArticleCommentEvaluate b where a.discussant.id=? and a.id=b.comment.id and a.article.id=b.article.id";
+
+		Query q = memberDao.createQuery(hqlCommentZanCount);
+
+		q.setString(0,memberId);
+
+		long commentZanCount = (long)q.uniqueResult();
+
+		return (int)commentZanCount;
 	}
 
 	@Override

@@ -36,6 +36,8 @@ public class Article implements Serializable{
 
     private int wordCount;
 
+    private String summary;
+
     public Article() {
     }
 
@@ -172,5 +174,13 @@ public class Article implements Serializable{
 
     public void setWordCount(int wordCount) {
         this.wordCount = wordCount;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }

@@ -47,6 +47,12 @@ public class MemberInfo implements Serializable{
 
 	private String introduction;
 
+	private String city;
+
+	private String school;
+
+	private Date enrollmentDate;
+
 	public MemberInfo() {
 		super();
 	}
@@ -182,5 +188,29 @@ public class MemberInfo implements Serializable{
 
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getSchool() {
+		return school;
+	}
+
+	public void setSchool(String school) {
+		this.school = school;
+	}
+
+	public Date getEnrollmentDate() {
+		return enrollmentDate;
+	}
+
+	public void setEnrollmentDate(Date enrollmentDate) {
+		this.enrollmentDate = enrollmentDate;
 	}
 }

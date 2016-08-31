@@ -67,7 +67,19 @@ public class APIArticleController {
     public RespData evaluate(@RequestHeader HttpHeaders headers, EvaluteRequest evaluteRequest){
 
         try {
-            return articleServiceImpl.evalute(headers, evaluteRequest);
+            return articleServiceImpl.evaluate(headers, evaluteRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
+
+    @RequestMapping("/comment_evaluate")
+    public RespData comment_evaluate(@RequestHeader HttpHeaders headers, EvaluteRequest evaluteRequest){
+
+        try {
+            return articleServiceImpl.comment_evaluate(headers, evaluteRequest);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -93,7 +105,7 @@ public class APIArticleController {
     public RespData commentList(@RequestHeader HttpHeaders headers, ArticleCommentRequest request){
 
         try {
-            return articleServiceImpl.comments(request);
+            return articleServiceImpl.comments(headers,request);
         }catch (Exception e){
             e.printStackTrace();
         }

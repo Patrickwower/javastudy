@@ -49,4 +49,12 @@ public class CommentRequest {
     public void setCommentId(String commentId) {
         this.commentId = commentId;
     }
+
+    public String getAtMember() {
+        return atMember;
+    }
+
+    public void setAtMember(String atMember) {
+        this.atMember = atMember;
+    }
 }

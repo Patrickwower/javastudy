@@ -2,10 +2,12 @@ package com.dengyuecang.www.controller.api.members;
 
 
 import com.dengyuecang.www.controller.api.members.model.request.MemberRegisterRequest;
+import com.dengyuecang.www.controller.api.members.model.request.UpdateMemberInformationRequest;
 import com.dengyuecang.www.controller.api.members.model.request.VerifyRequest;
 import com.dengyuecang.www.service.members.IMembersService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
+import org.omg.CORBA.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -216,6 +218,20 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 
 	}
 
+	/**
+	 * 更新用户信息
+	 */
+	@RequestMapping(value = "/updateInformation",method = RequestMethod.POST)
+	@ResponseBody
+	public RespData updateInformation(@RequestHeader HttpHeaders headers,UpdateMemberInformationRequest updateRequest){
 
+		try {
+			return membersServiceImpl.updateInformation(headers, updateRequest);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+	}
 
 }

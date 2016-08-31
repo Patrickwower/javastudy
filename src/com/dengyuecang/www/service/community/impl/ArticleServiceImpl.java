@@ -13,7 +13,6 @@ import com.longinf.lxcommon.dao.BaseDao;
 import com.longinf.lxcommon.service.BaseService;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
-import org.hibernate.mapping.Index;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +53,9 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
     @Resource(name="hibernateBaseDao")
     private BaseDao<ArticleCollection> collectionDao;
+
+    @Resource(name="hibernateBaseDao")
+    private BaseDao<ArticleCommentEvaluate> commentEvaluateDao;
 
     @Override
     public BaseDao<Article> getSuperDao() {
@@ -264,7 +266,11 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         iArticle.setIfZan(ifZan(memberId,article.getId())+"");
 
+        iArticle.setIfCollection(ifCollection(memberId,article.getId())+"");
+
         iArticle.setUrl(article.getUrl()+article.getId());
+
+        iArticle.setSummary(article.getSummary());
 
 //        iArticle.setContent(article.getContent());
 
@@ -333,7 +339,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
     }
 
     @Override
-    public RespData comments(ArticleCommentRequest request) {
+    public RespData comments(HttpHeaders headers,ArticleCommentRequest request) {
 
         int limit = 10;
 
@@ -347,7 +353,17 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
             timestamp = Long.valueOf(request.getTimestamp());
         }
 
-        String hql = "from ArticleComment ac where ac.article.id=? and timestamp<"+timestamp+" order by timestamp desc ";
+        String memberId = headers.getFirst("memberId");
+
+        String listHql = "";
+
+        if (StringUtils.isNotEmpty(request.getCommentId())){
+
+            listHql += " and articleComment.id=? ";
+
+        }
+
+        String hql = "from ArticleComment ac where ac.article.id=? and timestamp<"+timestamp+" "+listHql+" order by timestamp ";
 
         Query q = articleDao.createQuery(hql);
 
@@ -356,6 +372,16 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         q.setMaxResults(limit);
 
         q.setString(0,request.getArticleId());
+
+        if (StringUtils.isNotEmpty(request.getCommentId())){
+
+            ArticleComment articleComment = articleCommentDao.get(ArticleComment.class,request.getCommentId());
+
+            if (articleComment!=null){q.setString(1,articleComment.getArticleComment().getId());}else {
+                q.setString(1,"0");
+            }
+
+        }
 
         List<ArticleComment> articleComments = q.list();
 
@@ -374,23 +400,62 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
             articleCommentResponse.setTimestamp(articleComment.getTimestamp()+"");
 
+            if (articleComment.getArticleComment()!=null){
+                articleCommentResponse.setIfHaveList("1");
+            }
+
+            if (StringUtils.isNotEmpty(articleComment.getAtMember())){
+
+                String[] memberIds = articleComment.getAtMember().split(",");
+
+                for (String atMemberId :
+                        memberIds) {
+                    Member member = memberDao.get(Member.class,atMemberId);
+
+                    ArticleCommentAtMember atMember = new ArticleCommentAtMember();
+
+                    if (member!=null){
+                        atMember.setMemberId(atMemberId);
+                        atMember.setHead(member.getMemberInfo().getIcon()==null?"":member.getMemberInfo().getIcon());
+                        atMember.setNickname(member.getMemberInfo().getNickname());
+                        atMember.setIfAuthor(ifAuthor(articleComment.getArticle().getMember().getId(),member.getId()));
+                        articleCommentResponse.getAtMembers().add(atMember);
+                    }
+
+                }
+            }
+
             Member discussant = articleComment.getDiscussant();
 
             ArticleDiscussant articleDiscussant = new ArticleDiscussant();
 
             articleDiscussant.setId(discussant.getId());
 
-            articleDiscussant.setHead(discussant.getMemberInfo().getIcon());
+            articleDiscussant.setHead(discussant.getMemberInfo().getIcon()==null?"":discussant.getMemberInfo().getIcon());
 
             articleDiscussant.setNickname(discussant.getMemberInfo().getNickname());
 
+            //该评论人是否是作者 0否,1是
+            articleDiscussant.setIfAuthor(ifAuthor(articleComment.getArticle().getMember().getId(),articleDiscussant.getId()));
+
             articleCommentResponse.setDiscussant(articleDiscussant);
+
+            articleCommentResponse.setZanCount(zanCountForComment(articleComment.getId()));
+
+            articleCommentResponse.setIfZan(ifZanForComment(memberId,articleComment.getId()));
 
             articleCommentResponses.add(articleCommentResponse);
         }
 
         return RespCode.getRespData(RespCode.SUCESS,articleCommentResponses);
 
+    }
+
+    private String ifAuthor(String authorId,String memberId){
+
+        if (authorId.equals(memberId))return "1";
+
+        return "0";
     }
 
     @Override
@@ -404,6 +469,8 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         comment.setCtime(new Date());
 
+
+        //文章
         Article article = new Article();
 
         try{
@@ -416,11 +483,30 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         comment.setArticle(article);
 
+        //评论人
         String memberId = headers.getFirst("memberId");
 
         Member discussant = memberDao.get(Member.class,memberId);
 
         comment.setDiscussant(discussant);
+
+        if (StringUtils.isNotEmpty(request.getCommentId())){
+            //上级评论
+            ArticleComment articleComment = articleCommentDao.get(ArticleComment.class,request.getCommentId());
+
+            if (articleComment!=null){
+                comment.setFatherComment(articleComment);
+                if (articleComment.getArticleComment()==null){
+                    comment.setArticleComment(articleComment);
+                    articleComment.setArticleComment(articleComment);
+                    articleCommentDao.saveOrUpdate(articleComment);
+                }else{
+                    comment.setArticleComment(articleComment.getArticleComment());
+                }
+            }
+        }
+
+        comment.setAtMember(request.getAtMember());
 
         articleCommentDao.save(comment);
 
@@ -433,7 +519,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
     }
 
     @Override
-    public RespData evalute(HttpHeaders headers, EvaluteRequest evaluteRequest) {
+    public RespData evaluate(HttpHeaders headers, EvaluteRequest evaluteRequest) {
 
         String memberId = headers.getFirst("memberId");
 
@@ -448,6 +534,8 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         q.setString(1,articleId);
 
         ArticleEvaluate ae = (ArticleEvaluate) q.uniqueResult();
+
+        int ifZan = 0;
 
         if (ae!=null){
 
@@ -492,15 +580,113 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
             articleEvaluate.setArticle(article);
 
             articleEvaluateDao.save(articleEvaluate);
+
+            ifZan = 1;
         }
 
 
         Map<String,String> response = new HashMap<String,String>();
 
+        response.put("ifZan",ifZan+"");
+
         response.put("zanCounrt",zanCount(articleId));
 
         return RespCode.getRespData(RespCode.SUCESS, response);
 
+
+    }
+
+    @Override
+    public RespData comment_evaluate(HttpHeaders headers, EvaluteRequest evaluteRequest) {
+
+        String memberId = headers.getFirst("memberId");
+
+        String articleId = evaluteRequest.getArticleId();
+
+        String commentId = evaluteRequest.getCommentId();
+
+        String hql = "from ArticleCommentEvaluate ace where ace.discussant.id=? and ace.article.id=? and ace.comment.id=? ";
+
+        Query q = commentEvaluateDao.createQuery(hql);
+
+        q.setString(0,memberId);
+
+        q.setString(1,articleId);
+
+        q.setString(2,commentId);
+
+        ArticleCommentEvaluate ace = (ArticleCommentEvaluate) q.uniqueResult();
+
+        int ifZan = 0;
+
+        if (ace!=null){
+
+            if (ace.getEvaluation().equals(evaluteRequest.getEvaluation())){
+
+                commentEvaluateDao.delete(ace);
+
+            }else {
+                ace.setEvaluation(evaluteRequest.getEvaluation());
+
+                ace.setCtime(new Date());
+
+                ace.setTimestamp(System.currentTimeMillis());
+
+                commentEvaluateDao.saveOrUpdate(ace);
+            }
+
+        }else{
+
+            Member discussant = memberDao.get(Member.class,memberId);
+
+            ace = new ArticleCommentEvaluate();
+
+            ace.setDiscussant(discussant);
+
+            ace.setEvaluation(evaluteRequest.getEvaluation());
+
+            ace.setCtime(new Date());
+
+            ace.setTimestamp(System.currentTimeMillis());
+
+            Article article = new Article();
+
+            try{
+
+                article = articleDao.get(Article.class,evaluteRequest.getArticleId());
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            ace.setArticle(article);
+
+            ArticleComment ac = new ArticleComment();
+
+            try{
+
+                ac = articleCommentDao.get(ArticleComment.class,evaluteRequest.getCommentId());
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            ace.setComment(ac);
+
+
+            commentEvaluateDao.save(ace);
+
+            ifZan = 1;
+        }
+
+
+        Map<String,String> response = new HashMap<String,String>();
+
+        response.put("ifZan",ifZan+"");
+
+        response.put("zanCounrt",zanCountForComment(commentId));
+
+        return RespCode.getRespData(RespCode.SUCESS, response);
 
     }
 
@@ -520,6 +706,8 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         q.setString(1,articleId);
 
         ArticleCollection ac = (ArticleCollection) q.uniqueResult();
+
+        int ifCollection = 0;
 
         if (ac!=null){
 
@@ -551,10 +739,14 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
             ac.setArticle(article);
 
             collectionDao.save(ac);
+
+            ifCollection = 1;
         }
 
 
         Map<String,String> response = new HashMap<String,String>();
+
+        response.put("ifCollection",ifCollection+"");
 
         response.put("collectionCounrt",collectionCount(articleId));
 
@@ -837,6 +1029,19 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         return zanCount+"";
     }
 
+    private String zanCountForComment(String commentId){
+
+        String hqlZanCountForComment = "select count(ace.id) from ArticleCommentEvaluate ace where ace.comment.id=? and ace.evaluation='0' ";
+
+        Query q = commentEvaluateDao.createQuery(hqlZanCountForComment);
+
+        q.setString(0,commentId);
+
+        long zanCountForComment = (long)q.uniqueResult();
+
+        return zanCountForComment+"";
+    }
+
     private String commentCount(String articleId){
 
         String hqlCommentCount = "select count(ac.id) from ArticleComment ac where ac.article.id=? ";
@@ -898,4 +1103,47 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         return false;
     }
 
+    public String ifZanForComment(String memberId,String commentId){
+
+        if (memberId==null)return "0";
+
+        //评论是否点赞
+        String hqlZanCount = "from ArticleCommentEvaluate ace where ace.comment.id=? and ace.discussant.id=? ";
+
+        Query q = articleEvaluateDao.createQuery(hqlZanCount);
+
+        q.setString(0,commentId);
+
+        q.setString(1,memberId);
+
+        List<ArticleCommentEvaluate> l = q.list();
+
+        if (l.size()>0){
+            return "1";
+        }
+
+        return "0";
+    }
+
+    public boolean ifCollection(String memberId,String articleId){
+
+        if (memberId==null)return false;
+
+        //话题点赞数
+        String hqlCollectionCount = "from ArticleCollection ac where ac.article.id=? and ac.discussant.id=? ";
+
+        Query q = collectionDao.createQuery(hqlCollectionCount);
+
+        q.setString(0,articleId);
+
+        q.setString(1,memberId);
+
+        List<ArticleCollection> l = q.list();
+
+        if (l.size()>0){
+            return true;
+        }
+
+        return false;
+    }
 }
