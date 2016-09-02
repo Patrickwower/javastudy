@@ -799,7 +799,39 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		return RespCode.getRespData(RespCode.ERROR,new HashMap<>());
 		
 	}
-	
+
+	@Override
+	public RespData bindWeixin(HttpHeaders headers, String weixin_info) {
+
+		String memberId = headers.getFirst("memberId");
+
+		if (StringUtils.isEmpty(memberId)){
+			return RespCode.getRespData(RespCode.HEADER_MEMBERID_NEEDED,new HashMap<String,String>());
+		}
+
+		Member member = memberDao.get(Member.class,memberId);
+
+		if (member==null){
+			return RespCode.getRespData(RespCode.MEMBER_NOT_EXIST,new HashMap<String,String>());
+		}
+
+		JSONObject jsonObject = JsonUtils.toJSONObject(weixin_info);
+
+		Weixin weixin = JsonUtils.toBean(jsonObject, Weixin.class);
+
+		weixin.setOpenid(weixin.getUnionid());
+
+		weixin.setWeixin_info(weixin_info);
+
+		weixinDao.save(weixin);
+
+		member.setWeixin(weixin);
+
+		memberDao.saveOrUpdate(member);
+
+		return RespCode.getRespData(RespCode.SUCESS,new HashMap<String,String>().put("weixin",weixin.getNickname()));
+	}
+
 	/**
 	 * 验证手机是否已经存在
 	 * @param mobile
@@ -1019,10 +1051,6 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 			memberId = headers.getFirst("memberId");
 
-		}else{
-
-			return RespCode.getRespData(RespCode.HEADER_MEMBERID_NEEDED,new HashMap<String,String>());
-
 		}
 
 		Member member = memberDao.get(Member.class,memberId);
@@ -1047,7 +1075,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		if (member.getMemberInfo().getEnrollmentDate()!=null){
 
-			Format f = new SimpleDateFormat("yyyy-mm-dd hh:min:ss");
+			Format f = new SimpleDateFormat("yyyy");
 
 			cMemberResponse.setEnrollment(f.format(member.getMemberInfo().getEnrollmentDate()));
 
@@ -1149,9 +1177,9 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 			try {
 
-				Format f = new SimpleDateFormat("yyyy-mm-dd");
+				Format f = new SimpleDateFormat("yyyy-MM-dd");
 
-				member.getMemberInfo().setEnrollmentDate((Date) f.parseObject(updateRequest.getEnrollment()));
+				member.getMemberInfo().setEnrollmentDate((Date) f.parseObject(updateRequest.getEnrollment()+"-09-01"));
 
 			}catch (Exception e){
 
@@ -1161,35 +1189,39 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		if (StringUtils.isNotEmpty(updateRequest.getIntroduction())){
 
-
+			member.getMemberInfo().setIntroduction(updateRequest.getIntroduction());
 
 		}
 
 		if (StringUtils.isNotEmpty(updateRequest.getNickname())){
 
-
+			member.getMemberInfo().setNickname(updateRequest.getNickname());
 
 		}
 
 		if (StringUtils.isNotEmpty(updateRequest.getSchool())){
 
-
+			member.getMemberInfo().setSchool(updateRequest.getSchool());
 
 		}
 
 		if (StringUtils.isNotEmpty(updateRequest.getSex())){
 
-
+			member.getMemberInfo().setGender(updateRequest.getSex());
 
 		}
 
-//		if (StringUtils.isNotEmpty(updateRequest.get)){
-//
-//
-//
-//		}
+		try {
 
-		return null;
+			memberDao.saveOrUpdate(member);
+
+			return RespCode.getRespData(RespCode.SUCESS,new HashMap<String,String>());
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
 	}
 
 	private int fucosCount(String memberId){

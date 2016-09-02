@@ -234,4 +234,22 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
 	}
 
+	/**
+	 * 绑定手机号
+	 */
+	@RequestMapping(value="/bindWeixin",method=RequestMethod.POST)
+	@ResponseBody
+	public RespData bindWeixin(@RequestHeader HttpHeaders headers,String weixin){
+
+		try {
+			return membersServiceImpl.bindWeixin(headers,weixin);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
+	}
+
 }

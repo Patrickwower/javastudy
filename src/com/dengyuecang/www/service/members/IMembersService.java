@@ -63,6 +63,14 @@ public interface IMembersService extends IBaseService<Member>{
 	public RespData bindMobile(HttpHeaders headers, String mobile);
 
 	/**
+	 * 绑定微信
+	 * @param headers
+	 * @param weixin
+	 * @return
+	 */
+	public RespData bindWeixin(HttpHeaders headers, String weixin);
+
+	/**
 	 * 更新头像
 	 * @param headers
 	 * @param imgId

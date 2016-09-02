@@ -190,4 +190,19 @@ public class APIArticleController {
 
     }
 
+    @RequestMapping(value = "/collections",method = RequestMethod.POST)
+    @ResponseBody
+    public RespData collections(@RequestHeader HttpHeaders headers, String  memberId){
+
+        try {
+//            return articleServiceImpl.listByAuthor(headers,articleRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
+    }
+
+
 }
