@@ -3,6 +3,7 @@ package com.dengyuecang.www.service.community;
 import com.dengyuecang.www.controller.api.community.model.*;
 import com.dengyuecang.www.controller.community.model.LongTextRequest;
 import com.dengyuecang.www.entity.community.Article;
+import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.service.IBaseService;
 import org.springframework.http.HttpHeaders;
@@ -49,5 +50,7 @@ public interface IArticleService extends IBaseService<Article>{
    public Integer addBrowse(HttpHeaders headers,String articleId);
 
    public RespData browse(HttpHeaders headers,String articleId);
+
+   public RespData collections(HttpHeaders headers,CollectionRequest collectionRequest);
 
 }

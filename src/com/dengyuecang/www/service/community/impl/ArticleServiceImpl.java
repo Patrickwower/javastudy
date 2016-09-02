@@ -1016,6 +1016,49 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         return RespCode.getRespData(RespCode.SUCESS,response);
     }
 
+    @Override
+    public RespData collections(HttpHeaders headers, CollectionRequest collectionRequest) {
+
+        int limit = 10;
+
+        if (StringUtils.isNotEmpty(collectionRequest.getPageSize())){
+            limit = Integer.valueOf(collectionRequest.getPageSize());
+        }
+
+        long timestamp = System.currentTimeMillis();
+
+        if (StringUtils.isNotEmpty(collectionRequest.getTimestamp())){
+            timestamp = Long.valueOf(collectionRequest.getTimestamp());
+        }
+
+        String memberId = collectionRequest.getMemberId();
+
+        if (StringUtils.isEmpty(memberId)){
+
+            memberId = headers.getFirst("memberId");
+
+        }
+
+        //查询文章列表
+        Query q = articleDao.createQuery("select a from Article a,ArticleCollection b where b.discussant.id=? and a.id=b.article.id and a.status='100' and a.timestamp<"+timestamp+" order by a.timestamp desc ");
+
+        q.setString(0,memberId);
+
+        q.setFirstResult(0);
+
+        q.setMaxResults(limit);
+
+        List<Article> articleList = q.list();
+
+        List<IndexArticle> articles = new ArrayList<IndexArticle>();
+
+        articles = this.toIndexArticleList(memberId,articles,articleList);
+
+        return RespCode.getRespData(RespCode.SUCESS,articles);
+
+
+    }
+
     private String zanCount(String articleId){
 
         String hqlZanCount = "select count(ae.id) from ArticleEvaluate ae where ae.article.id=? and ae.evaluation='0' ";

@@ -192,10 +192,10 @@ public class APIArticleController {
 
     @RequestMapping(value = "/collections",method = RequestMethod.POST)
     @ResponseBody
-    public RespData collections(@RequestHeader HttpHeaders headers, String  memberId){
+        public RespData collections(@RequestHeader HttpHeaders headers, CollectionRequest  collectionRequest){
 
         try {
-//            return articleServiceImpl.listByAuthor(headers,articleRequest);
+            return articleServiceImpl.collections(headers,collectionRequest);
         }catch (Exception e){
             e.printStackTrace();
         }

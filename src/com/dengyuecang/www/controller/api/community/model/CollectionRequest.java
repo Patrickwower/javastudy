@@ -11,6 +11,12 @@ public class CollectionRequest {
 
     private String collection;
 
+    private String memberId;
+
+    private String pageSize;
+
+    private String timestamp;
+
     public CollectionRequest() {
     }
 
@@ -36,5 +42,29 @@ public class CollectionRequest {
 
     public void setArticleId(String articleId) {
         this.articleId = articleId;
+    }
+
+    public String getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(String memberId) {
+        this.memberId = memberId;
+    }
+
+    public String getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(String pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }

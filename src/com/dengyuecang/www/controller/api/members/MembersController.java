@@ -125,10 +125,10 @@ Logger log = LoggerFactory.getLogger(MembersController.class);
 	 */
 	@RequestMapping(value="/bindMobile",method=RequestMethod.POST)
 	@ResponseBody
-	public RespData bindMobile(@RequestHeader HttpHeaders headers,String mobile){
+	public RespData bindMobile(@RequestHeader HttpHeaders headers,String mobile,String pwd){
 		
 		try {
-			return membersServiceImpl.bindMobile(headers,mobile);	
+			return membersServiceImpl.bindMobile(headers,mobile,pwd);
 			
 		} catch (Exception e) {
 			// TODO: handle exception

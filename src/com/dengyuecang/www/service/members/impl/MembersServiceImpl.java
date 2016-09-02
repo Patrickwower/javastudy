@@ -779,7 +779,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 	}
 	
 	@Override
-	public RespData bindMobile(HttpHeaders headers, String mobile) {
+	public RespData bindMobile(HttpHeaders headers, String mobile,String pwd) {
 
 		try {
 			String memberId = headers.getFirst("memberId");
@@ -788,7 +788,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 				return RespCode.getRespData(RespCode.MOBILE_BOUND);
 			}
 			
-			this.updateMobile(memberId, mobile);
+			this.updateMobile(memberId, mobile,pwd);
 			
 			return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
 
@@ -815,9 +815,17 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			return RespCode.getRespData(RespCode.MEMBER_NOT_EXIST,new HashMap<String,String>());
 		}
 
+//		Weixin ifExist =
+
 		JSONObject jsonObject = JsonUtils.toJSONObject(weixin_info);
 
 		Weixin weixin = JsonUtils.toBean(jsonObject, Weixin.class);
+
+		List<Weixin> l = weixinDao.createQuery("from Weixin where unionid='"+weixin.getUnionid()+"' ").list();
+
+		if (l.size()>0){
+			return RespCode.getRespData(RespCode.WEIXIN_EXIST,new HashMap<String,String>());
+		}
 
 		weixin.setOpenid(weixin.getUnionid());
 
@@ -829,7 +837,11 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		memberDao.saveOrUpdate(member);
 
-		return RespCode.getRespData(RespCode.SUCESS,new HashMap<String,String>().put("weixin",weixin.getNickname()));
+		Map<String,String> response = new HashMap<String,String>();
+
+		response.put("weixin",weixin.getNickname());
+
+		return RespCode.getRespData(RespCode.SUCESS,response);
 	}
 
 	/**
@@ -857,10 +869,14 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 	 * @param memberId
 	 * @param mobile
 	 */
-	private void updateMobile(String memberId,String mobile){
+	private void updateMobile(String memberId,String mobile,String pwd){
 		
 		Member member = memberDao.get(Member.class, memberId);
-		
+
+		member.setPwd(pwd);
+
+		memberDao.save(member);
+
 		MemberInfo info = member.getMemberInfo();
 		
 		info.setMobile(mobile);

@@ -49,7 +49,9 @@ public class RespCode implements Serializable{
 	public static String UNKNOW_EXCEPTION = "-2";
 	
 	public static String MEMBER_NOT_EXIST = "1002";
-	
+
+	public static String WEIXIN_EXIST = "1014";
+
 	public static String STATIC_RESOURCE_NOTFOUND = "1012";
 
 	public static String UNLOGIN = "1113";
@@ -194,6 +196,7 @@ public class RespCode implements Serializable{
 		respCodeMap.put(MOBILE_BOUND,new RespCode(MOBILE_BOUND,"手机已绑定其他会员"));
 		respCodeMap.put(MOBILE_OPENID,new RespCode(MOBILE_OPENID,"mobile和openId必须有一项不为空"));
 		respCodeMap.put(UNLOGIN,new RespCode(UNLOGIN,"请先登陆"));
+		respCodeMap.put(WEIXIN_EXIST,new RespCode(WEIXIN_EXIST,"微信号已绑定其他账号"));
 
 
 

@@ -60,7 +60,7 @@ public interface IMembersService extends IBaseService<Member>{
 	 * @param mobile
 	 * @return
 	 */
-	public RespData bindMobile(HttpHeaders headers, String mobile);
+	public RespData bindMobile(HttpHeaders headers, String mobile, String pwd);
 
 	/**
 	 * 绑定微信
