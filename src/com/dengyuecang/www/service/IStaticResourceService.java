@@ -45,4 +45,9 @@ public interface IStaticResourceService extends IBaseService<StaticResource>{
 	 * @param memberId
 	 */
 	public void saveQr(String memberId);
+
+	/**
+	 * 根据图片url地址获取资源对象
+	 */
+	public StaticResource getResourceByUrl(String url);
 }

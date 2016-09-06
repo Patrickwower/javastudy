@@ -272,6 +272,8 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         iArticle.setSummary(article.getSummary());
 
+        iArticle.setSquareCorp(article.getSquareCover());
+
 //        iArticle.setContent(article.getContent());
 
         return iArticle;

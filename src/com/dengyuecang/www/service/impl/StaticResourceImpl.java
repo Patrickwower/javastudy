@@ -330,8 +330,15 @@ public class StaticResourceImpl extends BaseService<StaticResource> implements I
 		infoDao.saveOrUpdate(info);
 		
 	}
-	
-	
-	
+
+	@Override
+	public StaticResource getResourceByUrl(String url) {
+
+		StaticResource staticResource = (StaticResource) staticResourceDao.createQuery("from StaticResource where urlPath='"+url+"' ").uniqueResult();
+
+		return staticResource;
+
+	}
+
 
 }

@@ -38,6 +38,8 @@ public class Article implements Serializable{
 
     private String summary;
 
+    private String squareCover;
+
     public Article() {
     }
 
@@ -182,5 +184,13 @@ public class Article implements Serializable{
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public String getSquareCover() {
+        return squareCover;
+    }
+
+    public void setSquareCover(String squareCover) {
+        this.squareCover = squareCover;
     }
 }

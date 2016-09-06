@@ -164,6 +164,12 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			
 			if (StringUtils.isNotEmpty(request.getWeixin())) {
 				channel = CommonConstant.REGISTER_CHANNEL_WEIXIN;
+
+				JSONObject jsonObject = JsonUtils.toJSONObject(request.getWeixin());
+
+				Weixin weixin = JsonUtils.toBean(jsonObject, Weixin.class);
+
+				openId = weixin.getUnionid();
 			}else if (StringUtils.isNotEmpty(request.getQq())) {
 				channel = CommonConstant.REGISTER_CHANNEL_QQ;
 			}else if(StringUtils.isNotEmpty(request.getWeibo())){

@@ -42,6 +42,8 @@ public class IndexArticle {
 
     private String summary;
 
+    private String squareCorp;
+
     private Date ctime;
 
     public IndexArticle() {
@@ -181,6 +183,14 @@ public class IndexArticle {
 
     public void setCtime(Date ctime) {
         this.ctime = ctime;
+    }
+
+    public String getSquareCorp() {
+        return squareCorp;
+    }
+
+    public void setSquareCorp(String squareCorp) {
+        this.squareCorp = squareCorp;
     }
 
     public String getSummary() {

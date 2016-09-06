@@ -2,10 +2,12 @@ package com.dengyuecang.www.service.publish.impl;
 
 import com.dengyuecang.www.controller.api.publish.model.ArticlePublishRequest;
 import com.dengyuecang.www.entity.Member;
+import com.dengyuecang.www.entity.StaticResource;
 import com.dengyuecang.www.entity.community.Article;
 import com.dengyuecang.www.entity.community.ArticleUpdateLog;
 import com.dengyuecang.www.entity.community.Category;
 import com.dengyuecang.www.entity.community.Tag;
+import com.dengyuecang.www.service.IStaticResourceService;
 import com.dengyuecang.www.service.common.CommonConstant;
 import com.dengyuecang.www.service.publish.IPublishArticleService;
 import com.dengyuecang.www.service.publish.model.CategoryResponse;
@@ -13,6 +15,7 @@ import com.dengyuecang.www.utils.JsonUtils;
 import com.dengyuecang.www.utils.RegexUtils;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
+import com.dengyuecang.www.utils.img.ImgUtils;
 import com.longinf.lxcommon.dao.BaseDao;
 import com.longinf.lxcommon.service.BaseService;
 import jdk.nashorn.internal.runtime.regexp.joni.Regex;
@@ -48,6 +51,9 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
     @Resource(name = "hibernateBaseDao")
     private BaseDao<ArticleUpdateLog> articleUpdateLogDao;
 
+    private IStaticResourceService staticResourceServiceImpl;
+
+
     @Override
     public RespData articleAdd(HttpHeaders headers,ArticlePublishRequest articlePublishRequest) {
 
@@ -57,9 +63,8 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
         article.setTimestamp(System.currentTimeMillis());
         article.setContent(StringUtils.isEmpty(articlePublishRequest.getContent())?"":articlePublishRequest.getContent());
 
-        String regEx_html = "<[^>]+>";
 
-        String summary = article.getContent().replace(regEx_html,"");
+        String summary = RegexUtils.getStringFromHtml(article.getContent());
 
         article.setSummary(summary);
 
@@ -81,6 +86,20 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
             }
 
         }
+
+        StaticResource staticResource = staticResourceServiceImpl.getResourceByUrl(article.getCover());
+
+        String imgPath = staticResource.getPath().substring(0,staticResource.getPath().lastIndexOf("."))+"_corp"+staticResource.getPath().substring(staticResource.getPath().lastIndexOf("."));
+
+        try {
+            ImgUtils.squareCrop(staticResource.getPath(),imgPath);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        String squareCover = imgPath;
+
+        article.setSquareCover(squareCover);
 
         article.setCtime(new Date());
         article.setTitle(StringUtils.isEmpty(articlePublishRequest.getTitle())?"":articlePublishRequest.getTitle());
