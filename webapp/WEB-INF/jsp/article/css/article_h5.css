@@ -1,5 +1,0 @@
-*{ margin: 0px; padding: 0px; }
-div,ul,li,h1,h2,h3,h4,h5,h6,p,table,tr,td,header,footer,article,section,aside { margin: 0px; padding: 0px; list-style: none; }
-#mainframe { max-width: 768px; }
-p { padding: 10px 20px; margin: 0 auto; }
-img {  height: auto; width: 100%;}
