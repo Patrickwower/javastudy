@@ -34,32 +34,19 @@ public class ArticleController {
 		
 		return mav;
 	}
-	
-//	@RequestMapping("/toWrite")
-//	@ResponseBody
-//	public ModelAndView toWrite(){
-//
-//		ModelAndView mav = new ModelAndView();
-//
-//		mav.setViewName("write/write");
-//
-//		return mav;
-//	}
-//
-//	@RequestMapping("/write")
-//	@ResponseBody
-//	public ModelAndView write(LongTextRequest request){
-//
-//		ModelAndView mav = new ModelAndView();
-//
-//		log.info(request.getContent());
-//
-//		articleServiceImpl.save(request);
-//
-//		mav.setViewName("write/write");
-//
-//		return mav;
-//	}
 
+	@RequestMapping("/share")
+	public ModelAndView share(String articleId){
+
+		log.info("文章分享");
+
+		ModelAndView mav = new ModelAndView();
+
+		mav.addObject("article",articleId);
+
+		mav.setViewName("article/share");
+
+		return mav;
+	}
 
 }

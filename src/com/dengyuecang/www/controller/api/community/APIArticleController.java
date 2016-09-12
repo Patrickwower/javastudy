@@ -204,5 +204,18 @@ public class APIArticleController {
 
     }
 
+    @RequestMapping(value = "/toIndex",method = RequestMethod.POST)
+    @ResponseBody
+    public RespData toIndex(@RequestHeader HttpHeaders headers, String  articleId){
+
+        try {
+            return articleServiceImpl.toIndex(headers,articleId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
+    }
 
 }

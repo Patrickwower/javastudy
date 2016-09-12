@@ -52,13 +52,13 @@ public class SmsVerifyRequest {
     public String getParams(){
         String params = "";
 
-        params += this.getAppkey()+"&";
+        params += "appkey="+this.getAppkey()+"&";
 
-        params += this.getPhone()+"&";
+        params += "phone="+this.getPhone()+"&";
 
-        params += this.getZone()+"&";
+        params += "zone="+this.getZone()+"&";
 
-        params += this.getCode();
+        params += "code="+this.getCode();
 
         return params;
     }

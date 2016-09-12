@@ -18,6 +18,8 @@ public class IndexArticle {
 
     private String url;
 
+    private String shareUrl;
+
     private List<String> tags;
 
     private IndexAuthor author;
@@ -42,7 +44,7 @@ public class IndexArticle {
 
     private String summary;
 
-    private String squareCorp;
+    private String squareCrop;
 
     private Date ctime;
 
@@ -111,6 +113,14 @@ public class IndexArticle {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
     }
 
     public List<String> getTags() {
@@ -185,12 +195,12 @@ public class IndexArticle {
         this.ctime = ctime;
     }
 
-    public String getSquareCorp() {
-        return squareCorp;
+    public String getSquareCrop() {
+        return squareCrop;
     }
 
-    public void setSquareCorp(String squareCorp) {
-        this.squareCorp = squareCorp;
+    public void setSquareCrop(String squareCrop) {
+        this.squareCrop = squareCrop;
     }
 
     public String getSummary() {

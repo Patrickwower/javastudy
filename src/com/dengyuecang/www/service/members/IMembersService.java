@@ -129,7 +129,11 @@ public interface IMembersService extends IBaseService<Member>{
 	/**
 	 * 验证手机验证码
 	 */
-
 	public RespData verifyCode(HttpHeaders headers, VerifyRequest verifyRequest);
+
+	/**
+	 * 是否关注
+	 */
+	public int ifFocus(String memberId,String focusId);
 
 }

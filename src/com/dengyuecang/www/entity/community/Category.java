@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by acang on 16/7/5.
@@ -73,14 +74,14 @@ public class Category implements Serializable {
         this.ctime = ctime;
     }
 
-    public List<Article> articles;
+    public Set<Article> articles;
 
     @ManyToMany(mappedBy="categories",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
-    public List<Article> getArticles() {
+    public Set<Article> getArticles() {
         return articles;
     }
 
-    public void setArticles(List<Article> articles) {
+    public void setArticles(Set<Article> articles) {
         this.articles = articles;
     }
 

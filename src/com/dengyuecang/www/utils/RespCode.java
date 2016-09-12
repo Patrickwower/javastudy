@@ -88,6 +88,8 @@ public class RespCode implements Serializable{
 
 
 
+
+
 	//登录类
 	public static String LOGIN_MOBILE_NEEDED = "2001";
 
@@ -102,13 +104,18 @@ public class RespCode implements Serializable{
 
 	public static String UPDATE_INTRODUCTION_EXCEPTION = "2102";
 
+
+	//管理平台权限部分异常
+	public static String USERNAME_OR_PWD_WRONG = "3001";
+
 	//社区类
 	//社区话题
 //	public static String
 
+	//文章类异常
+	public static String ARTICLE_NOT_EXIST = "4001";
 
-
-
+	public static String ARTICLE_ALREADY_INDEX = "4002";
 
 	
 	public static String MOBILE_NOVALID="11";
@@ -199,9 +206,14 @@ public class RespCode implements Serializable{
 		respCodeMap.put(WEIXIN_EXIST,new RespCode(WEIXIN_EXIST,"微信号已绑定其他账号"));
 
 
+		//文章类异常
+		respCodeMap.put(ARTICLE_NOT_EXIST,new RespCode(ARTICLE_NOT_EXIST,"文章不存在"));
+
+		respCodeMap.put(ARTICLE_ALREADY_INDEX,new RespCode(ARTICLE_ALREADY_INDEX,"文章已在首页列表"));
 
 
-		
+
+
 		respCodeMap.put(PWD_NEEDED,new RespCode(PWD_NEEDED,"密码不能为空"));
 		
 		respCodeMap.put(NICKNAME_NEEDED,new RespCode(NICKNAME_NEEDED,"昵称不能为空"));
@@ -225,7 +237,12 @@ public class RespCode implements Serializable{
 		respCodeMap.put(UPDATE_HEAD_EXCEPTION,new RespCode(UPDATE_HEAD_EXCEPTION,"头像修改发生异常"));
 
 		respCodeMap.put(UPDATE_INTRODUCTION_EXCEPTION,new RespCode(UPDATE_INTRODUCTION_EXCEPTION,"介绍修改发生异常"));
-		
+
+		respCodeMap.put(USERNAME_OR_PWD_WRONG,new RespCode(USERNAME_OR_PWD_WRONG,"管理凭条,用户名或密码错误"));
+
+
+		//
+
 
 		respCodeMap.put(INVATE_CODE_NEED,new RespCode(INVATE_CODE_NEED,"邀请码必须提供"));
 

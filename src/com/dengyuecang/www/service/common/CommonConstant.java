@@ -21,9 +21,9 @@ public class CommonConstant {
 	 * 静态资源文件的网络访问路径+“资源用途名称”+“文件名”
 	 * 暂时：上线时需要修改为
 	 */
-	public static final String STATIC_URL = "http://test.static.dengyuecang.com";//开发
+//	public static final String STATIC_URL = "http://test.static.dengyuecang.com";//开发
 //	public static final String STATIC_URL = "http://localhost:8080/dyc";//开发
-//	public static final String STATIC_URL = "http://static.dengyuecang.com";//生产
+	public static final String STATIC_URL = "http://static.dengyuecang.com";//生产
 	
 	
 	/**
@@ -49,10 +49,18 @@ public class CommonConstant {
 	/**
 	 * 文章详情地址
 	 */
-	public static final String ARTICLE_DETAIL_URL = "http://test.manager.dengyuecang.com/dyc/community/article/detail?articleId=";
+//	public static final String ARTICLE_DETAIL_URL = "http://test.manager.dengyuecang.com/dyc/community/article/detail?articleId=";
 
-//	public static final String ARTICLE_DETAIL_URL = "http://manager.dengyuecang.com/dyc/community/article/detail?articleId=4028829a557b5deb01557babcb4d0001";
+	public static final String ARTICLE_DETAIL_URL = "http://manager.dengyuecang.com/dyc/community/article/detail?articleId=";
 
 
-	public static final boolean SDK_MSG_LOCK = true;
+	/**
+	 * 文章分享页面
+	 */
+//	public static final String ARTICLE_SHARE_URL = "http://test.manager.dengyuecang.com/dyc/community/article/share?articleId=";
+
+	public static final String ARTICLE_SHARE_URL = "http://manager.dengyuecang.com/dyc/community/article/share?articleId=";
+
+
+	public static final boolean SDK_MSG_LOCK = false;
 }

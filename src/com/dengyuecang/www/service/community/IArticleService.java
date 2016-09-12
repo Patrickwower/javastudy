@@ -23,6 +23,8 @@ public interface IArticleService extends IBaseService<Article>{
 
    public RespData index();
 
+   public RespData toIndex(HttpHeaders headers,String articleId);
+
    public RespData queryArticles(HttpHeaders headers, ArticleRequest articleRequest);
 
    public RespData getArticle(String articleId);

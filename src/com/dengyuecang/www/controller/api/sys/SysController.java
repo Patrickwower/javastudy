@@ -4,6 +4,7 @@ package com.dengyuecang.www.controller.api.sys;
 import com.dengyuecang.www.controller.api.members.model.request.MemberRegisterRequest;
 import com.dengyuecang.www.controller.api.members.model.request.UpdateMemberInformationRequest;
 import com.dengyuecang.www.controller.api.members.model.request.VerifyRequest;
+import com.dengyuecang.www.controller.api.sys.model.UserLoginRequest;
 import com.dengyuecang.www.service.members.IMembersService;
 import com.dengyuecang.www.service.sys.ISysService;
 import com.dengyuecang.www.utils.RespCode;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/sys")
@@ -27,7 +29,7 @@ Logger log = LoggerFactory.getLogger(SysController.class);
 	
 	@RequestMapping(value="/provinces",method=RequestMethod.POST)
 	@ResponseBody
-	public RespData register(@RequestHeader HttpHeaders headers, MemberRegisterRequest request){
+	public RespData register(@RequestHeader HttpHeaders headers){
 		
 		try {
 			
@@ -40,6 +42,12 @@ Logger log = LoggerFactory.getLogger(SysController.class);
 		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
 	}
 
+	@RequestMapping(value = "/login",method = RequestMethod.POST)
+	@ResponseBody
+	public RespData login(@RequestHeader HttpHeaders headers, UserLoginRequest loginRequest){
 
+		return sysServiceImpl.login(headers,loginRequest);
+
+	}
 
 }

@@ -26,7 +26,7 @@ public class SmsUtil {
 
     public static void main(String[] args) throws Exception {
         String result = requestData(SMS_VERIFY_URL,
-                "appkey=127d0cc8fd910&phone=18500902882&zone=86&code=9045");
+                "appkey=127d0cc8fd910&phone=15286860860&zone=86&code=5723");
         System.out.println(result);
     }
 
@@ -84,6 +84,7 @@ public class SmsUtil {
             //get result
             if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 String result = parsRtn(conn.getInputStream());
+                System.out.println("验证码验证结果:"+result);
                 return result;
             } else {
                 System.out.println(conn.getResponseCode() + " "+ conn.getResponseMessage());

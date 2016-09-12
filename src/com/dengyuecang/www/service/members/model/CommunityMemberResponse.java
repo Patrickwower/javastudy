@@ -15,9 +15,11 @@ public class CommunityMemberResponse {
 
     private String introduction;
 
-    private String fucosCount;
+    private String focusCount;
 
-    private String fucosedCount;
+    private String focusedCount;
+
+    private String ifFocus;
 
     private String zanCount;
 
@@ -86,20 +88,28 @@ public class CommunityMemberResponse {
         this.timestamp = timestamp;
     }
 
-    public String getFucosCount() {
-        return fucosCount;
+    public String getFocusCount() {
+        return focusCount;
     }
 
-    public void setFucosCount(String fucosCount) {
-        this.fucosCount = fucosCount;
+    public void setFocusCount(String focusCount) {
+        this.focusCount = focusCount;
     }
 
-    public String getFucosedCount() {
-        return fucosedCount;
+    public String getFocusedCount() {
+        return focusedCount;
     }
 
-    public void setFucosedCount(String fucosedCount) {
-        this.fucosedCount = fucosedCount;
+    public void setFocusedCount(String focusedCount) {
+        this.focusedCount = focusedCount;
+    }
+
+    public String getIfFocus() {
+        return ifFocus;
+    }
+
+    public void setIfFocus(String ifFocus) {
+        this.ifFocus = ifFocus;
     }
 
     public String getZanCount() {

@@ -51,6 +51,7 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
     @Resource(name = "hibernateBaseDao")
     private BaseDao<ArticleUpdateLog> articleUpdateLogDao;
 
+    @Resource
     private IStaticResourceService staticResourceServiceImpl;
 
 
@@ -83,23 +84,29 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
             if (imgList.size()>0){
                 article.setCover(imgList.get(0));
+
+                StaticResource staticResource = staticResourceServiceImpl.getResourceByUrl(article.getCover());
+
+                String imgPath = staticResource.getPath().substring(0,staticResource.getPath().lastIndexOf("."))+"_corp"+staticResource.getPath().substring(staticResource.getPath().lastIndexOf("."));
+
+                String squareCover = "";
+
+                try {
+
+
+                    squareCover = staticResource.getUrlPath().substring(0,staticResource.getUrlPath().lastIndexOf("."))+"_corp"+staticResource.getUrlPath().substring(staticResource.getUrlPath().lastIndexOf("."));
+                    ImgUtils.squareCrop(staticResource.getPath(),imgPath);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+
+                article.setSquareCover(squareCover);
+
             }
 
         }
-
-        StaticResource staticResource = staticResourceServiceImpl.getResourceByUrl(article.getCover());
-
-        String imgPath = staticResource.getPath().substring(0,staticResource.getPath().lastIndexOf("."))+"_corp"+staticResource.getPath().substring(staticResource.getPath().lastIndexOf("."));
-
-        try {
-            ImgUtils.squareCrop(staticResource.getPath(),imgPath);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        String squareCover = imgPath;
-
-        article.setSquareCover(squareCover);
 
         article.setCtime(new Date());
         article.setTitle(StringUtils.isEmpty(articlePublishRequest.getTitle())?"":articlePublishRequest.getTitle());
@@ -130,7 +137,7 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
             Category cat = categoryDao.get(Category.class,catid);
 
-            List<Category> catlist = new ArrayList<Category>();
+            Set<Category> catlist = new HashSet<Category>();
 
             catlist.add(cat);
 
@@ -144,7 +151,7 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
             String[] tags = tagstring.split(",");
 
-            List<Tag> tagList = new ArrayList<Tag>();
+            Set<Tag> tagList = new HashSet<Tag>();
 
             for (String tag :
                     tags) {
@@ -177,6 +184,8 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
         article.setUrl(CommonConstant.ARTICLE_DETAIL_URL);
 
+        article.setShareUrl(CommonConstant.ARTICLE_SHARE_URL);
+
         articleDao.save(article);
 
         Map<String,String> response = new HashMap<String,String>();
@@ -207,12 +216,12 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
             String[] tagArray = new String[(article.getTags().size())];
 
             for (int i = 0; i <article.getTags().size(); i++) {
-                tagArray[i] = article.getTags().get(i).getName();
+                tagArray[i] = article.getTags().iterator().next().getName();
             }
 
             articleUpdateLog.setTags(StringUtils.join(tagArray,","));
 
-            articleUpdateLog.setCid(article.getCategories().get(0).getId());
+            articleUpdateLog.setCid(article.getCategories().iterator().next().getId());
 
             articleUpdateLog.setCtime(new Date());
 
@@ -258,7 +267,7 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
             String[] tags = tagstring.split(",");
 
-            List<Tag> tagList = new ArrayList<Tag>();
+            Set<Tag> tagList = new HashSet<Tag>();
 
             for (String tag :
                     tags) {
@@ -294,7 +303,7 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
                 Category cat = categoryDao.get(Category.class,catid);
 
-                List<Category> catlist = new ArrayList<Category>();
+                Set<Category> catlist = new HashSet<Category>();
 
                 catlist.add(cat);
 

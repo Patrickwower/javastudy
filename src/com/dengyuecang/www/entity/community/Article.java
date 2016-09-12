@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by acang on 16/6/22.
@@ -134,29 +135,29 @@ public class Article implements Serializable{
         System.out.println(System.currentTimeMillis());
     }
 
-    private List<Tag> tags;
+    private Set<Tag> tags;
 
     @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE},fetch=FetchType.EAGER)
     @JoinTable(name="community_tag_article",joinColumns={@JoinColumn(name="article_id")},inverseJoinColumns={@JoinColumn(name="tag_id")})
     @OrderBy("ctime")
-    public List<Tag> getTags() {
+    public Set<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(List<Tag> tags) {
+    public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
 
-    private List<Category> categories;
+    private Set<Category> categories;
 
     @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE},fetch=FetchType.EAGER)
     @JoinTable(name="community_category_article",joinColumns={@JoinColumn(name="article_id")},inverseJoinColumns={@JoinColumn(name="cid")})
     @OrderBy("ctime")
-    public List<Category> getCategories() {
+    public Set<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
 
@@ -168,6 +169,16 @@ public class Article implements Serializable{
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    private String shareUrl;
+
+    public String getShareUrl() {
+        return shareUrl;
+    }
+
+    public void setShareUrl(String shareUrl) {
+        this.shareUrl = shareUrl;
     }
 
     public int getWordCount() {

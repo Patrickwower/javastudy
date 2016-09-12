@@ -1,6 +1,8 @@
 package com.dengyuecang.www.service.sys.impl;
 
+import com.dengyuecang.www.controller.api.sys.model.UserLoginRequest;
 import com.dengyuecang.www.entity.*;
+import com.dengyuecang.www.entity.sys.User;
 import com.dengyuecang.www.service.sys.ISysService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
@@ -23,6 +25,9 @@ public class SysServiceImpl extends BaseService<StaticProvince> implements ISysS
 	
 	@Resource(name = "hibernateBaseDao")
 	private BaseDao<StaticProvince> provinceDao;
+
+	@Resource(name = "hibernateBaseDao")
+	private BaseDao<User> userDao;
 
 
 	@Override
@@ -48,6 +53,23 @@ public class SysServiceImpl extends BaseService<StaticProvince> implements ISysS
 		}
 
 		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,response);
+
+	}
+
+	@Override
+	public RespData login(HttpHeaders headers, UserLoginRequest loginRequest) {
+
+		String hql = "from User u where u.username=? and u.pwd=? ";
+
+		User user  = (User) userDao.createQuery(hql).uniqueResult();
+
+		Map<String,String> response = new HashMap<String,String>();
+
+		if (user!=null){
+			return RespCode.getRespData(RespCode.SUCESS,response);
+		}
+
+		return RespCode.getRespData(RespCode.USERNAME_OR_PWD_WRONG,response);
 
 	}
 }

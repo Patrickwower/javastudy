@@ -6,7 +6,9 @@ import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.community.*;
 import com.dengyuecang.www.service.community.IArticleService;
 import com.dengyuecang.www.service.community.model.*;
+import com.dengyuecang.www.service.members.IMembersService;
 import com.dengyuecang.www.service.members.model.CommunityMemberResponse;
+import com.dengyuecang.www.service.publish.IPublishArticleService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
@@ -56,6 +58,12 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
     @Resource(name="hibernateBaseDao")
     private BaseDao<ArticleCommentEvaluate> commentEvaluateDao;
+
+    @Resource
+    private IMembersService membersServiceImpl;
+
+    @Resource(name = "hibernateBaseDao")
+    private BaseDao<ArticleIndex> articleIndexDao;
 
     @Override
     public BaseDao<Article> getSuperDao() {
@@ -189,6 +197,44 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         return RespCode.getRespData(RespCode.SUCESS,iResponse);
     }
 
+    @Override
+    public RespData toIndex(HttpHeaders headers,String articleId) {
+
+        if (StringUtils.isEmpty(articleId)){
+            return RespCode.getRespData(RespCode.ARTICLE_NOT_EXIST,new HashMap<String,String>());
+        }
+
+        Article article = articleDao.get(Article.class,articleId);
+
+        if (article==null){
+            return RespCode.getRespData(RespCode.ARTICLE_NOT_EXIST,new HashMap<String,String>());
+        }
+
+        List<ArticleIndex> aiList = articleIndexDao.createQuery("from ArticleIndex ai where ai.article.id=? ").setString(0,articleId).list();
+
+        if (aiList.size()>0){
+            return RespCode.getRespData(RespCode.ARTICLE_ALREADY_INDEX,new HashMap<String,String>());
+        }
+
+        ArticleIndex ai = new ArticleIndex();
+
+        ai.setArticle(article);
+
+        ai.setIndex_time(new Date());
+
+        ai.setMax_sort("99999999");
+
+        ai.setSort("99999999");
+
+        ai.setTimestamp(System.currentTimeMillis());
+
+        articleIndexDao.save(ai);
+
+        Map<String,String> response = new HashMap<String,String>();
+
+        return RespCode.getRespData(RespCode.SUCESS,response);
+    }
+
     private IndexArticle toIndexArticle(String memberId,Article article){
 
         IndexArticle iArticle = new IndexArticle();
@@ -200,7 +246,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         iArticle.setCategory("");
 
         if (article.getCategories().size()>0){
-            iArticle.setCategory(article.getCategories().get(0).getName());
+            iArticle.setCategory(article.getCategories().iterator().next().getName());
         }
 
         IndexAuthor iAuthor = new IndexAuthor();
@@ -211,25 +257,14 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         iAuthor.setNickname(article.getMember().getMemberInfo().getNickname());
 
-        iAuthor.setIfFocus("false");
+        iAuthor.setIfFocus("0");
 
         if (StringUtils.isNotEmpty(memberId)){
 
             String focusId = article.getMember().getId();
 
-            String hql = "from FocusMember fm where fm.member.id=? and fm.focus.id=? ";
+            iAuthor.setIfFocus(membersServiceImpl.ifFocus(memberId,focusId)+"");
 
-            Query q = focusDao.createQuery(hql);
-
-            q.setString(0,memberId);
-
-            q.setString(1,focusId);
-
-            FocusMember fm = (FocusMember) q.uniqueResult();
-
-            if (fm!=null){
-                iAuthor.setIfFocus("true");
-            }
         }
 
         iArticle.setAuthor(iAuthor);
@@ -270,11 +305,13 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         iArticle.setUrl(article.getUrl()+article.getId());
 
-        iArticle.setSummary(article.getSummary());
+        iArticle.setShareUrl(article.getShareUrl()+article.getId());
 
-        iArticle.setSquareCorp(article.getSquareCover());
+        iArticle.setSummary(article.getSummary()==null?"":article.getSummary());
 
-//        iArticle.setContent(article.getContent());
+        iArticle.setSquareCrop(article.getSquareCover()==null?"":article.getSquareCover());
+
+        iArticle.setContent(article.getContent());
 
         return iArticle;
     }
@@ -307,8 +344,12 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
             timestamp = Long.valueOf(articleRequest.getTimestamp());
         }
 
+        String hql = "select b from ArticleIndex a,Article b where a.article.id=b.id and a.timestamp < "+timestamp+" order by a.sort,a.index_time desc";
+
+//        hql = "from Article where status='100' and timestamp<"+timestamp+" order by timestamp desc ";
+
         //查询文章列表
-        Query q = articleDao.createQuery("from Article where status='100' and timestamp<"+timestamp+" order by timestamp desc ");
+        Query q = articleDao.createQuery(hql);
 
         q.setFirstResult(0);
 
@@ -349,7 +390,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
             limit = Integer.valueOf(request.getPageSize());
         }
 
-        long timestamp = System.currentTimeMillis();
+        long timestamp = 0l;
 
         if (StringUtils.isNotEmpty(request.getTimestamp())){
             timestamp = Long.valueOf(request.getTimestamp());
@@ -365,7 +406,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         }
 
-        String hql = "from ArticleComment ac where ac.article.id=? and timestamp<"+timestamp+" "+listHql+" order by timestamp ";
+        String hql = "from ArticleComment ac where ac.article.id=? and timestamp > "+timestamp+" "+listHql+" order by timestamp ";
 
         Query q = articleDao.createQuery(hql);
 
@@ -591,7 +632,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         response.put("ifZan",ifZan+"");
 
-        response.put("zanCounrt",zanCount(articleId));
+        response.put("zanCount",zanCount(articleId));
 
         return RespCode.getRespData(RespCode.SUCESS, response);
 
@@ -750,7 +791,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         response.put("ifCollection",ifCollection+"");
 
-        response.put("collectionCounrt",collectionCount(articleId));
+        response.put("collectionCount",collectionCount(articleId));
 
         return RespCode.getRespData(RespCode.SUCESS, response);
 

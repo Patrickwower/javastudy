@@ -436,7 +436,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		String verifyResult = SmsUtil.requestData(SmsUtil.SMS_VERIFY_URL,smsVerifyRequest.getParams());
 
-		if (!"200".equals(verifyResult)){
+		if (!"{\"status\":200}".equals(verifyResult)){
 
 			return RespCode.getRespData(RespCode.MOBILE_CODE_ERROR, new HashMap<String, String>());
 
@@ -821,8 +821,6 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			return RespCode.getRespData(RespCode.MEMBER_NOT_EXIST,new HashMap<String,String>());
 		}
 
-//		Weixin ifExist =
-
 		JSONObject jsonObject = JsonUtils.toJSONObject(weixin_info);
 
 		Weixin weixin = JsonUtils.toBean(jsonObject, Weixin.class);
@@ -833,7 +831,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			return RespCode.getRespData(RespCode.WEIXIN_EXIST,new HashMap<String,String>());
 		}
 
-		weixin.setOpenid(weixin.getUnionid());
+//		weixin.setOpenid(weixin.getUnionid());
 
 		weixin.setWeixin_info(weixin_info);
 
@@ -1105,19 +1103,24 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		//计算总的关注人数      下一步关注列表接口
 
-		int fucosCount = 0;
+		int focusCount = 0;
 
-		fucosCount = fucosCount(memberId);
+		focusCount = focusCount(memberId);
 
-		cMemberResponse.setFucosCount(fucosCount+"");
+		cMemberResponse.setFocusCount(focusCount+"");
 
 		//计算总的被关注次数(粉丝数)   下一步关注我的人的列表
 
-		int fucosedCount = 0;
+		int focusedCount = 0;
 
-		fucosedCount = fucosedCount(memberId);
+		focusedCount = focusedCount(memberId);
 
-		cMemberResponse.setFucosedCount(fucosedCount+"");
+		cMemberResponse.setFocusedCount(focusedCount+"");
+
+		//header中的memberId 是否已关注了当前查询用户
+
+		cMemberResponse.setIfFocus(ifFocus(headers.getFirst("memberId"),memberId)+"");
+
 		//总的被赞数   包含文章和评论被赞
 
 		int zanCount = 0;
@@ -1246,40 +1249,64 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
 	}
 
-	private int fucosCount(String memberId){
+	private int focusCount(String memberId){
 
 		if (StringUtils.isNotEmpty(memberId)){
 
-			String hqlFucosCount = "select count(fm.id) from FocusMember fm where fm.focus.id=? ";
+			String hqlfocusCount = "select count(fm.id) from FocusMember fm where fm.member.id=? ";
 
-			Query q = focusMemberDao.createQuery(hqlFucosCount);
+			Query q = focusMemberDao.createQuery(hqlfocusCount);
 
 			q.setString(0,memberId);
 
-			long fucosCount = (long)q.uniqueResult();
+			long focusCount = (long)q.uniqueResult();
 
-			return (int) fucosCount;
+			return (int) focusCount;
 
 		}
 
 		return 0;
 	}
 
-	private int fucosedCount(String memberId){
+	private int focusedCount(String memberId){
 
 		if (StringUtils.isNotEmpty(memberId)){
 
-			String hqlFucosCount = "select count(fm.id) from FocusMember fm where fm.member.id=? ";
+			String hqlfocusCount = "select count(fm.id) from FocusMember fm where fm.focus.id=? ";
 
-			Query q = focusMemberDao.createQuery(hqlFucosCount);
+			Query q = focusMemberDao.createQuery(hqlfocusCount);
 
 			q.setString(0,memberId);
 
-			long fucosCount = (long)q.uniqueResult();
+			long focusCount = (long)q.uniqueResult();
 
-			return (int) fucosCount;
+			return (int) focusCount;
 
 		}
+
+		return 0;
+	}
+
+	@Override
+	public int ifFocus(String memberId,String focusId){
+
+		if (StringUtils.isEmpty(memberId))return 0;
+
+		if (focusId.equals(memberId)){
+			return 0;
+		}
+
+		String hql = "from FocusMember fm where fm.member.id=? and fm.focus.id=? ";
+
+		Query q = focusMemberDao.createQuery(hql);
+
+		q.setString(0,memberId);
+
+		q.setString(1,focusId);
+
+		FocusMember fm = (FocusMember) q.uniqueResult();
+
+		if (fm!=null)return 1;
 
 		return 0;
 	}
@@ -1389,7 +1416,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		String verifyResult = SmsUtil.requestData(SmsUtil.SMS_VERIFY_URL,smsVerifyRequest.getParams());
 
-		if (!"200".equals(verifyResult)){
+		if (!"{\"status\":200}".equals(verifyResult)){
 
 			return RespCode.getRespData(RespCode.MOBILE_CODE_ERROR, new HashMap<String, String>());
 
