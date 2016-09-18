@@ -3,6 +3,7 @@ package com.dengyuecang.www.service.community;
 import com.dengyuecang.www.controller.api.community.model.*;
 import com.dengyuecang.www.controller.community.model.LongTextRequest;
 import com.dengyuecang.www.entity.community.Article;
+import com.dengyuecang.www.service.community.model.IndexArticle;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.service.IBaseService;
@@ -22,8 +23,6 @@ public interface IArticleService extends IBaseService<Article>{
    public Article queryArticleById(String articleId);
 
    public RespData index();
-
-   public RespData toIndex(HttpHeaders headers,String articleId);
 
    public RespData queryArticles(HttpHeaders headers, ArticleRequest articleRequest);
 
@@ -54,5 +53,9 @@ public interface IArticleService extends IBaseService<Article>{
    public RespData browse(HttpHeaders headers,String articleId);
 
    public RespData collections(HttpHeaders headers,CollectionRequest collectionRequest);
+
+   public IndexArticle toIndexArticle(String memberId, Article article);
+
+   public List<IndexArticle> toIndexArticleList(String memberId, List<IndexArticle> articles, List<Article> articleList);
 
 }

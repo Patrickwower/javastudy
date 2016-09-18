@@ -8,6 +8,7 @@ import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
 import com.longinf.lxcommon.service.BaseService;
+import org.hibernate.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -61,9 +62,17 @@ public class SysServiceImpl extends BaseService<StaticProvince> implements ISysS
 
 		String hql = "from User u where u.username=? and u.pwd=? ";
 
-		User user  = (User) userDao.createQuery(hql).uniqueResult();
+		Query q = userDao.createQuery(hql);
+
+		q.setString(0,loginRequest.getUsername());
+
+		q.setString(1,loginRequest.getPwd());
+
+		User user  = (User) q.uniqueResult();
 
 		Map<String,String> response = new HashMap<String,String>();
+
+		response.put("userid",user.getId());
 
 		if (user!=null){
 			return RespCode.getRespData(RespCode.SUCESS,response);

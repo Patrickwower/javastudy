@@ -3,10 +3,7 @@ package com.dengyuecang.www.service.publish.impl;
 import com.dengyuecang.www.controller.api.publish.model.ArticlePublishRequest;
 import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.StaticResource;
-import com.dengyuecang.www.entity.community.Article;
-import com.dengyuecang.www.entity.community.ArticleUpdateLog;
-import com.dengyuecang.www.entity.community.Category;
-import com.dengyuecang.www.entity.community.Tag;
+import com.dengyuecang.www.entity.community.*;
 import com.dengyuecang.www.service.IStaticResourceService;
 import com.dengyuecang.www.service.common.CommonConstant;
 import com.dengyuecang.www.service.publish.IPublishArticleService;
@@ -50,6 +47,9 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
     @Resource(name = "hibernateBaseDao")
     private BaseDao<ArticleUpdateLog> articleUpdateLogDao;
+
+    @Resource(name = "hibernateBaseDao")
+    private BaseDao<ArticleIndex> articleIndexDao;
 
     @Resource
     private IStaticResourceService staticResourceServiceImpl;
@@ -187,6 +187,26 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
         article.setShareUrl(CommonConstant.ARTICLE_SHARE_URL);
 
         articleDao.save(article);
+
+        //直接放入首页热门
+
+        if (CommonConstant.PUBLISH_TO_INDEX_HOT){
+
+            ArticleIndex ai = new ArticleIndex();
+
+            ai.setArticle(article);
+
+            ai.setIndex_time(new Date());
+
+            ai.setMax_sort("99999999");
+
+            ai.setSort("99999999");
+
+            ai.setTimestamp(System.currentTimeMillis());
+
+            articleIndexDao.save(ai);
+        }
+
 
         Map<String,String> response = new HashMap<String,String>();
 

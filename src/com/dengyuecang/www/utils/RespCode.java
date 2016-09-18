@@ -238,7 +238,7 @@ public class RespCode implements Serializable{
 
 		respCodeMap.put(UPDATE_INTRODUCTION_EXCEPTION,new RespCode(UPDATE_INTRODUCTION_EXCEPTION,"介绍修改发生异常"));
 
-		respCodeMap.put(USERNAME_OR_PWD_WRONG,new RespCode(USERNAME_OR_PWD_WRONG,"管理凭条,用户名或密码错误"));
+		respCodeMap.put(USERNAME_OR_PWD_WRONG,new RespCode(USERNAME_OR_PWD_WRONG,"管理平台,用户名或密码错误"));
 
 
 		//

@@ -9,6 +9,7 @@ import org.hibernate.Query;
 import org.hibernate.ReplicationMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -90,7 +91,14 @@ public class HibernateBaseDao<T extends Serializable> implements BaseDao<T> {
 		long pageNo = page.getPage();
 		long pageSize = page.getRows();
 
+		long rowsTotal = (long)criteria.setProjection(Projections.rowCount()).uniqueResult();
+
+		page.setTotalPages(rowsTotal);
+
+		criteria.setProjection(null);
+
 		List<T> items = criteria.setFirstResult((int) ((pageNo - 1) * pageSize)).setMaxResults((int) pageSize).list();
+
 		page.setList(items);
 		page.setTotal(total);
 		return items;

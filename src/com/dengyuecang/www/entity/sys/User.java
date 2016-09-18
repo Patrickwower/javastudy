@@ -1,10 +1,15 @@
 package com.dengyuecang.www.entity.sys;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * Created by acang on 16/9/6.
  */
+@Entity
+@Table(name = "sys_user")
 public class User implements Serializable {
 
     private String id;
@@ -15,6 +20,13 @@ public class User implements Serializable {
 
     private String nickname;
 
+    private String token;
+
+    @GenericGenerator(name = "generator", strategy = "uuid")
+    @Id
+    @GeneratedValue(generator = "generator")
+
+    @Column(name = "id", unique = true, nullable = false, length = 100)
     public String getId() {
         return id;
     }
@@ -45,5 +57,13 @@ public class User implements Serializable {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

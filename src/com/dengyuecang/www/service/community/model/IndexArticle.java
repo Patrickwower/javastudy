@@ -48,6 +48,12 @@ public class IndexArticle {
 
     private Date ctime;
 
+    private String status;
+
+    private String statusName;
+
+    private String ifIndex;
+
     public IndexArticle() {
     }
 
@@ -209,5 +215,29 @@ public class IndexArticle {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
+
+    public String getIfIndex() {
+        return ifIndex;
+    }
+
+    public void setIfIndex(String ifIndex) {
+        this.ifIndex = ifIndex;
     }
 }

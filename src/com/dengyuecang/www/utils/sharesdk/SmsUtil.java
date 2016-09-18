@@ -39,7 +39,7 @@ public class SmsUtil {
     public  static String requestData(String address ,String params){
 
         if (CommonConstant.SDK_MSG_LOCK){
-            return "200";
+            return "{\"status\":200}";
         }
 
         HttpURLConnection conn = null;

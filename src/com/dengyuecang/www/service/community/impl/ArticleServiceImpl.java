@@ -4,6 +4,7 @@ import com.dengyuecang.www.controller.api.community.model.*;
 import com.dengyuecang.www.controller.community.model.LongTextRequest;
 import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.community.*;
+import com.dengyuecang.www.service.common.CommonConstant;
 import com.dengyuecang.www.service.community.IArticleService;
 import com.dengyuecang.www.service.community.model.*;
 import com.dengyuecang.www.service.members.IMembersService;
@@ -11,9 +12,11 @@ import com.dengyuecang.www.service.members.model.CommunityMemberResponse;
 import com.dengyuecang.www.service.publish.IPublishArticleService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
+import com.fasterxml.jackson.core.sym.NameN;
 import com.longinf.lxcommon.dao.BaseDao;
 import com.longinf.lxcommon.service.BaseService;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -198,44 +201,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
     }
 
     @Override
-    public RespData toIndex(HttpHeaders headers,String articleId) {
-
-        if (StringUtils.isEmpty(articleId)){
-            return RespCode.getRespData(RespCode.ARTICLE_NOT_EXIST,new HashMap<String,String>());
-        }
-
-        Article article = articleDao.get(Article.class,articleId);
-
-        if (article==null){
-            return RespCode.getRespData(RespCode.ARTICLE_NOT_EXIST,new HashMap<String,String>());
-        }
-
-        List<ArticleIndex> aiList = articleIndexDao.createQuery("from ArticleIndex ai where ai.article.id=? ").setString(0,articleId).list();
-
-        if (aiList.size()>0){
-            return RespCode.getRespData(RespCode.ARTICLE_ALREADY_INDEX,new HashMap<String,String>());
-        }
-
-        ArticleIndex ai = new ArticleIndex();
-
-        ai.setArticle(article);
-
-        ai.setIndex_time(new Date());
-
-        ai.setMax_sort("99999999");
-
-        ai.setSort("99999999");
-
-        ai.setTimestamp(System.currentTimeMillis());
-
-        articleIndexDao.save(ai);
-
-        Map<String,String> response = new HashMap<String,String>();
-
-        return RespCode.getRespData(RespCode.SUCESS,response);
-    }
-
-    private IndexArticle toIndexArticle(String memberId,Article article){
+    public IndexArticle toIndexArticle(String memberId,Article article){
 
         IndexArticle iArticle = new IndexArticle();
 
@@ -313,20 +279,57 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         iArticle.setContent(article.getContent());
 
+        iArticle.setStatus(article.getStatus());
+
+        iArticle.setStatusName(CommonConstant.ARTICLE_STATUS.get(article.getStatus()));
+
+        iArticle.setIfIndex("");
+
         return iArticle;
     }
 
-    private List<IndexArticle> toIndexArticleList(String memberId, List<IndexArticle> articles, List<Article> articleList){
+    private String ifIndex(String articleId,List<ArticleIndex> indexList){
+
+
+
+        return "0";
+    }
+
+    @Override
+    public List<IndexArticle> toIndexArticleList(String memberId, List<IndexArticle> articles, List<Article> articleList){
+
+        Criteria indexCriteria = articleIndexDao.createCriteria(ArticleIndex.class);
+
+        List<ArticleIndex> indexList = articleIndexDao.all(indexCriteria);
 
         for (Article article :
                 articleList) {
 
             IndexArticle iArticle = toIndexArticle(memberId,article);
 
+            iArticle.setIfIndex(ifInIndex(iArticle.getId(),indexList)+"");
+
             articles.add(iArticle);
         }
 
         return articles;
+    }
+
+    /**
+     *
+     * @param articleId
+     * @param indexList
+     * @return
+     */
+    private int ifInIndex(String articleId,List<ArticleIndex> indexList){
+
+        for (ArticleIndex index : indexList){
+
+            if (articleId.equals(index.getArticle().getId())){
+                return 1;
+            }
+        }
+        return 0;
     }
 
     @Override
@@ -344,9 +347,9 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
             timestamp = Long.valueOf(articleRequest.getTimestamp());
         }
 
-        String hql = "select b from ArticleIndex a,Article b where a.article.id=b.id and a.timestamp < "+timestamp+" order by a.sort,a.index_time desc";
+        String hql = "from Article where status<>'200' and timestamp<"+timestamp+" order by timestamp desc ";
 
-//        hql = "from Article where status='100' and timestamp<"+timestamp+" order by timestamp desc ";
+//          hql = "select b from ArticleIndex a,Article b where a.article.id=b.id and a.timestamp < "+timestamp+" order by a.sort,a.index_time desc";
 
         //查询文章列表
         Query q = articleDao.createQuery(hql);
@@ -365,6 +368,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         return RespCode.getRespData(RespCode.SUCESS,articles);
     }
+
 
     @Override
     public RespData getArticle(String articleId) {

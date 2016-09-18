@@ -1,6 +1,9 @@
 package com.dengyuecang.www.service.common;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 基础信息类
  * @author acang
@@ -61,6 +64,34 @@ public class CommonConstant {
 
 	public static final String ARTICLE_SHARE_URL = "http://manager.dengyuecang.com/dyc/community/article/share?articleId=";
 
-
+	/**
+	 * 短信验证码是否验证,true为不验证,false为验证
+	 */
 	public static final boolean SDK_MSG_LOCK = false;
+
+	/**
+	 * 是否直接在文章发布时,直接插入首页热门,true为直接插入,false为不插入
+	 */
+	public static final boolean PUBLISH_TO_INDEX_HOT = true;
+
+	/**
+	 * 文章状态
+	 */
+	public static final Map<String,String> ARTICLE_STATUS = new HashMap<String,String>();
+
+	static {
+
+		ARTICLE_STATUS.put("100","正常");
+
+		ARTICLE_STATUS.put("200","禁用");
+
+	}
+
+	/**
+	 * 首页热门文章排序数量(最多排序到多少)
+	 */
+
+	public static final int INDEX_HOT_MAX_SORT = 30;
+
+
 }

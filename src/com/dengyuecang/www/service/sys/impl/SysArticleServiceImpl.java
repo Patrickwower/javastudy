@@ -1,18 +1,25 @@
 package com.dengyuecang.www.service.sys.impl;
 
 import com.dengyuecang.www.controller.api.sys.model.ArticleListRequest;
+import com.dengyuecang.www.controller.api.sys.model.IndexListRequest;
+import com.dengyuecang.www.controller.api.sys.model.IndexSortRequest;
 import com.dengyuecang.www.entity.StaticProvince;
 import com.dengyuecang.www.entity.community.Article;
+import com.dengyuecang.www.entity.community.ArticleIndex;
 import com.dengyuecang.www.entity.sys.User;
+import com.dengyuecang.www.service.common.CommonConstant;
+import com.dengyuecang.www.service.community.IArticleService;
+import com.dengyuecang.www.service.community.model.IndexArticle;
 import com.dengyuecang.www.service.sys.ISysArticleService;
+import com.dengyuecang.www.service.sys.model.SysIndexArticle;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
+import com.longinf.lxcommon.dao.params.PageModel;
 import com.longinf.lxcommon.service.BaseService;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +29,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class SysArticleServiceImpl extends BaseService<Article> implements ISysArticleService{
@@ -38,6 +45,11 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 	@Resource(name = "hibernateBaseDao")
 	private BaseDao<Article> articleDao;
 
+	@Resource
+	private IArticleService articleServiceImpl;
+
+	@Resource(name = "hibernateBaseDao")
+	private BaseDao<ArticleIndex> articleIndexDao;
 
 	@Override
 	public BaseDao<Article> getSuperDao() {
@@ -88,11 +100,27 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 
 			articleCriteria.addOrder(Order.desc("ctime"));
 
-			List<Article> ll = articleDao.pagedQuery(articleCriteria,articleListRequest.getPageModel());
+			articleDao.pagedQuery(articleCriteria,articleListRequest.getPageModel());
 
-			long rowsTotal = (long)articleCriteria.setProjection(Projections.rowCount()).uniqueResult();
+			HashMap<String,Object> response = new HashMap<String,Object>();
 
-			return RespCode.getRespData(RespCode.SUCESS,ll);
+			List<IndexArticle> articles = new ArrayList<IndexArticle>();
+
+			String memberId = headers.getFirst("memberId");
+
+			articles = articleServiceImpl.toIndexArticleList(memberId,articles,articleListRequest.getPageModel().getList());
+
+			PageModel page = articleListRequest.getPageModel();
+
+			page.setList(null);
+
+			response.put("page",articleListRequest.getPageModel());
+
+			response.put("articles",articles);
+
+//			response.put("articles",ll);
+
+			return RespCode.getRespData(RespCode.SUCESS,response);
 
 		}catch (Exception e){
 			e.printStackTrace();
@@ -100,4 +128,241 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 
 		return null;
 	}
+
+	@Override
+	public RespData forbidden(HttpHeaders headers, String articleId) {
+
+		Article article = articleDao.get(Article.class,articleId);
+
+		if (article!=null){
+
+			if ("100".equals(article.getStatus())){
+				article.setStatus("200");
+			}else if ("200".equals(article.getStatus()))
+			{
+				article.setStatus("100");
+			}
+
+		}
+
+		articleDao.saveOrUpdate(article);
+
+		Map<String,String> response = new HashMap<String,String>();
+
+		response.put("statusName", CommonConstant.ARTICLE_STATUS.get(article.getStatus()));
+
+		return RespCode.getRespData(RespCode.SUCESS,response);
+	}
+
+	@Override
+	public RespData enable(HttpHeaders headers, String articleId) {
+
+		return this.forbidden(headers,articleId);
+	}
+
+	@Override
+	public RespData toIndex(HttpHeaders headers, String articleId) {
+
+		if (StringUtils.isEmpty(articleId)){
+			return RespCode.getRespData(RespCode.ARTICLE_NOT_EXIST,new HashMap<String,String>());
+		}
+
+		Article article = articleDao.get(Article.class,articleId);
+
+		if (article==null){
+			return RespCode.getRespData(RespCode.ARTICLE_NOT_EXIST,new HashMap<String,String>());
+		}
+
+		List<ArticleIndex> aiList = articleIndexDao.createQuery("from ArticleIndex ai where ai.article.id=? ").setString(0,articleId).list();
+
+		if (aiList.size()>0){
+			return RespCode.getRespData(RespCode.ARTICLE_ALREADY_INDEX,new HashMap<String,String>());
+		}
+
+		ArticleIndex ai = new ArticleIndex();
+
+		ai.setArticle(article);
+
+		ai.setIndex_time(new Date());
+
+		ai.setMax_sort("99999999");
+
+		ai.setSort("99999999");
+
+		ai.setTimestamp(System.currentTimeMillis());
+
+		articleIndexDao.save(ai);
+
+		Map<String,String> response = new HashMap<String,String>();
+
+		return RespCode.getRespData(RespCode.SUCESS,response);
+
+	}
+
+	@Override
+	public RespData indexList(HttpHeaders headers, IndexListRequest indexListRequest) {
+
+		try {
+
+			Criteria indexCriteria = articleIndexDao.createCriteria(ArticleIndex.class);
+
+			if (StringUtils.isNotEmpty(indexListRequest.getAuthor())){
+
+				indexCriteria.createCriteria("article").createCriteria("member").createCriteria("memberInfo").add(Restrictions.like("nickname", "%"+indexListRequest.getAuthor()+"%"));
+
+			}
+
+			if (StringUtils.isNotEmpty(indexListRequest.getTitle())){
+
+				indexCriteria.createCriteria("article").add(Restrictions.like("title", "%"+indexListRequest.getTitle()+"%"));
+
+			}
+
+			indexCriteria.addOrder(Order.asc("sort"));
+
+			indexCriteria.addOrder(Order.desc("index_time"));
+
+			articleDao.pagedQuery(indexCriteria,indexListRequest.getPageModel());
+
+			List<ArticleIndex> articleIndexList = indexListRequest.getPageModel().getList();
+
+			List<Article> articleList = new ArrayList<Article>();
+
+			for (ArticleIndex articleIndex :
+					articleIndexList) {
+
+				articleList.add(articleIndex.getArticle());
+
+			}
+
+			HashMap<String,Object> response = new HashMap<String,Object>();
+
+			List<IndexArticle> articles = new ArrayList<IndexArticle>();
+
+			String memberId = headers.getFirst("memberId");
+
+			articles = articleServiceImpl.toIndexArticleList(memberId,articles,articleList);
+
+			List<SysIndexArticle> sysIndexArticleList = new ArrayList<SysIndexArticle>();
+
+			for (ArticleIndex articleIndex :
+					articleIndexList) {
+
+				SysIndexArticle sysIndexArticle = new SysIndexArticle();
+
+				sysIndexArticle.setId(articleIndex.getId());
+
+				sysIndexArticle.setIndex_time(articleIndex.getIndex_time());
+
+				sysIndexArticle.setSort(articleIndex.getSort());
+
+				for (IndexArticle indexArticle:
+					 articles) {
+
+					if (indexArticle.getId().equals(articleIndex.getArticle().getId())){
+
+						sysIndexArticle.setIndexArticle(indexArticle);
+
+						break;
+					}
+
+				}
+
+
+				sysIndexArticleList.add(sysIndexArticle);
+			}
+
+			PageModel page = indexListRequest.getPageModel();
+
+			page.setList(null);
+
+			response.put("page",indexListRequest.getPageModel());
+
+			response.put("indexArticles",sysIndexArticleList);
+
+			return RespCode.getRespData(RespCode.SUCESS,response);
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
+
+	}
+
+	@Override
+	public RespData indexSort(HttpHeaders headers, IndexSortRequest indexSortRequest) {
+
+		List<ArticleIndex> indexList = articleIndexDao.createQuery("from ArticleIndex where id<>'"+indexSortRequest.getIndexId()+"' and sort<99999999 order by sort").list();
+
+		String sortString = indexSortRequest.getSort();
+
+
+
+
+
+		String indexId = indexSortRequest.getIndexId();
+
+		ArticleIndex ai = articleIndexDao.get(ArticleIndex.class,indexId);
+		int sortResult = 0;
+
+		if (StringUtils.isEmpty(sortString)||"99999999".equals(sortString)){
+			ai.setSort("99999999");
+
+		}else {
+
+			int sort = Integer.valueOf(sortString);
+
+
+			int size = indexList.size();
+
+			if (sort>size){
+
+				ai.setSort((size+1)+"");
+
+			}else if(sort==size){
+
+				ai.setSort(sortString);
+
+				sortResult = sort;
+
+			}else if(sort<size){
+
+				ai.setSort(sortString);
+
+				sortResult = sort;
+
+			}
+
+		}
+
+		articleIndexDao.saveOrUpdate(ai);
+		this.reSort(indexList,sortResult);
+
+
+		return RespCode.getRespData(RespCode.SUCESS,new HashMap<String,String>());
+	}
+
+	/**
+	 * index热门排序重排机制
+	 */
+	private void reSort(List<ArticleIndex> indexList,int sort){
+
+		int indexSort = 0;
+		for (ArticleIndex aIndex :
+				indexList) {
+			indexSort++;
+			if (sort!=0&&sort==indexSort){
+				indexSort++;
+			}
+			if (indexSort <= CommonConstant.INDEX_HOT_MAX_SORT) {
+				aIndex.setSort(indexSort + "");
+			}else{
+				aIndex.setSort("99999999");
+			}
+			articleIndexDao.saveOrUpdate(aIndex);
+		}
+
+	}
+
 }
