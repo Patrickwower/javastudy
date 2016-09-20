@@ -206,16 +206,16 @@ public class Article implements Serializable{
     }
 
 
-    private String index;
+    private String if_index;
 
     private String banner;
 
-    public String getIndex() {
-        return index;
+    public String getIf_index() {
+        return if_index;
     }
 
-    public void setIndex(String index) {
-        this.index = index;
+    public void setIf_index(String if_index) {
+        this.if_index = if_index;
     }
 
     public String getBanner() {

@@ -85,6 +85,8 @@ public class CommonConstant {
 
 		ARTICLE_STATUS.put("200","禁用");
 
+		ARTICLE_STATUS.put("300","删除");
+
 	}
 
 	/**

@@ -58,4 +58,6 @@ public interface IArticleService extends IBaseService<Article>{
 
    public List<IndexArticle> toIndexArticleList(String memberId, List<IndexArticle> articles, List<Article> articleList);
 
+   public RespData delete(HttpHeaders headers,String articleId);
+
 }

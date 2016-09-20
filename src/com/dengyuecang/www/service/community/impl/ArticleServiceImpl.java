@@ -283,7 +283,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         iArticle.setStatusName(CommonConstant.ARTICLE_STATUS.get(article.getStatus()));
 
-        iArticle.setIfIndex(article.getIndex());
+        iArticle.setIfIndex(article.getIf_index());
 
         iArticle.setIfBanner(article.getBanner());
 
@@ -306,6 +306,40 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         }
 
         return articles;
+    }
+
+    @Override
+    public RespData delete(HttpHeaders headers, String articleId) {
+
+        if (StringUtils.isEmpty(articleId)){
+
+            return RespCode.getRespData(RespCode.ARTICLE_NOT_EXIST,new HashMap<String,String>());
+
+        }
+
+        Article article = articleDao.get(Article.class,articleId);
+
+        if (article==null){
+
+            return RespCode.getRespData(RespCode.ARTICLE_NOT_EXIST,new HashMap<String,String>());
+
+        }
+
+
+        try {
+            article.setStatus("300");
+
+            articleDao.saveOrUpdate(article);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        Map<String,String> response = new HashMap<String,String>();
+
+        response.put("msg","删除成功");
+
+        return RespCode.getRespData(RespCode.SUCESS,response);
     }
 
     /**
@@ -340,7 +374,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
             timestamp = Long.valueOf(articleRequest.getTimestamp());
         }
 
-        String hql = "from Article where status<>'200' and timestamp<"+timestamp+" order by timestamp desc ";
+        String hql = "from Article where status='100' and timestamp<"+timestamp+" order by timestamp desc ";
 
 //          hql = "select b from ArticleIndex a,Article b where a.article.id=b.id and a.timestamp < "+timestamp+" order by a.sort,a.index_time desc";
 

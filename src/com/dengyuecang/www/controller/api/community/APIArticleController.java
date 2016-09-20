@@ -192,7 +192,7 @@ public class APIArticleController {
 
     @RequestMapping(value = "/collections",method = RequestMethod.POST)
     @ResponseBody
-        public RespData collections(@RequestHeader HttpHeaders headers, CollectionRequest  collectionRequest){
+    public RespData collections(@RequestHeader HttpHeaders headers, CollectionRequest  collectionRequest){
 
         try {
             return articleServiceImpl.collections(headers,collectionRequest);
@@ -203,5 +203,19 @@ public class APIArticleController {
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
 
     }
+
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    @ResponseBody
+    public RespData delete(@RequestHeader HttpHeaders headers,String articleId){
+
+        try {
+            return articleServiceImpl.delete(headers,articleId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
+
 
 }

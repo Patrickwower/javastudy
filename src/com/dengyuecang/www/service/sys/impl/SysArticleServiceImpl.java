@@ -185,7 +185,7 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 			return RespCode.getRespData(RespCode.ARTICLE_ALREADY_INDEX,new HashMap<String,String>());
 		}
 
-		article.setIndex("1");
+		article.setIf_index("1");
 
 		articleDao.saveOrUpdate(article);
 
