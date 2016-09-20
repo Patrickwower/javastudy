@@ -54,6 +54,8 @@ public class IndexArticle {
 
     private String ifIndex;
 
+    private String ifBanner;
+
     public IndexArticle() {
     }
 
@@ -239,5 +241,13 @@ public class IndexArticle {
 
     public void setIfIndex(String ifIndex) {
         this.ifIndex = ifIndex;
+    }
+
+    public String getIfBanner() {
+        return ifBanner;
+    }
+
+    public void setIfBanner(String ifBanner) {
+        this.ifBanner = ifBanner;
     }
 }

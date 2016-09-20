@@ -283,16 +283,11 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         iArticle.setStatusName(CommonConstant.ARTICLE_STATUS.get(article.getStatus()));
 
-        iArticle.setIfIndex("");
+        iArticle.setIfIndex(article.getIndex());
+
+        iArticle.setIfBanner(article.getBanner());
 
         return iArticle;
-    }
-
-    private String ifIndex(String articleId,List<ArticleIndex> indexList){
-
-
-
-        return "0";
     }
 
     @Override
@@ -306,8 +301,6 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
                 articleList) {
 
             IndexArticle iArticle = toIndexArticle(memberId,article);
-
-            iArticle.setIfIndex(ifInIndex(iArticle.getId(),indexList)+"");
 
             articles.add(iArticle);
         }

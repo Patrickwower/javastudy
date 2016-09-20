@@ -1,10 +1,7 @@
 package com.dengyuecang.www.controller.api.sys;
 
 
-import com.dengyuecang.www.controller.api.sys.model.ArticleListRequest;
-import com.dengyuecang.www.controller.api.sys.model.IndexListRequest;
-import com.dengyuecang.www.controller.api.sys.model.IndexSortRequest;
-import com.dengyuecang.www.controller.api.sys.model.UserLoginRequest;
+import com.dengyuecang.www.controller.api.sys.model.*;
 import com.dengyuecang.www.service.members.IMembersService;
 import com.dengyuecang.www.service.sys.ISysArticleService;
 import com.dengyuecang.www.service.sys.ISysService;
@@ -124,6 +121,72 @@ public class SysArticleController {
 	}
 
 	/**
+	 * 插入到首页的热门文章
+	 * @param headers
+	 * @param articleId
+	 * @return
+	 */
+	@RequestMapping(value = "/toBanner",method = RequestMethod.POST)
+	@ResponseBody
+	public RespData toBanner(@RequestHeader HttpHeaders headers, String  articleId){
+
+		try {
+
+			return sysArticleServiceImpl.toBanner(headers,articleId);
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
+	}
+
+	/**
+	 * banner中文章上线
+	 * @param headers
+	 * @param recommendId
+	 * @return
+	 */
+	@RequestMapping(value = "/bannerUp",method = RequestMethod.POST)
+	@ResponseBody
+	public RespData bannerUp(@RequestHeader HttpHeaders headers, String  recommendId){
+
+		try {
+
+			return sysArticleServiceImpl.bannerUp(headers,recommendId);
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
+	}
+
+	/**
+	 * banner中文章下线
+	 * @param headers
+	 * @param recommendId
+	 * @return
+	 */
+	@RequestMapping(value = "/bannerDown",method = RequestMethod.POST)
+	@ResponseBody
+	public RespData bannerDown(@RequestHeader HttpHeaders headers, String  recommendId){
+
+		try {
+
+			return sysArticleServiceImpl.bannerDown(headers,recommendId);
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
+	}
+
+	/**
 	 * 分页查询index列表
 	 * @param headers
 	 * @return
@@ -175,11 +238,13 @@ public class SysArticleController {
 	 */
 	@RequestMapping(value = "/banner/list",method = RequestMethod.POST)
 	@ResponseBody
-	public RespData bannerList(@RequestHeader HttpHeaders headers, IndexListRequest indexListRequest, PageModel pageModel){
+	public RespData bannerList(@RequestHeader HttpHeaders headers, BannerListRequest bannerListRequest, PageModel pageModel){
 
 		try {
 
-			return sysArticleServiceImpl.indexList(headers,indexListRequest);
+			bannerListRequest.setPageModel(pageModel);
+
+			return sysArticleServiceImpl.bannerList(headers,bannerListRequest);
 
 		}catch (Exception e){
 			e.printStackTrace();

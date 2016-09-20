@@ -24,9 +24,9 @@ public class CommonConstant {
 	 * 静态资源文件的网络访问路径+“资源用途名称”+“文件名”
 	 * 暂时：上线时需要修改为
 	 */
-//	public static final String STATIC_URL = "http://test.static.dengyuecang.com";//开发
+	public static final String STATIC_URL = "http://test.static.dengyuecang.com";//开发
 //	public static final String STATIC_URL = "http://localhost:8080/dyc";//开发
-	public static final String STATIC_URL = "http://static.dengyuecang.com";//生产
+//	public static final String STATIC_URL = "http://static.dengyuecang.com";//生产
 	
 	
 	/**
@@ -52,17 +52,17 @@ public class CommonConstant {
 	/**
 	 * 文章详情地址
 	 */
-//	public static final String ARTICLE_DETAIL_URL = "http://test.manager.dengyuecang.com/dyc/community/article/detail?articleId=";
+	public static final String ARTICLE_DETAIL_URL = "http://test.manager.dengyuecang.com/dyc/community/article/detail?articleId=";
 
-	public static final String ARTICLE_DETAIL_URL = "http://manager.dengyuecang.com/dyc/community/article/detail?articleId=";
+//	public static final String ARTICLE_DETAIL_URL = "http://manager.dengyuecang.com/dyc/community/article/detail?articleId=";
 
 
 	/**
 	 * 文章分享页面
 	 */
-//	public static final String ARTICLE_SHARE_URL = "http://test.manager.dengyuecang.com/dyc/community/article/share?articleId=";
+	public static final String ARTICLE_SHARE_URL = "http://test.manager.dengyuecang.com/dyc/community/article/share?articleId=";
 
-	public static final String ARTICLE_SHARE_URL = "http://manager.dengyuecang.com/dyc/community/article/share?articleId=";
+//	public static final String ARTICLE_SHARE_URL = "http://manager.dengyuecang.com/dyc/community/article/share?articleId=";
 
 	/**
 	 * 短信验证码是否验证,true为不验证,false为验证
@@ -84,6 +84,19 @@ public class CommonConstant {
 		ARTICLE_STATUS.put("100","正常");
 
 		ARTICLE_STATUS.put("200","禁用");
+
+	}
+
+	/**
+	 * banner状态
+	 */
+	public static final Map<String,String> BANNER_STATUS = new HashMap<String,String>();
+
+	static {
+
+		BANNER_STATUS.put("100","上线");
+
+		BANNER_STATUS.put("200","下线");
 
 	}
 

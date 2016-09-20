@@ -1,9 +1,6 @@
 package com.dengyuecang.www.service.sys;
 
-import com.dengyuecang.www.controller.api.sys.model.ArticleListRequest;
-import com.dengyuecang.www.controller.api.sys.model.IndexListRequest;
-import com.dengyuecang.www.controller.api.sys.model.IndexSortRequest;
-import com.dengyuecang.www.controller.api.sys.model.UserLoginRequest;
+import com.dengyuecang.www.controller.api.sys.model.*;
 import com.dengyuecang.www.entity.StaticProvince;
 import com.dengyuecang.www.entity.community.Article;
 import com.dengyuecang.www.utils.RespData;
@@ -46,5 +43,35 @@ public interface ISysArticleService extends IBaseService<Article>{
 	 * 首页热门文章排序接口
 	 */
 	public RespData indexSort(HttpHeaders headers, IndexSortRequest indexSortRequest);
+
+	/**
+	 * 首页热门文章列表
+	 */
+	public RespData bannerList(HttpHeaders headers, BannerListRequest bannerListRequest);
+
+
+	/**
+	 * 文章上banner列表的接口
+	 * @param headers
+	 * @param articleId
+	 * @return
+	 */
+	public RespData toBanner(HttpHeaders headers,String articleId);
+
+	/**
+	 * banner中信息上线
+	 * @param headers
+	 * @param recommendId
+	 * @return
+	 */
+	public RespData bannerUp(HttpHeaders headers,String recommendId);
+
+	/**
+	 * banner中信息下线
+	 * @param headers
+	 * @param recommendId
+	 * @return
+	 */
+	public RespData bannerDown(HttpHeaders headers,String recommendId);
 
 }

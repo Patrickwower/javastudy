@@ -204,4 +204,25 @@ public class Article implements Serializable{
     public void setSquareCover(String squareCover) {
         this.squareCover = squareCover;
     }
+
+
+    private String index;
+
+    private String banner;
+
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
+    }
+
+    public String getBanner() {
+        return banner;
+    }
+
+    public void setBanner(String banner) {
+        this.banner = banner;
+    }
 }
