@@ -14,10 +14,12 @@ import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.fasterxml.jackson.core.sym.NameN;
 import com.longinf.lxcommon.dao.BaseDao;
+import com.longinf.lxcommon.dao.params.PageModel;
 import com.longinf.lxcommon.service.BaseService;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
@@ -287,15 +289,33 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         iArticle.setIfBanner(article.getBanner());
 
+        iArticle.setCanDelete(this.canDeleteArticle(article,memberId)+"");
+
+        iArticle.setCanEdit(this.canEditArticle(article,memberId)+"");
+
         return iArticle;
+    }
+
+    private int canDeleteArticle(Article article,String memberId){
+
+        if (article.getMember().getId().equals(memberId)){
+            return 1;
+        }
+
+        return 0;
+    }
+
+    private int canEditArticle(Article article,String memberId){
+
+        if (article.getMember().getId().equals(memberId)){
+            return 1;
+        }
+
+        return 0;
     }
 
     @Override
     public List<IndexArticle> toIndexArticleList(String memberId, List<IndexArticle> articles, List<Article> articleList){
-
-        Criteria indexCriteria = articleIndexDao.createCriteria(ArticleIndex.class);
-
-        List<ArticleIndex> indexList = articleIndexDao.all(indexCriteria);
 
         for (Article article :
                 articleList) {
@@ -331,16 +351,91 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
             articleDao.saveOrUpdate(article);
 
+            Map<String,String> response = new HashMap<String,String>();
+
+            response.put("articleId",articleId);
+
+            return RespCode.getRespData(RespCode.SUCESS,response);
+
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        Map<String,String> response = new HashMap<String,String>();
-
-        response.put("msg","删除成功");
-
-        return RespCode.getRespData(RespCode.SUCESS,response);
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
     }
+
+    @Override
+    public RespData commentDelete(HttpHeaders headers, String commentId) {
+
+        String memberId = headers.getFirst("memberId");
+
+        if (StringUtils.isEmpty(memberId)){
+            return RespCode.getRespData(RespCode.UNLOGIN,new HashMap<String,String>());
+        }
+
+        if (StringUtils.isEmpty(commentId)){
+
+            return RespCode.getRespData(RespCode.COMMENT_ID_NEED,new HashMap<String,String>());
+
+        }
+
+        ArticleComment ac = articleCommentDao.get(ArticleComment.class,commentId);
+
+        if (ac==null){
+            return RespCode.getRespData(RespCode.COMMENT_NOT_EXIST,new HashMap<String,String>());
+        }
+
+        if (!ac.getArticle().getMember().getId().equals(memberId)){
+
+            if (!ac.getDiscussant().getId().equals(memberId)){
+
+                return RespCode.getRespData(RespCode.COMMENT_NOT_CURRENT_MEMBER,new HashMap<String,String>());
+            }
+
+        }
+
+        try {
+
+            ac.setStatus("200");
+
+            articleCommentDao.saveOrUpdate(ac);
+
+            Map<String,String> response = new HashMap<String,String>();
+
+            response.put("commentId",commentId);
+
+            return RespCode.getRespData(RespCode.SUCESS,response);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
+    }
+
+    /**
+     * 评论是否上传
+     *  //当前用户是否可以删除,0不可以,1可以
+     *  文章作者和评论所有人可以删除
+     */
+    private int canDeleteComment(ArticleComment ac,String memberId){
+
+        if (ac.getArticle().getMember().getId().equals(memberId)){
+
+            return 1;
+
+        }else{
+
+            if (ac.getDiscussant().getId().equals(memberId)){
+
+                return 1;
+            }
+
+        }
+
+        return 0;
+    }
+
 
     /**
      *
@@ -396,6 +491,71 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         return RespCode.getRespData(RespCode.SUCESS,articles);
     }
 
+    @Override
+    public RespData hotList(HttpHeaders headers, PageModel pageModel) {
+
+        try {
+
+            pageModel.setRows(2);
+
+            Criteria indexCriteria = articleIndexDao.createCriteria(ArticleIndex.class);
+
+            indexCriteria.addOrder(Order.asc("sort"));
+
+            indexCriteria.addOrder(Order.desc("index_time"));
+
+            articleDao.pagedQuery(indexCriteria,pageModel);
+
+            List<ArticleIndex> articleIndexList = pageModel.getList();
+
+            if (articleIndexList.size()<2){
+
+                Criteria tmp_criteria  = articleIndexDao.createCriteria(ArticleIndex.class);
+
+                tmp_criteria.addOrder(Order.asc("sort"));
+
+                tmp_criteria.addOrder(Order.desc("index_time"));
+
+                pageModel = new PageModel();
+
+                pageModel.setRows(2);
+
+                articleDao.pagedQuery(tmp_criteria,pageModel);
+
+                articleIndexList = pageModel.getList();
+            }
+
+            List<Article> articleList = new ArrayList<Article>();
+
+            for (ArticleIndex articleIndex :
+                    articleIndexList) {
+
+                articleList.add(articleIndex.getArticle());
+
+            }
+
+            HashMap<String,Object> response = new HashMap<String,Object>();
+
+            List<IndexArticle> articles = new ArrayList<IndexArticle>();
+
+            String memberId = headers.getFirst("memberId");
+
+            articles = this.toIndexArticleList(memberId,articles,articleList);
+
+            response.put("articles",articles);
+
+            pageModel.setList(null);
+
+            response.put("page",pageModel.getPage());
+
+            return RespCode.getRespData(RespCode.SUCESS,response);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
+    }
 
     @Override
     public RespData getArticle(String articleId) {
@@ -437,7 +597,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         }
 
-        String hql = "from ArticleComment ac where ac.article.id=? and timestamp > "+timestamp+" "+listHql+" order by timestamp ";
+        String hql = "from ArticleComment ac where ac.status='100' and ac.article.id=? and timestamp > "+timestamp+" "+listHql+" order by timestamp ";
 
         Query q = articleDao.createQuery(hql);
 
@@ -517,6 +677,9 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
             articleCommentResponse.setZanCount(zanCountForComment(articleComment.getId()));
 
             articleCommentResponse.setIfZan(ifZanForComment(memberId,articleComment.getId()));
+
+            //当前用户是否可以删除,0不可以,1可以
+            articleCommentResponse.setCanDelete(this.canDeleteComment(articleComment,memberId)+"");
 
             articleCommentResponses.add(articleCommentResponse);
         }

@@ -32,6 +32,8 @@ public class ArticleComment implements Serializable {
 
     private String atMember;
 
+    private String status;
+
     @GenericGenerator(name = "generator", strategy = "uuid")
     @Id
     @GeneratedValue(generator = "generator")
@@ -116,5 +118,13 @@ public class ArticleComment implements Serializable {
 
     public void setAtMember(String atMember) {
         this.atMember = atMember;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

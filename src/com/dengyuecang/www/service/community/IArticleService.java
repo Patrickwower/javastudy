@@ -6,6 +6,7 @@ import com.dengyuecang.www.entity.community.Article;
 import com.dengyuecang.www.service.community.model.IndexArticle;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
+import com.longinf.lxcommon.dao.params.PageModel;
 import com.longinf.lxcommon.service.IBaseService;
 import org.springframework.http.HttpHeaders;
 
@@ -24,7 +25,21 @@ public interface IArticleService extends IBaseService<Article>{
 
    public RespData index();
 
+   /**
+    * 文章列表,普通文件列表
+    * @param headers
+    * @param articleRequest
+    * @return
+     */
    public RespData queryArticles(HttpHeaders headers, ArticleRequest articleRequest);
+
+    /**
+     *
+     * @param headers
+     * @param pageModel
+     * @return
+     */
+   public RespData hotList(HttpHeaders headers, PageModel pageModel);
 
    public RespData getArticle(String articleId);
 
@@ -59,5 +74,7 @@ public interface IArticleService extends IBaseService<Article>{
    public List<IndexArticle> toIndexArticleList(String memberId, List<IndexArticle> articles, List<Article> articleList);
 
    public RespData delete(HttpHeaders headers,String articleId);
+
+   public RespData commentDelete(HttpHeaders headers,String commentId);
 
 }

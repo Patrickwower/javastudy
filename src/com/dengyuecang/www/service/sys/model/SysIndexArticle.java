@@ -15,7 +15,7 @@ public class SysIndexArticle {
 
     private Date index_time;
 
-    private String sort;
+    private int sort;
 
     public IndexArticle getIndexArticle() {
         return indexArticle;
@@ -41,11 +41,11 @@ public class SysIndexArticle {
         this.index_time = index_time;
     }
 
-    public String getSort() {
+    public int getSort() {
         return sort;
     }
 
-    public void setSort(String sort) {
+    public void setSort(int sort) {
         this.sort = sort;
     }
 }

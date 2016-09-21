@@ -119,6 +119,15 @@ public class RespCode implements Serializable{
 
 	public static String ARTICLE_ALREADY_BANNER = "4003";
 
+
+
+	//评论类异常
+	public static String COMMENT_ID_NEED = "5001";
+
+	public static String COMMENT_NOT_EXIST = "5002";
+
+	public static String COMMENT_NOT_CURRENT_MEMBER = "5003";
+
 	
 	public static String MOBILE_NOVALID="11";
 	
@@ -214,6 +223,14 @@ public class RespCode implements Serializable{
 		respCodeMap.put(ARTICLE_ALREADY_INDEX,new RespCode(ARTICLE_ALREADY_INDEX,"文章已在首页列表"));
 
 		respCodeMap.put(ARTICLE_ALREADY_BANNER,new RespCode(ARTICLE_ALREADY_BANNER,"文章已在banner列表"));
+
+
+		//评论类异常描述
+		respCodeMap.put(COMMENT_ID_NEED,new RespCode(COMMENT_ID_NEED,"需要评论id"));
+
+		respCodeMap.put(COMMENT_NOT_EXIST,new RespCode(COMMENT_NOT_EXIST,"该评论不存在"));
+
+		respCodeMap.put(COMMENT_NOT_CURRENT_MEMBER,new RespCode(COMMENT_NOT_CURRENT_MEMBER,"非当前用户的评论"));
 
 
 		respCodeMap.put(PWD_NEEDED,new RespCode(PWD_NEEDED,"密码不能为空"));

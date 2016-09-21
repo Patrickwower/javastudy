@@ -4,13 +4,11 @@ import com.dengyuecang.www.controller.api.community.model.*;
 import com.dengyuecang.www.service.community.IArticleService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
-import org.omg.CORBA.Request;
+import com.longinf.lxcommon.dao.params.PageModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import javax.xml.stream.events.Comment;
 
 /**
  * Created by acang on 16/7/11.
@@ -217,5 +215,32 @@ public class APIArticleController {
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
     }
 
+    @RequestMapping("/comment/delete")
+    @ResponseBody
+    public RespData commentDelete(@RequestHeader HttpHeaders headers, String commentId){
+
+        try {
+            return articleServiceImpl.commentDelete(headers, commentId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
+
+    @RequestMapping("/hots")
+    @ResponseBody
+    public RespData hots(@RequestHeader HttpHeaders headers, PageModel pageModel){
+
+        try {
+
+           return articleServiceImpl.hotList(headers,pageModel);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
 
 }

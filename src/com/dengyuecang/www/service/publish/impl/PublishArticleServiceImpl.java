@@ -200,7 +200,7 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
             ai.setMax_sort("99999999");
 
-            ai.setSort("99999999");
+            ai.setSort(99999999);
 
             ai.setTimestamp(System.currentTimeMillis());
 

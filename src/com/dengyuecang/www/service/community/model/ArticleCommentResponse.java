@@ -28,6 +28,9 @@ public class ArticleCommentResponse {
 
     private String ifZan = "0";
 
+    //当前用户是否可以删除,0不可以,1可以
+    private String canDelete = "0";
+
     public ArticleCommentResponse() {
     }
 
@@ -101,5 +104,13 @@ public class ArticleCommentResponse {
 
     public void setIfZan(String ifZan) {
         this.ifZan = ifZan;
+    }
+
+    public String getCanDelete() {
+        return canDelete;
+    }
+
+    public void setCanDelete(String canDelete) {
+        this.canDelete = canDelete;
     }
 }

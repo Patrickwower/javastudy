@@ -56,6 +56,10 @@ public class IndexArticle {
 
     private String ifBanner;
 
+    private String canDelete;
+
+    private String canEdit;
+
     public IndexArticle() {
     }
 
@@ -249,5 +253,21 @@ public class IndexArticle {
 
     public void setIfBanner(String ifBanner) {
         this.ifBanner = ifBanner;
+    }
+
+    public String getCanDelete() {
+        return canDelete;
+    }
+
+    public void setCanDelete(String canDelete) {
+        this.canDelete = canDelete;
+    }
+
+    public String getCanEdit() {
+        return canEdit;
+    }
+
+    public void setCanEdit(String canEdit) {
+        this.canEdit = canEdit;
     }
 }

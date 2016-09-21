@@ -197,7 +197,7 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 
 		ai.setMax_sort("99999999");
 
-		ai.setSort("99999999");
+		ai.setSort(99999999);
 
 		ai.setTimestamp(System.currentTimeMillis());
 
@@ -399,15 +399,19 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 
 		List<ArticleIndex> indexList = articleIndexDao.createQuery("from ArticleIndex where id<>'"+indexSortRequest.getIndexId()+"' and sort<99999999 order by sort").list();
 
-		String sortString = indexSortRequest.getSort();
+		int sortString = 99999999;
+
+		if (StringUtils.isNotEmpty(indexSortRequest.getSort())){
+			sortString = Integer.valueOf(indexSortRequest.getSort());
+		}
 
 		String indexId = indexSortRequest.getIndexId();
 
 		ArticleIndex ai = articleIndexDao.get(ArticleIndex.class,indexId);
 		int sortResult = 0;
 
-		if (StringUtils.isEmpty(sortString)||"99999999".equals(sortString)){
-			ai.setSort("99999999");
+		if (0==sortString||99999999==sortString){
+			ai.setSort(99999999);
 
 		}else {
 
@@ -418,7 +422,7 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 
 			if (sort>size){
 
-				ai.setSort((size+1)+"");
+				ai.setSort(size+1);
 
 			}else if(sort==size){
 
@@ -557,9 +561,9 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 				indexSort++;
 			}
 			if (indexSort <= CommonConstant.INDEX_HOT_MAX_SORT) {
-				aIndex.setSort(indexSort + "");
+				aIndex.setSort(indexSort);
 			}else{
-				aIndex.setSort("99999999");
+				aIndex.setSort(99999999);
 			}
 			articleIndexDao.saveOrUpdate(aIndex);
 		}

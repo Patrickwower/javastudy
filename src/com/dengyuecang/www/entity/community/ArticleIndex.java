@@ -22,7 +22,7 @@ public class ArticleIndex implements Serializable{
 
     private long timestamp;
 
-    private String sort;
+    private int sort;
 
     private String max_sort;
 
@@ -57,11 +57,11 @@ public class ArticleIndex implements Serializable{
         this.index_time = index_time;
     }
 
-    public String getSort() {
+    public int getSort() {
         return sort;
     }
 
-    public void setSort(String sort) {
+    public void setSort(int sort) {
         this.sort = sort;
     }
 
