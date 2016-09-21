@@ -16,7 +16,7 @@
         *{ margin: 0px; padding: 0px; }
         div,ul,li,h1,h2,h3,h4,h5,h6,p,table,tr,td,header,footer,article,section,aside { margin: 0px; padding: 0px; list-style: none; }
         #mainframe { max-width: 768px; }
-        p { padding: 10px 15px; margin: 0 auto; color: #3c3c3c; font-size: 17px; line-height: 24px; word-wrap: break-word;}
+        p { padding: 0px 15px; margin: 0 auto; color: #3c3c3c; font-size: 17px; line-height: 24px; word-wrap: break-word;}
         img { height: auto; width: 100%; }
 
     </style>
