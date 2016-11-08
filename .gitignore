@@ -15,3 +15,5 @@ rebel.xml
 *.classpath
 *.settings
 *.project
+
+webapp/WEB-INF/classes/
