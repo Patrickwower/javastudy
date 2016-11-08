@@ -31,6 +31,7 @@ public class Article implements Serializable{
 
     private Date utime;
 
+    //文章状态:100正常,200禁用,300删除,50草稿
     private String status;
 
     private long timestamp;

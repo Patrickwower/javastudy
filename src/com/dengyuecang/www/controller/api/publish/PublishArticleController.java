@@ -28,6 +28,51 @@ public class PublishArticleController {
     @Resource
     private IPublishArticleService publishArticleServiceImpl;
 
+
+    /**
+     * 文章草稿保存
+     */
+    @RequestMapping(value = "/draft/save",method = RequestMethod.POST)
+    @ResponseBody
+    public RespData draftSave(@RequestHeader HttpHeaders headers, ArticlePublishRequest articlePublishRequest){
+
+        try {
+
+            log.info("保存文章草稿接口,参数列表");
+            return publishArticleServiceImpl.draftAdd(headers,articlePublishRequest);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
+
+    /**
+     * 文章草稿保存
+     */
+    @RequestMapping(value = "/draft/publish",method = RequestMethod.POST)
+    @ResponseBody
+    public RespData draftPublish(@RequestHeader HttpHeaders headers, ArticlePublishRequest articlePublishRequest){
+
+        try {
+
+            log.info("保存草稿并发布文章接口");
+            return publishArticleServiceImpl.draftPublish(headers,articlePublishRequest);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
+
+    /**
+     * 文章发布
+     * @param headers
+     * @param articlePublishRequest
+     * @return
+     */
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     @ResponseBody
     public RespData save(@RequestHeader HttpHeaders headers, ArticlePublishRequest articlePublishRequest){

@@ -11,6 +11,8 @@ public class ArticleRequest {
 
     public String memberId;
 
+    public String status;
+
     public ArticleRequest() {
     }
 
@@ -36,5 +38,13 @@ public class ArticleRequest {
 
     public void setMemberId(String memberId) {
         this.memberId = memberId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

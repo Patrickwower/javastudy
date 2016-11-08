@@ -11,6 +11,31 @@ import org.springframework.http.HttpHeaders;
  */
 public interface IPublishArticleService extends IBaseService<Article>{
 
+
+    /**
+     * 保存草稿接口
+     * @param headers
+     * @param articlePublishRequest
+     * @return
+     */
+    public RespData draftAdd(HttpHeaders headers, ArticlePublishRequest articlePublishRequest);
+
+
+    /**
+     * 草稿发布接口
+     * @param headers
+     * @param articlePublishRequest
+     * @return
+     */
+    public RespData draftPublish(HttpHeaders headers, ArticlePublishRequest articlePublishRequest);
+
+
+    /**
+     * 保存文章接口
+     * @param headers
+     * @param articlePublishRequest
+     * @return
+     */
     public RespData articleAdd(HttpHeaders headers, ArticlePublishRequest articlePublishRequest);
 
     public RespData articleUpdate(HttpHeaders headers, ArticlePublishRequest articlePublishRequest);
@@ -18,5 +43,10 @@ public interface IPublishArticleService extends IBaseService<Article>{
     public RespData categoryList();
 
     public RespData articleDel(HttpHeaders headers, ArticlePublishRequest articlePublishRequest);
+
+    /**
+     * 补全cover和放行展示图
+     */
+    public Article fullCover(Article article);
 
 }

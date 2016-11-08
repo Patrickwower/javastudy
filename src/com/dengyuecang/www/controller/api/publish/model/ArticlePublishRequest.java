@@ -21,6 +21,8 @@ public class ArticlePublishRequest {
 
     private String wordCount;
 
+    private String status;
+
     public String getMemberId() {
         return memberId;
     }
@@ -83,6 +85,14 @@ public class ArticlePublishRequest {
 
     public void setWordCount(String wordCount) {
         this.wordCount = wordCount;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public ArticlePublishRequest() {

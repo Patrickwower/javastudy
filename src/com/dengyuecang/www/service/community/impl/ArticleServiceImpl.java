@@ -9,10 +9,8 @@ import com.dengyuecang.www.service.community.IArticleService;
 import com.dengyuecang.www.service.community.model.*;
 import com.dengyuecang.www.service.members.IMembersService;
 import com.dengyuecang.www.service.members.model.CommunityMemberResponse;
-import com.dengyuecang.www.service.publish.IPublishArticleService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
-import com.fasterxml.jackson.core.sym.NameN;
 import com.longinf.lxcommon.dao.BaseDao;
 import com.longinf.lxcommon.dao.params.PageModel;
 import com.longinf.lxcommon.service.BaseService;
@@ -469,7 +467,14 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
             timestamp = Long.valueOf(articleRequest.getTimestamp());
         }
 
-        String hql = "from Article where status='100' and timestamp<"+timestamp+" order by timestamp desc ";
+        String status = "100";
+
+        if (StringUtils.isNotEmpty(articleRequest.getStatus())){
+
+            status = articleRequest.getStatus();
+        }
+
+        String hql = "from Article where status='"+status+"' and timestamp<"+timestamp+" order by timestamp desc ";
 
 //          hql = "select b from ArticleIndex a,Article b where a.article.id=b.id and a.timestamp < "+timestamp+" order by a.sort,a.index_time desc";
 
@@ -496,7 +501,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         try {
 
-            pageModel.setRows(2);
+//            pageModel.setRows(2);
 
             Criteria indexCriteria = articleIndexDao.createCriteria(ArticleIndex.class);
 
@@ -508,21 +513,25 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
             List<ArticleIndex> articleIndexList = pageModel.getList();
 
-            if (articleIndexList.size()<2){
+            if (pageModel.getRows()==2){
 
-                Criteria tmp_criteria  = articleIndexDao.createCriteria(ArticleIndex.class);
+                if (articleIndexList.size()<2){
 
-                tmp_criteria.addOrder(Order.asc("sort"));
+                    Criteria tmp_criteria  = articleIndexDao.createCriteria(ArticleIndex.class);
 
-                tmp_criteria.addOrder(Order.desc("index_time"));
+                    tmp_criteria.addOrder(Order.asc("sort"));
 
-                pageModel = new PageModel();
+                    tmp_criteria.addOrder(Order.desc("index_time"));
 
-                pageModel.setRows(2);
+                    pageModel = new PageModel();
 
-                articleDao.pagedQuery(tmp_criteria,pageModel);
+                    pageModel.setRows(2);
 
-                articleIndexList = pageModel.getList();
+                    articleDao.pagedQuery(tmp_criteria,pageModel);
+
+                    articleIndexList = pageModel.getList();
+                }
+
             }
 
             List<Article> articleList = new ArrayList<Article>();
@@ -555,6 +564,17 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         }
 
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
+    }
+
+    @Override
+    public RespData drafts(HttpHeaders headers, ArticleRequest articleRequest) {
+
+
+        //查找文章状态为50,即草稿的文章
+        articleRequest.setStatus("50");
+
+        return this.listByAuthor(headers,articleRequest);
+
     }
 
     @Override
@@ -744,6 +764,8 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
         }
 
         comment.setAtMember(request.getAtMember());
+
+        comment.setStatus("100");
 
         articleCommentDao.save(comment);
 

@@ -26,7 +26,7 @@ public interface IArticleService extends IBaseService<Article>{
    public RespData index();
 
    /**
-    * 文章列表,普通文件列表
+    * 文章列表,普通文章列表
     * @param headers
     * @param articleRequest
     * @return
@@ -34,12 +34,21 @@ public interface IArticleService extends IBaseService<Article>{
    public RespData queryArticles(HttpHeaders headers, ArticleRequest articleRequest);
 
     /**
-     *
+     * 热门文章首页列表
      * @param headers
      * @param pageModel
      * @return
      */
    public RespData hotList(HttpHeaders headers, PageModel pageModel);
+
+   /**
+    * 草稿列表
+    * @param headers
+    * @param articleRequest
+    * @return
+     */
+   public RespData drafts(HttpHeaders headers, ArticleRequest articleRequest);
+
 
    public RespData getArticle(String articleId);
 

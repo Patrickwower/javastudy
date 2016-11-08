@@ -243,4 +243,20 @@ public class APIArticleController {
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
     }
 
+    @RequestMapping("/drafts")
+    @ResponseBody
+    public RespData drafts(@RequestHeader HttpHeaders headers, ArticleRequest articleRequest){
+
+        try {
+
+            return articleServiceImpl.drafts(headers,articleRequest);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
+
+
 }

@@ -81,6 +81,8 @@ public class CommonConstant {
 
 	static {
 
+		ARTICLE_STATUS.put("50","草稿");
+
 		ARTICLE_STATUS.put("100","正常");
 
 		ARTICLE_STATUS.put("200","禁用");

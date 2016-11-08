@@ -1,6 +1,7 @@
 package com.dengyuecang.www.utils.img;
 
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -8,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import com.dengyuecang.www.utils.RegexUtils;
 import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Position;
 import net.coobird.thumbnailator.geometry.Positions;
 
 
@@ -46,13 +48,36 @@ public class ImgUtils {
      * @throws Exception
      */
     public static void testFour() throws Exception {
-        Thumbnails.of("image/1.jpg")
+
+        final Point point = new Point();
+
+        point.setLocation(100,200);
+
+
+        ;
+
+        Thumbnails.of("/Users/acang/Downloads/16.jpg")
                 .size(1920, 1080)  //必须要设置大小 不然会抛异常
-                .watermark(Positions.BOTTOM_RIGHT,ImageIO.read(new File("image/a_0.25%.jpg")), 0.5f)
+                .watermark(new Position() {
+                    @Override
+                    public Point calculate(int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+                        return new Point(800,500);
+                    }
+                },ImageIO.read(new File("/Users/acang/Downloads/128x128/heart.png")), 0.8f)
+                .watermark(new Position() {
+                    @Override
+                    public Point calculate(int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+                        return new Point(800,350);
+                    }
+                },ImageIO.read(new File("/Users/acang/Downloads/128x128/girl.png")), 0.8f)
                 //输出品质   越高 图片越大
                 .outputQuality(1.0f)
-                .toFile("image/wt.jpg");
+//                .rotate(200.0)
+                .toFile("/Users/acang/Downloads/16_watermark.jpg");
     }
+
+
+
 
     /***
      * 裁剪
@@ -101,18 +126,7 @@ public class ImgUtils {
 
     public static void main(String[] args) throws Exception {
 
-//        String path = "/home/soft/tomcat7/webapps/article/2016/08/26/12/dad69079-6e15-4d58-820c-a30fd022affe.jpg";
-//
-//        String imgPath = path.substring(0,path.lastIndexOf("."))+"_corp"+path.substring(path.lastIndexOf("."));
-//
-//        System.out.println(imgPath);
-//
-
-        String html = "<p>啦咯啦咯啦咯啦咯啦</p><p>☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺</p><p>啦咯啦咯啦咯</p>";
-
-        String summary = RegexUtils.getStringFromHtml(html);
-
-        System.out.println(summary);
+            ImgUtils.testFour();
 
     }
 
