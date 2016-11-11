@@ -8,6 +8,7 @@ import java.io.File;
 import javax.imageio.ImageIO;
 
 import com.dengyuecang.www.utils.RegexUtils;
+import com.sun.imageio.plugins.common.ImageUtil;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Position;
 import net.coobird.thumbnailator.geometry.Positions;
@@ -48,13 +49,6 @@ public class ImgUtils {
      * @throws Exception
      */
     public static void testFour() throws Exception {
-
-        final Point point = new Point();
-
-        point.setLocation(100,200);
-
-
-        ;
 
         Thumbnails.of("/Users/acang/Downloads/16.jpg")
                 .size(1920, 1080)  //必须要设置大小 不然会抛异常
@@ -126,7 +120,7 @@ public class ImgUtils {
 
     public static void main(String[] args) throws Exception {
 
-            ImgUtils.testFour();
+            ImgUtils.makeWord();
 
     }
 
@@ -137,25 +131,51 @@ public class ImgUtils {
 
         String imagePath = resource;
 
-        BufferedImage bufferedImage = ImageIO.read(new File(imagePath));
-        int width = bufferedImage.getWidth();
-        int height = bufferedImage.getHeight();
-
-        int squareWidth = 0;
-
-        if (height>width){
-            squareWidth = width;
-        }else{
-            squareWidth = height;
-        }
-
         Thumbnails.of(imagePath)
                 //从原图哪里开始裁剪   裁减多少
-                .sourceRegion(Positions.CENTER, squareWidth, squareWidth)
+                .sourceRegion(Positions.TOP_LEFT, 155, 73)
                 //新图的大小
-                .size(squareWidth, squareWidth).toFile(target);
+                .size(155, 73).toFile(target);
 
     }
+
+
+
+
+
+    public static void makeWord(){
+
+        try {
+            ImgUtils.squareCrop("/Users/acang/Downloads/words/description.png","/Users/acang/Downloads/words/part/lian.png");
+
+        }catch (Exception e){
+
+
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
