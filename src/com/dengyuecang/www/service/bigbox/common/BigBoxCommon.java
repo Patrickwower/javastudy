@@ -11,18 +11,20 @@ public class BigBoxCommon {
     /**
      * 大盒子h5 资源地址
      */
-    public static final String H5_SOURCE = "/Applications/tomcat7/webapps/h5source/";
+//    public static final String H5_SOURCE = "/Applications/tomcat7/webapps/h5source/";//开发
+    public static final String H5_SOURCE = "/home/soft/tomcat7/webapps/h5source/";//生产和测试
 
     /**
      * 大盒子h5 图片输出地址
      */
-    public static final String H5_IMG_PATH = "/Applications/tomcat7/webapps/h5img/";
+//    public static final String H5_IMG_PATH = "/Applications/tomcat7/webapps/h5img/";//开发
+    public static final String H5_IMG_PATH = "/home/soft/tomcat7/webapps/h5img/";//生产和测试
 
     /**
      * 大盒子推广h5的人物描述-哪里长
      */
     public static final String[] BIG_BOX_DESCRIPTION = {"腿"
-            , "腿毛"
+//            , "腿毛"
             , "睫毛"
             , "脸"
             , "耳垂"
@@ -57,7 +59,8 @@ public class BigBoxCommon {
             , "搞传销的"
             , "卖安利的"
             , "吃安利的"
-            , "打酱油的吃瓜群众"
+            , "打酱油的"
+            , "吃瓜群众"
             , "广场舞大妈"
             , "秘制观众"
             , "你大爷"
@@ -70,33 +73,39 @@ public class BigBoxCommon {
             , "勾手老大爷"
             , "灵活死胖子"
             , "印度阿三"
-            , "消化"
+            , "校花"
             , "圣母"
             , "校长"
             , "教导主任"
             , "班主任"
+            , "新美国总统"
+            , "楼下卖串的"
+            , "万年睁眼民"
+            , "你的父亲"
     };
 
     /**
      * 大盒子推广h5的人物活动-在干嘛
      */
     public static final String[] BIG_BOX_ACTION = {
-//            "开着车"
-//            , "唱着红歌"
-//            , "挥着手绢"
-//            , "跳着舞"
-//            , "喊着欧巴"
-             "竞选着美国总统"
+              "竞选着美国总统"
             , "牵着刘恺威的老婆"
             , "摸着Angelababy的肚子"
             , "抱着李易峰的大腿"
             , "拿着大宝剑"
             , "抱着井柏然的腿"
-            , "摊着葛优"
             , "怀着杨洋的孩子"
             , "看着颗猕猴桃"
-            , "捏着脚"
             , "穿着全套椰子"
+
+            , "挥舞着小皮鞭"
+            , "欺凌着学校校长"
+            , "和班主任打着牌"
+            , "和教导主任喝着酒"
+            , "坐拥着高三学姐"
+            , "在主席台上唱着歌"
+            , "在班里看着小电影"
+            , "指挥着年级组长"
 
     };
 
@@ -137,11 +146,16 @@ public class BigBoxCommon {
         ROLE_PINYIN.put("活动文案", "huodongwenan");
         ROLE_PINYIN.put("家长", "jiazhang");
         ROLE_PINYIN.put("指导老师", "zhidaolaoshi");
+        ROLE_PINYIN.put("辅导老师", "fudaolaoshi");//标记
         ROLE_PINYIN.put("你爸爸", "nibaba");
         ROLE_PINYIN.put("搞传销的", "gaochuanxiaode");
+        ROLE_PINYIN.put("搞事专家", "gaoshizhuanjia");
+        ROLE_PINYIN.put("传销高手", "chuanxiaogaoshou");
         ROLE_PINYIN.put("卖安利的", "maianlide");
         ROLE_PINYIN.put("吃安利的", "chianlide");
         ROLE_PINYIN.put("打酱油的吃瓜群众", "dajiangyoudechiguaqunzhong");
+        ROLE_PINYIN.put("打酱油的", "dajiangyoude");
+        ROLE_PINYIN.put("吃瓜群众", "chiguaqunzhong");
         ROLE_PINYIN.put("广场舞大妈", "guangchangwudama");
         ROLE_PINYIN.put("秘制观众", "mizhiguanzhong");
         ROLE_PINYIN.put("你大爷", "nidaye");
@@ -158,7 +172,20 @@ public class BigBoxCommon {
         ROLE_PINYIN.put("圣母", "shengmu");
         ROLE_PINYIN.put("校长", "xiaozhang");
         ROLE_PINYIN.put("教导主任", "jiaodaozhuren");
-        ROLE_PINYIN.put("班主任", "banzhuren");
+        ROLE_PINYIN.put("新美国总统", "xinmeiguozongtong");
+        ROLE_PINYIN.put("楼下卖串的", "louxiamaichuande");
+        ROLE_PINYIN.put("万年睁眼民", "wannianzhengyanmin");
+        ROLE_PINYIN.put("你的父亲", "nidefuqin");
+        ROLE_PINYIN.put("超级小鲜肉", "chaojixiaoxianrou");
+        ROLE_PINYIN.put("孩子ta妈", "haizitama");
+        ROLE_PINYIN.put("孩子ta爹", "haizitadie");
+        ROLE_PINYIN.put("未来校花", "weilaixiaohua");
+        ROLE_PINYIN.put("未来校草", "weilaixiaocao");
+
+
+
+
+
 
 //        ACTION_PINYIN.put("开着车", "kaizheche");
 //        ACTION_PINYIN.put("唱着红歌", "changzhehongge");
@@ -177,6 +204,14 @@ public class BigBoxCommon {
         ACTION_PINYIN.put("捏着脚", "niezhejiao");
         ACTION_PINYIN.put("穿着全套椰子", "chuanzhequantaoyezi");
 
+        ACTION_PINYIN.put("挥舞着小皮鞭", "huiwuzhexiaopibian");
+        ACTION_PINYIN.put("欺凌着学校校长", "qilingzhexuexiaoxiaozhang");
+        ACTION_PINYIN.put("和班主任打着牌", "hebanzhurendazhepai");
+        ACTION_PINYIN.put("坐拥着高三学姐", "zuoyongzhegaosanxuejie");
+        ACTION_PINYIN.put("在主席台上唱着歌", "zaizhuxitaishangchangzhege");
+        ACTION_PINYIN.put("在班里看着小电影", "zaibanlikanzhexiaodianying");
+        ACTION_PINYIN.put("指挥着年级组长", "zhihuizhenianjizuzhang");
+        ACTION_PINYIN.put("和教导主任喝着酒","hejiaodaozhurenhezhejiu");
 
 
     }

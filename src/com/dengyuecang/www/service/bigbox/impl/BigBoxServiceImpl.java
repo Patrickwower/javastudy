@@ -1,22 +1,11 @@
 package com.dengyuecang.www.service.bigbox.impl;
 
-import com.dengyuecang.www.controller.api.community.model.CommentRequest;
-import com.dengyuecang.www.controller.api.community.model.EvaluteRequest;
-import com.dengyuecang.www.controller.api.community.model.TopicCommentRequest;
 import com.dengyuecang.www.controller.api.h5.model.BigBoxUserInfo;
-import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.bigbox.BigBoxUserinfo;
-import com.dengyuecang.www.entity.community.Topic;
-import com.dengyuecang.www.entity.community.TopicComment;
-import com.dengyuecang.www.entity.community.TopicEvaluate;
-import com.dengyuecang.www.entity.community.TopicEveryday;
 import com.dengyuecang.www.service.bigbox.IBigBoxService;
 import com.dengyuecang.www.service.bigbox.common.BigBoxCommon;
 import com.dengyuecang.www.service.common.CommonConstant;
-import com.dengyuecang.www.service.community.ITopicService;
-import com.dengyuecang.www.service.community.model.IndexTopic;
-import com.dengyuecang.www.service.community.model.TopicCommentResponse;
-import com.dengyuecang.www.service.community.model.TopicDiscussant;
+
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.dengyuecang.www.utils.img.WaterMark;
@@ -25,7 +14,7 @@ import com.longinf.lxcommon.service.BaseService;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Position;
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.Query;
+import org.slf4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +22,6 @@ import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -42,6 +29,8 @@ import java.util.*;
  */
 @Service
 public class BigBoxServiceImpl extends BaseService<BigBoxUserinfo> implements IBigBoxService{
+
+    Logger log = org.slf4j.LoggerFactory.getLogger(BigBoxServiceImpl.class);
 
     @Resource(name="hibernateBaseDao")
     private BaseDao<BigBoxUserinfo> bigBoxUserinfoBaseDao;
@@ -90,21 +79,48 @@ public class BigBoxServiceImpl extends BaseService<BigBoxUserinfo> implements IB
 
         userinfo.setImgurl(CommonConstant.STATIC_URL+imgPath+imgName);
 
-        this.makePicForBigBox(userinfo);
+
 
         try {
+
+            System.out.println("作为一个");
+
+            System.out.println(userinfo.getDescription());
+
+            System.out.println(userinfo.getNumber_1());
+
+            System.out.println("米");
+
+            System.out.println(userinfo.getNumber_2());
+
+            System.out.println("长 的");
+
+            System.out.println(userinfo.getRole());
+
+            System.out.println(userinfo.getName());
+
+            System.out.println(userinfo.getAction());
+
+            System.out.println("励志要在");
+
+            System.out.println(userinfo.getLocation());
+
+            System.out.println("搞事");
+
             bigBoxUserinfoBaseDao.save(userinfo);
+
+            this.makePicForBigBox(userinfo);
 
             return userinfo.getImgurl();
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        return userinfo.getImgurl();
+        return null;
     }
 
     @Override
-    public RespData getPic(HttpHeaders headers, BigBoxUserInfo bigBoxUserInfonfo) {
+    public RespData addPic(HttpHeaders headers, BigBoxUserInfo bigBoxUserInfonfo) {
 
         String imgurl = this.addImg(headers, bigBoxUserInfonfo);
 
@@ -172,32 +188,31 @@ public class BigBoxServiceImpl extends BaseService<BigBoxUserinfo> implements IB
 
         String h5_img = BigBoxCommon.H5_IMG_PATH+userinfo.getImgurl().replaceAll(CommonConstant.STATIC_URL+"/h5img","");
 
-
         try {
             Thumbnails.of(source_img)
                     .size(640, 640)  //必须要设置大小 不然会抛异常
                     .watermark(new Position() {
                         @Override
                         public Point calculate(int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-                            return new Point(113,30);
+                            return new Point(113,20);
                         }
                     }, ImageIO.read(new File(dPicPath)), 1.0f)
                     .watermark(new Position() {
                         @Override
                         public Point calculate(int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-                            return new Point(360,30);
+                            return new Point(360,20);
                         }
                     },ImageIO.read(new File(n1PicPath)), 1.0f)
                     .watermark(new Position() {
                         @Override
                         public Point calculate(int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-                            return new Point(530,30);
+                            return new Point(530,20);
                         }
                     }, ImageIO.read(new File(n2PicPath)), 1.0f)
                     .watermark(new Position() {
                         @Override
                         public Point calculate(int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-                            return new Point(170,120);
+                            return new Point(170,130);
                         }
                     },ImageIO.read(new File(rPicPath)), 1.0f)
                     .watermark(new Position() {
@@ -216,30 +231,7 @@ public class BigBoxServiceImpl extends BaseService<BigBoxUserinfo> implements IB
 
             String toPath = h5_img;
 
-            String name = "0";
-
-            String[] words = userinfo.getName().split("");
-
-            for (String word :
-                    words) {
-                name += "/"+word;
-            }
-
-            name = name.replaceAll("0/","");
-
-            String location = "0";
-
-            words = userinfo.getLocation().split("");
-
-            for (String word :
-                    words) {
-                location += "/"+word;
-            }
-
-            location = location.replaceAll("0/","");
-
-
-            WaterMark.createMark(fromPath,toPath,","+name,location);
+            WaterMark.createMarkcreateMark(fromPath,toPath,userinfo.getName(),userinfo.getLocation());
 
         }catch (Exception e){
             e.printStackTrace();

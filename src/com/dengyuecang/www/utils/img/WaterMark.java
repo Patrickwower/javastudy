@@ -5,6 +5,9 @@ import java.awt.image.*;
 import java.io.*;
 import javax.swing.*;
 import com.sun.image.codec.jpeg.*;
+import com.sun.javafx.tk.FontLoader;
+import org.apache.commons.lang.StringUtils;
+
 import java.text.AttributedString;
 import java.awt.font.TextAttribute;
 import java.text.AttributedCharacterIterator;
@@ -22,8 +25,11 @@ public class WaterMark {
      * @return
      * @author zhongweihai newwei2001@yahoo.com.cn
      */
-    public static boolean createMark(String from,String to,String markContent,String markContent2)
+    public static boolean createMarkcreateMark(String from,String to,String markContent,String markContent2)
     {
+
+        String sourceLocation = markContent2;
+
         ImageIcon imgIcon=new ImageIcon(from);
         Image theImg =imgIcon.getImage();
         int width=theImg.getWidth(null);
@@ -33,23 +39,32 @@ public class WaterMark {
 
         //第一块
         Graphics2D g=bimage.createGraphics();
-        g.setColor(Color.BLACK);
+        g.setColor(new Color(20,33,100));
         g.drawImage(theImg, 0, 0, null );
 
 
         AttributedString ats = new AttributedString(markContent);
         AttributedString ats2 = new AttributedString(markContent2);
+        AttributedString ats3 = new AttributedString(sourceLocation);
 
         //设置字体大小
-        Font f = new Font("Microsoft YaHei",Font.BOLD, 40);
 
-        ats.addAttribute(TextAttribute.FONT, f, 0,markContent.length() );
-        ats2.addAttribute(TextAttribute.FONT, f, 0,markContent2.length() );
+        Font f = new Font("汉仪黑荔枝体简",Font.BOLD, 45);
+        Font f2 = new Font("汉仪黑荔枝体简",Font.BOLD, 45);
+        Font f3 = new Font("悦园",Font.BOLD, 22);
 
+        System.out.println(f.getFontName());
+        System.out.println(f2.getFontName());
+        System.out.println(f3.getFontName());
+
+
+        ats.addAttribute(TextAttribute.FONT, f, 0,markContent.length());
+        ats2.addAttribute(TextAttribute.FONT, f2, 0,markContent2.length() );
+        ats3.addAttribute(TextAttribute.FONT,f3,0,sourceLocation.length());
 
         AttributedCharacterIterator iter = ats.getIterator();
         AttributedCharacterIterator iter2 = ats2.getIterator();
-
+        AttributedCharacterIterator iter3 = ats3.getIterator();
 
 
         /* 消除java.awt.Font字体的锯齿 */
@@ -57,10 +72,13 @@ public class WaterMark {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         //第一块 字水印
-        g.drawString(iter,450,180); //添加水印的文字和设置水印文字出现的内容
+        g.drawString(iter,340,230); //添加水印的文字和设置水印文字出现的内容
 
         //第二块 字水印
-        g.drawString(iter2,310,350);
+        g.drawString(iter2,260,350);
+
+        //第三块 字水印
+        g.drawString(iter3,305,595);
 
         g.dispose();
 

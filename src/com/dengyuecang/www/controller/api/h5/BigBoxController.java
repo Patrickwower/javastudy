@@ -26,7 +26,7 @@ public class BigBoxController {
 
         try {
 
-            return bigBoxServiceImpl.getPic(headers,bigBoxUserInfo);
+            return bigBoxServiceImpl.addPic(headers,bigBoxUserInfo);
 
         }catch (Exception e){
             e.printStackTrace();

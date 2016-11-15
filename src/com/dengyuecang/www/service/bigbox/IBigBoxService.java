@@ -13,6 +13,6 @@ public interface IBigBoxService extends IBaseService<BigBoxUserinfo> {
 
     public String addImg(HttpHeaders headers, BigBoxUserInfo bigBoxUserInfonfo);
 
-    public RespData getPic(HttpHeaders headers, BigBoxUserInfo bigBoxUserInfonfo);
+    public RespData addPic(HttpHeaders headers, BigBoxUserInfo bigBoxUserInfonfo);
 
 }
