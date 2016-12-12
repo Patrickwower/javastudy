@@ -38,7 +38,7 @@ public class FeedbackServiceImpl extends BaseService<Feedback> implements Feedba
         if(content == ""){
             return RespCode.getRespData(RespCode.ERROR,response);
         }else {
-            return RespCode.getRespData(RespCode.SUCESS,response);
+            return RespCode.getRespData(RespCode.SUCCESS,response);
         }
 
     }
@@ -69,7 +69,7 @@ public class FeedbackServiceImpl extends BaseService<Feedback> implements Feedba
 
         Map<String,String> response = new HashMap<String,String>();
 
-        return RespCode.getRespData(RespCode.SUCESS,response);
+        return RespCode.getRespData(RespCode.SUCCESS,response);
 
     }
 
