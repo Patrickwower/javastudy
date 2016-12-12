@@ -332,7 +332,7 @@ public class MemberServiceImpl extends BaseService<Member> implements
 			Member member = (Member)memberDao.createQuery("select a from Member a,MemberInfo b where a.memberInfo.id=b.id and a.pwd='"+pwd+"' and b.mobile='"+mobile+"' ").uniqueResult();
 			
 			if (member!=null) {
-				return RespCode.getRespData(RespCode.SUCESS,member);
+				return RespCode.getRespData(RespCode.SUCCESS,member);
 			}else {
 				return RespCode.getRespData(RespCode.LOGIN_PWD_ERROR,"用户不存在或密码错误");
 			}
@@ -345,7 +345,7 @@ public class MemberServiceImpl extends BaseService<Member> implements
 			Member member = (Member)memberDao.createQuery("from Member where id='"+memberId+"' and token='"+token+"' ").uniqueResult();
 			
 			if (member!=null) {
-				return RespCode.getRespData(RespCode.SUCESS,member);
+				return RespCode.getRespData(RespCode.SUCCESS,member);
 			}
 		}
 		
@@ -381,7 +381,7 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		Member member = this.saveMember(json, headers);
 		
 		if (member!=null) {
-			return RespCode.getRespData(RespCode.SUCESS,member);
+			return RespCode.getRespData(RespCode.SUCCESS,member);
 		}
 		
 		return RespCode.getRespData(RespCode.JSON_ERROR);
@@ -431,7 +431,7 @@ public class MemberServiceImpl extends BaseService<Member> implements
 			staticResourceServiceImpl.saveQr(member.getId());
 		}
 		
-		return RespCode.getRespData(RespCode.SUCESS,member);
+		return RespCode.getRespData(RespCode.SUCCESS,member);
 		
 	}
 
@@ -467,7 +467,7 @@ public class MemberServiceImpl extends BaseService<Member> implements
 			member.setIfFeedBack("1");
 		}
 		
-		return RespCode.getRespData(RespCode.SUCESS,member);
+		return RespCode.getRespData(RespCode.SUCCESS,member);
 	}
 
 	private Member saveIdentity(MemberRequest request,Member member,HttpHeaders headers){
@@ -632,7 +632,7 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		datas.put("function",functionList);
 		
 		
-		return RespCode.getRespData(RespCode.SUCESS,datas); 
+		return RespCode.getRespData(RespCode.SUCCESS,datas);
 	}
 
 	@Override
@@ -651,7 +651,7 @@ public class MemberServiceImpl extends BaseService<Member> implements
 			
 			this.updateMobile(memberId, mobile);
 			
-			return RespCode.getRespData(RespCode.SUCESS,mobile);
+			return RespCode.getRespData(RespCode.SUCCESS,mobile);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -700,13 +700,13 @@ public class MemberServiceImpl extends BaseService<Member> implements
 			
 			updateHead(memberId, sr.getUrlPath(),imgId);
 			//?为什么不行
-//			return RespCode.getRespData(RespCode.SUCESS,new HashMap<String,String>().put("urlPath", sr.getUrlPath()));
+//			return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>().put("urlPath", sr.getUrlPath()));
 			
 			Map<String, String> result = new HashMap<String,String>();
 			
 			result.put("urlPath", sr.getUrlPath());
 			
-			return RespCode.getRespData(RespCode.SUCESS,result);
+			return RespCode.getRespData(RespCode.SUCCESS,result);
 		}
 		
 		
@@ -737,7 +737,7 @@ public class MemberServiceImpl extends BaseService<Member> implements
 			
 			this.updateNickname(memberId, nickname);
 			
-			return RespCode.getRespData(RespCode.SUCESS,"昵称修改成功");
+			return RespCode.getRespData(RespCode.SUCCESS,"昵称修改成功");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

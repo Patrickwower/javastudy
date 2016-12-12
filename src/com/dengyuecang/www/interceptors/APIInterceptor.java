@@ -34,11 +34,11 @@ public class APIInterceptor extends HandlerInterceptorAdapter {
 			
 			RespData rd = HeaderUtils.check(request, true);
 			
-			if (RespCode.SUCESS.equals(rd.getRespCode())) {
+			if (RespCode.SUCCESS.equals(rd.getRespCode())) {
 				
 				rd = membersServiceImpl.checkToken(request);
 				
-				if (RespCode.SUCESS.equals(rd.getRespCode())) {
+				if (RespCode.SUCCESS.equals(rd.getRespCode())) {
 					return true;					
 				}
 				
@@ -60,7 +60,7 @@ public class APIInterceptor extends HandlerInterceptorAdapter {
 		        }  
 		    }  
 			
-			
+
 			
 			return false;
 		}else {

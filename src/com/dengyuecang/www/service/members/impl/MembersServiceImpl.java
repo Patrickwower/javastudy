@@ -207,7 +207,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			
 			loginResponse.put("token", token);
 			
-			return RespCode.getRespData(RespCode.SUCESS,loginResponse);
+			return RespCode.getRespData(RespCode.SUCCESS,loginResponse);
 		}
 		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<>());
 	}
@@ -407,7 +407,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			
 			loginResponse.put("token", StringUtils.isEmpty(member.getToken())?"":member.getToken());
 			
-			return RespCode.getRespData(RespCode.SUCESS,loginResponse);
+			return RespCode.getRespData(RespCode.SUCCESS,loginResponse);
 		}
 		
 		return RespCode.getRespData(RespCode.MEMBER_NOT_EXIST_OR_PWD_ERROR,new HashMap<>());
@@ -490,7 +490,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 			loginResponse.put("token", token);
 
-			return RespCode.getRespData(RespCode.SUCESS,loginResponse);
+			return RespCode.getRespData(RespCode.SUCCESS,loginResponse);
 		}
 		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<>());
 
@@ -602,7 +602,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			
 		}
 		
-		return RespCode.getRespData(RespCode.SUCESS,mr);
+		return RespCode.getRespData(RespCode.SUCCESS,mr);
 	}
 	
 	@Override
@@ -633,7 +633,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		
 		member = this.saveFunction(infoRequest, member, headers);
 		
-		return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
+		return RespCode.getRespData(RespCode.SUCCESS,new HashMap<>());
 		
 	}
 
@@ -796,7 +796,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			
 			this.updateMobile(memberId, mobile,pwd);
 			
-			return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
+			return RespCode.getRespData(RespCode.SUCCESS,new HashMap<>());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -845,7 +845,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		response.put("weixin",weixin.getNickname());
 
-		return RespCode.getRespData(RespCode.SUCESS,response);
+		return RespCode.getRespData(RespCode.SUCCESS,response);
 	}
 
 	/**
@@ -911,7 +911,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			
 			result.put("urlPath", sr.getUrlPath());
 			
-			return RespCode.getRespData(RespCode.SUCESS,result);
+			return RespCode.getRespData(RespCode.SUCCESS,result);
 		}else {
 			return RespCode.getRespData(RespCode.STATIC_RESOURCE_NOTFOUND,new HashMap<>());
 		}
@@ -952,7 +952,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			log.info("更新昵称的ID："+memberId);
 			this.updateNickname(memberId, nickname);
 			log.info("更新完成");
-			return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
+			return RespCode.getRespData(RespCode.SUCCESS,new HashMap<>());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -976,7 +976,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			log.info("更新介绍的ID："+memberId);
 			this.updateIntroduction(memberId, introduction);
 			log.info("更新完成");
-			return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
+			return RespCode.getRespData(RespCode.SUCCESS,new HashMap<>());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1059,7 +1059,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 			return RespCode.getRespData(RespCode.MEMBER_NOT_EXIST,new HashMap<>());
 		}
 		
-		return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
+		return RespCode.getRespData(RespCode.SUCCESS,new HashMap<>());
 	}
 
 	@Override
@@ -1164,7 +1164,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		response.put("memberinfo",cMemberResponse);
 
-		return RespCode.getRespData(RespCode.SUCESS,response);
+		return RespCode.getRespData(RespCode.SUCCESS,response);
 	}
 
 	@Override
@@ -1240,7 +1240,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 			memberDao.saveOrUpdate(member);
 
-			return RespCode.getRespData(RespCode.SUCESS,new HashMap<String,String>());
+			return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
 
 		}catch (Exception e){
 			e.printStackTrace();
@@ -1380,7 +1380,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 				memberDao.save(member);
 
-				return RespCode.getRespData(RespCode.SUCESS, new HashMap<String, String>());
+				return RespCode.getRespData(RespCode.SUCCESS, new HashMap<String, String>());
 
 			}else{
 
@@ -1422,7 +1422,7 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		}
 
-		return RespCode.getRespData(RespCode.SUCESS, new HashMap<String, String>());
+		return RespCode.getRespData(RespCode.SUCCESS, new HashMap<String, String>());
 	}
 
 	/**

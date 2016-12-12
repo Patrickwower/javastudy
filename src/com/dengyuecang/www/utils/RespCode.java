@@ -44,7 +44,7 @@ public class RespCode implements Serializable{
 	//通用类
 	public static String ERROR="-1";
 	
-	public static String SUCESS="0";
+	public static String SUCCESS="0";
 	
 	public static String UNKNOW_EXCEPTION = "-2";
 	
@@ -272,7 +272,7 @@ public class RespCode implements Serializable{
 		respCodeMap.put(INVATE_CODE_NOT_EXIST,new RespCode(INVATE_CODE_NOT_EXIST,"邀请码不存在,请核对后输入"));
 		
 		
-		respCodeMap.put(SUCESS,new RespCode(SUCESS,"操作成功"));
+		respCodeMap.put(SUCCESS,new RespCode(SUCCESS,"操作成功"));
 		respCodeMap.put(MOBILE_NOVALID,new RespCode(MOBILE_NOVALID,"手机号码不符合规则"));
 		respCodeMap.put(PWD_NOVALID,new RespCode(PWD_NOVALID,"密码不符合规则"));
 		respCodeMap.put(CAPTCHA_NOVALID,new RespCode(CAPTCHA_NOVALID,"验证码不符合规则"));

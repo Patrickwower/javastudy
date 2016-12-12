@@ -197,7 +197,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
             e.printStackTrace();
         }
 
-        return RespCode.getRespData(RespCode.SUCESS,iResponse);
+        return RespCode.getRespData(RespCode.SUCCESS,iResponse);
     }
 
     @Override
@@ -353,7 +353,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
             response.put("articleId",articleId);
 
-            return RespCode.getRespData(RespCode.SUCESS,response);
+            return RespCode.getRespData(RespCode.SUCCESS,response);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -402,7 +402,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
             response.put("commentId",commentId);
 
-            return RespCode.getRespData(RespCode.SUCESS,response);
+            return RespCode.getRespData(RespCode.SUCCESS,response);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -493,7 +493,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         articles = this.toIndexArticleList(memberId,articles,articleList);
 
-        return RespCode.getRespData(RespCode.SUCESS,articles);
+        return RespCode.getRespData(RespCode.SUCCESS,articles);
     }
 
     @Override
@@ -557,7 +557,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
             response.put("page",pageModel.getPage());
 
-            return RespCode.getRespData(RespCode.SUCESS,response);
+            return RespCode.getRespData(RespCode.SUCCESS,response);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -704,7 +704,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
             articleCommentResponses.add(articleCommentResponse);
         }
 
-        return RespCode.getRespData(RespCode.SUCESS,articleCommentResponses);
+        return RespCode.getRespData(RespCode.SUCCESS,articleCommentResponses);
 
     }
 
@@ -773,7 +773,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         response.put("commentCount",commentCount(request.getArticleId()));
 
-        return RespCode.getRespData(RespCode.SUCESS, response);
+        return RespCode.getRespData(RespCode.SUCCESS, response);
 
     }
 
@@ -850,7 +850,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         response.put("zanCount",zanCount(articleId));
 
-        return RespCode.getRespData(RespCode.SUCESS, response);
+        return RespCode.getRespData(RespCode.SUCCESS, response);
 
 
     }
@@ -945,7 +945,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         response.put("zanCounrt",zanCountForComment(commentId));
 
-        return RespCode.getRespData(RespCode.SUCESS, response);
+        return RespCode.getRespData(RespCode.SUCCESS, response);
 
     }
 
@@ -1009,7 +1009,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         response.put("collectionCount",collectionCount(articleId));
 
-        return RespCode.getRespData(RespCode.SUCESS, response);
+        return RespCode.getRespData(RespCode.SUCCESS, response);
 
     }
 
@@ -1042,7 +1042,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         }
 
-        return RespCode.getRespData(RespCode.SUCESS,response);
+        return RespCode.getRespData(RespCode.SUCCESS,response);
     }
 
     @Override
@@ -1088,7 +1088,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         Map<String,String> response = new HashMap<String,String>();
 
-        return RespCode.getRespData(RespCode.SUCESS,response);
+        return RespCode.getRespData(RespCode.SUCCESS,response);
 
     }
 
@@ -1117,7 +1117,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         response.put("recommend",articles);
 
-        return RespCode.getRespData(RespCode.SUCESS,response);
+        return RespCode.getRespData(RespCode.SUCCESS,response);
 
     }
 
@@ -1169,7 +1169,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         articles = this.toIndexArticleList(memberId,articles,articleList);
 
-        return RespCode.getRespData(RespCode.SUCESS,articles);
+        return RespCode.getRespData(RespCode.SUCCESS,articles);
 
     }
 
@@ -1231,7 +1231,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         response.put("focusMembers",cmrs);
 
-        return RespCode.getRespData(RespCode.SUCESS,response);
+        return RespCode.getRespData(RespCode.SUCCESS,response);
     }
 
     @Override
@@ -1272,7 +1272,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         response.put("browseCount",browseCount+"");
 
-        return RespCode.getRespData(RespCode.SUCESS,response);
+        return RespCode.getRespData(RespCode.SUCCESS,response);
     }
 
     @Override
@@ -1313,7 +1313,7 @@ public class ArticleServiceImpl extends BaseService<Article> implements IArticle
 
         articles = this.toIndexArticleList(memberId,articles,articleList);
 
-        return RespCode.getRespData(RespCode.SUCESS,articles);
+        return RespCode.getRespData(RespCode.SUCCESS,articles);
 
 
     }

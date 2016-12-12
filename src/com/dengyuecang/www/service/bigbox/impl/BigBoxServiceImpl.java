@@ -130,7 +130,7 @@ public class BigBoxServiceImpl extends BaseService<BigBoxUserinfo> implements IB
 
             response.put("imgurl",imgurl);
 
-            return RespCode.getRespData(RespCode.SUCESS,response);
+            return RespCode.getRespData(RespCode.SUCCESS,response);
         }
 
         return RespCode.getRespData(RespCode.ERROR);

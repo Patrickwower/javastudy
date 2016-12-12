@@ -75,7 +75,7 @@ public class PublishMembersServiceImpl extends BaseService<Member> implements IP
 			if (StringUtils.isNotEmpty(member.getInviteCode()))response.put("invited","true");
 			if (StringUtils.isEmpty(member.getInviteCode()))response.put("invited","false");
 
-			return RespCode.getRespData(RespCode.SUCESS,response);
+			return RespCode.getRespData(RespCode.SUCCESS,response);
 		}catch (Exception e){
 			e.printStackTrace();
 		}
@@ -118,7 +118,7 @@ public class PublishMembersServiceImpl extends BaseService<Member> implements IP
 
 			memberDao.saveOrUpdate(member);
 
-			return RespCode.getRespData(RespCode.SUCESS);
+			return RespCode.getRespData(RespCode.SUCCESS);
 
 		}else if ("0".equals(code.getStatus())){
 

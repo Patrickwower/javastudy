@@ -99,7 +99,7 @@ public class TopicServiceImpl extends BaseService<Topic> implements ITopicServic
 
         response.put("topic",iTopic);
 
-        return RespCode.getRespData(RespCode.SUCESS,response);
+        return RespCode.getRespData(RespCode.SUCCESS,response);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class TopicServiceImpl extends BaseService<Topic> implements ITopicServic
             topicCommentResponses.add(topicCommentResponse);
         }
 
-       return RespCode.getRespData(RespCode.SUCESS,topicCommentResponses);
+       return RespCode.getRespData(RespCode.SUCCESS,topicCommentResponses);
     }
 
     @Override
@@ -200,7 +200,7 @@ public class TopicServiceImpl extends BaseService<Topic> implements ITopicServic
 
         Map<String,String> response = new HashMap<String,String>();
 
-        return RespCode.getRespData(RespCode.SUCESS, response);
+        return RespCode.getRespData(RespCode.SUCCESS, response);
     }
 
     @Override
@@ -268,7 +268,7 @@ public class TopicServiceImpl extends BaseService<Topic> implements ITopicServic
 
         Map<String,String> response = new HashMap<String,String>();
 
-        return RespCode.getRespData(RespCode.SUCESS, response);
+        return RespCode.getRespData(RespCode.SUCCESS, response);
     }
 
     @Override
@@ -287,7 +287,7 @@ public class TopicServiceImpl extends BaseService<Topic> implements ITopicServic
 
         response.put("zanCount",zanCount+"");
 
-        return RespCode.getRespData(RespCode.SUCESS,response);
+        return RespCode.getRespData(RespCode.SUCCESS,response);
     }
 
     public String zanCount(String topicId){

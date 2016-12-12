@@ -46,7 +46,7 @@ public class ApplyBetaServiceImpl extends BaseService<ApplyBeta> implements IApp
 
         Map<String, String> response = new HashMap<String, String>();
 
-        return RespCode.getRespData(RespCode.SUCESS,response);
+        return RespCode.getRespData(RespCode.SUCCESS,response);
     }
 
     @Override

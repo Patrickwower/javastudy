@@ -47,7 +47,7 @@ public class SysServiceImpl extends BaseService<StaticProvince> implements ISysS
 
 			response.put("provinces",provinces);
 
-			return RespCode.getRespData(RespCode.SUCESS,response);
+			return RespCode.getRespData(RespCode.SUCCESS,response);
 
 		}catch (Exception e){
 			e.printStackTrace();
@@ -75,7 +75,7 @@ public class SysServiceImpl extends BaseService<StaticProvince> implements ISysS
 		response.put("userid",user.getId());
 
 		if (user!=null){
-			return RespCode.getRespData(RespCode.SUCESS,response);
+			return RespCode.getRespData(RespCode.SUCCESS,response);
 		}
 
 		return RespCode.getRespData(RespCode.USERNAME_OR_PWD_WRONG,response);

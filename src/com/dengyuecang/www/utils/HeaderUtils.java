@@ -54,7 +54,7 @@ public class HeaderUtils {
 	public static RespData check(HttpServletRequest request,boolean ifCheck){
 		
 		if (!ifCheck) {
-			return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
+			return RespCode.getRespData(RespCode.SUCCESS,new HashMap<>());
 		}
 		
 		String deviceAgent = request.getHeader("deviceAgent");
@@ -90,7 +90,7 @@ public class HeaderUtils {
 			return RespCode.getRespData(RespCode.HEADER_VERSION_NEEDED,new HashMap<>());
 		}
 		
-		return RespCode.getRespData(RespCode.SUCESS,new HashMap<>());
+		return RespCode.getRespData(RespCode.SUCCESS,new HashMap<>());
 	}
 	
 }

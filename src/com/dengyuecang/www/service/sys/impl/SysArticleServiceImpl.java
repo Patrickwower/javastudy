@@ -126,7 +126,7 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 
 //			response.put("articles",ll);
 
-			return RespCode.getRespData(RespCode.SUCESS,response);
+			return RespCode.getRespData(RespCode.SUCCESS,response);
 
 		}catch (Exception e){
 			e.printStackTrace();
@@ -157,7 +157,7 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 
 		response.put("statusName", CommonConstant.ARTICLE_STATUS.get(article.getStatus()));
 
-		return RespCode.getRespData(RespCode.SUCESS,response);
+		return RespCode.getRespData(RespCode.SUCCESS,response);
 	}
 
 	@Override
@@ -205,7 +205,7 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 
 		Map<String,String> response = new HashMap<String,String>();
 
-		return RespCode.getRespData(RespCode.SUCESS,response);
+		return RespCode.getRespData(RespCode.SUCCESS,response);
 
 	}
 
@@ -252,7 +252,7 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 
 		Map<String,String> response = new HashMap<String,String>();
 
-		return RespCode.getRespData(RespCode.SUCESS,response);
+		return RespCode.getRespData(RespCode.SUCCESS,response);
 
 	}
 
@@ -275,7 +275,7 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 
 			response.put("msg","上线成功");
 
-			return RespCode.getRespData(RespCode.SUCESS,response);
+			return RespCode.getRespData(RespCode.SUCCESS,response);
 
 		}
 
@@ -297,7 +297,7 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 
 			response.put("msg","下线成功");
 
-			return RespCode.getRespData(RespCode.SUCESS,response);
+			return RespCode.getRespData(RespCode.SUCCESS,response);
 		}
 
 		return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
@@ -384,7 +384,7 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 
 			response.put("indexArticles",sysIndexArticleList);
 
-			return RespCode.getRespData(RespCode.SUCESS,response);
+			return RespCode.getRespData(RespCode.SUCCESS,response);
 
 		}catch (Exception e){
 			e.printStackTrace();
@@ -444,7 +444,7 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 		this.reSort(indexList,sortResult);
 
 
-		return RespCode.getRespData(RespCode.SUCESS,new HashMap<String,String>());
+		return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
 	}
 
 	@Override
@@ -538,7 +538,7 @@ public class SysArticleServiceImpl extends BaseService<Article> implements ISysA
 
 			response.put("banners",sysIndexArticleList);
 
-			return RespCode.getRespData(RespCode.SUCESS,response);
+			return RespCode.getRespData(RespCode.SUCCESS,response);
 
 		}catch (Exception e){
 			e.printStackTrace();

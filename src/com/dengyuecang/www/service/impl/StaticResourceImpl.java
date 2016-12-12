@@ -106,7 +106,7 @@ public class StaticResourceImpl extends BaseService<StaticResource> implements I
 			
 			staticResourceDao.save(sr);
 			
-			return RespCode.getRespData(RespCode.SUCESS,sr);
+			return RespCode.getRespData(RespCode.SUCCESS,sr);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

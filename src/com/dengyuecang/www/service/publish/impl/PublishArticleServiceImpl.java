@@ -75,7 +75,7 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
             response.put("articleId",article.getId());
 
-            return RespCode.getRespData(RespCode.SUCESS,response);
+            return RespCode.getRespData(RespCode.SUCCESS,response);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -250,7 +250,7 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 
         response.put("articleId",article.getId());
 
-        return RespCode.getRespData(RespCode.SUCESS,response);
+        return RespCode.getRespData(RespCode.SUCCESS,response);
     }
 
     public Article fullCover(Article article){
@@ -442,7 +442,7 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
 //
 //            }
 
-            return RespCode.getRespData(RespCode.SUCESS);
+            return RespCode.getRespData(RespCode.SUCCESS);
 
         }
 
@@ -466,7 +466,7 @@ public class PublishArticleServiceImpl extends BaseService<Article> implements I
             categories.add(cr);
         }
 
-        return RespCode.getRespData(RespCode.SUCESS,categories);
+        return RespCode.getRespData(RespCode.SUCCESS,categories);
     }
 
     @Override
