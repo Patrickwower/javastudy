@@ -1,25 +1,37 @@
 package com.dengyuecang.www.entity.startlog;
 
+import com.dengyuecang.www.entity.Member;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by lxrent on 2016/12/9.
  */
-public class StartLog {
+@Entity
+@Table(name="dyc_startlog")
+public class StartLog implements Serializable {
 
     private String id;
     private Date logtime;
-    private String userId;
+    private Member member;
 
-    public StartLog(String id, Date logtime, String userId) {
+    public StartLog(String id, Date logtime, Member member) {
         this.id = id;
         this.logtime = logtime;
-        this.userId = userId;
+        this.member = member;
     }
 
     public StartLog() {
     }
 
+    @GenericGenerator(name = "generator", strategy = "uuid")
+    @Id
+    @GeneratedValue(generator = "generator")
+
+    @Column(name = "id", unique = true, nullable = false, length = 100)
     public String getId() {
         return id;
     }
@@ -36,11 +48,13 @@ public class StartLog {
         this.logtime = logtime;
     }
 
-    public String getUserId() {
-        return userId;
+    @OneToOne
+    @JoinColumn(name="memberId")
+    public Member getMember() {
+        return member;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setMember(Member member) {
+        this.member = member;
     }
 }
