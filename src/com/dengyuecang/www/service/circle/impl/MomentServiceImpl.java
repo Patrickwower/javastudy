@@ -5,6 +5,9 @@ import com.dengyuecang.www.controller.api.circle.model.MomentRequest;
 import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.circle.Moment;
 import com.dengyuecang.www.service.circle.IMomentService;
+import com.dengyuecang.www.service.circle.model.MomentCreater;
+import com.dengyuecang.www.service.circle.model.MomentImg;
+import com.dengyuecang.www.service.circle.model.MomentInterest;
 import com.dengyuecang.www.service.circle.model.MomentResponse;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
@@ -40,7 +43,7 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             Map<String,Object> response = new HashMap<String,Object>();
 
-            response.put("moments",momentList);
+            response.put("moments",prepareMoment());
 
             return RespCode.getRespData(RespCode.SUCCESS,response);
         }catch (Exception e){
@@ -48,6 +51,42 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
         }
 
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
+    }
+
+    private List<MomentResponse> prepareMoment(){
+
+        try {
+
+            MomentResponse momentResponse = new MomentResponse();
+
+            MomentImg momentImg = new MomentImg();
+
+            MomentCreater momentCreater = new MomentCreater();
+
+            MomentInterest momentInterest = new MomentInterest();
+
+
+
+            momentResponse.setCreater(momentCreater);
+            momentResponse.setInterest(momentInterest);
+            momentResponse.getImgs().add(momentImg);
+
+            momentResponse.setContent("今天搞了一把好吉他,希望它能助我成大神");
+            momentResponse.setDate("");
+            momentResponse.setMomentId("1234");
+            momentResponse.setZanCount("123");
+            momentResponse.setTimestamp(1111111111);
+
+
+            List<MomentResponse> l = new ArrayList<MomentResponse>();
+            l.add(momentResponse);
+            return l;
+
+        }catch (Exception e){
+
+        }
+
+        return null;
     }
 
     @Override

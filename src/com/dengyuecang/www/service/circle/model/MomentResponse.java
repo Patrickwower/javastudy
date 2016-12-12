@@ -1,5 +1,6 @@
 package com.dengyuecang.www.service.circle.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +16,9 @@ public class MomentResponse {
 
     private MomentInterest interest;
 
-    private List<MomentImg> imgs;
+    private String coverimg;
+
+    private List<MomentImg> imgs = new ArrayList<MomentImg>();
 
     private long timestamp;
 
@@ -53,6 +56,14 @@ public class MomentResponse {
 
     public void setInterest(MomentInterest interest) {
         this.interest = interest;
+    }
+
+    public String getCoverimg() {
+        return coverimg;
+    }
+
+    public void setCoverimg(String coverimg) {
+        this.coverimg = coverimg;
     }
 
     public List<MomentImg> getImgs() {
