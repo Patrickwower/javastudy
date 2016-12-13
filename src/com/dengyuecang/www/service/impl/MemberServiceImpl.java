@@ -416,14 +416,14 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		
 		if (identityList.size()>0) {
 			member.setIfFeedBack("1");
-			
+
 			Query q = memberIdentityDao.createQuery("select b from MemberIdentity b where b.status='101' and b.member.id='"+memberId+"' order by b.ctime desc");
-			
+
 			q.setFirstResult(0);
 			q.setMaxResults(0);
-			
+
 			MemberIdentity mi = (MemberIdentity)q.uniqueResult();
-			
+
 			member.setCity(mi.getCity());
 			member.setOrganization(mi.getOrganization());
 		}

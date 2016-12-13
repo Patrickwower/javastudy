@@ -15,6 +15,6 @@ public interface IMomentService extends IBaseService<Moment>{
 
     public RespData queryList(HttpHeaders headers, MomentRequest momentRequest);
 
-    public RespData evaluate(HttpHeaders httpHeaders, MomentEvaluateRequest momentEvaluateRequest);
+    public RespData evaluate(HttpHeaders headers, MomentEvaluateRequest momentEvaluateRequest);
 
 }

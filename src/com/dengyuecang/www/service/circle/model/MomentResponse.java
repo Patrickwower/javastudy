@@ -20,11 +20,13 @@ public class MomentResponse {
 
     private List<MomentImg> imgs = new ArrayList<MomentImg>();
 
-    private long timestamp;
+    private String timestamp;
 
     private String date;
 
     private String zanCount;
+
+    private String ifZan;
 
     public String getMomentId() {
         return momentId;
@@ -74,11 +76,11 @@ public class MomentResponse {
         this.imgs = imgs;
     }
 
-    public long getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -96,5 +98,13 @@ public class MomentResponse {
 
     public void setZanCount(String zanCount) {
         this.zanCount = zanCount;
+    }
+
+    public String getIfZan() {
+        return ifZan;
+    }
+
+    public void setIfZan(String ifZan) {
+        this.ifZan = ifZan;
     }
 }
