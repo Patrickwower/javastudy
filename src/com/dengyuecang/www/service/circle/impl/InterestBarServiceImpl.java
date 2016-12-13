@@ -1,28 +1,18 @@
 package com.dengyuecang.www.service.circle.impl;
 
 import com.dengyuecang.www.controller.api.circle.model.AddInterestBarRequest;
-import com.dengyuecang.www.controller.api.circle.model.MomentEvaluateRequest;
-import com.dengyuecang.www.controller.api.circle.model.MomentRequest;
 import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.circle.*;
 import com.dengyuecang.www.service.circle.IInterestBarService;
-import com.dengyuecang.www.service.circle.IMomentService;
-import com.dengyuecang.www.service.circle.model.MomentCreater;
-import com.dengyuecang.www.service.circle.model.MomentImg;
-import com.dengyuecang.www.service.circle.model.MomentInterest;
-import com.dengyuecang.www.service.circle.model.MomentResponse;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
 import com.longinf.lxcommon.service.BaseService;
-import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -53,6 +43,8 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
     @Override
     public RespData addInterestBar(HttpHeaders headers, AddInterestBarRequest addInterestBarRequest) {
 
+        String memberId = headers.getFirst("memberId");
+
         InterestBar interestBar = new InterestBar();
 
         interestBar.setName(addInterestBarRequest.getName());
@@ -63,23 +55,50 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
 
         String[] typeArray = types.split(",");
 
+        String hql = "from InterestType where name=? ";
+
+        Set<InterestType> typeSet = new HashSet<InterestType>();
+
         for (String type :
                 typeArray) {
+            Query q = interestTypeDao.createQuery(hql);
 
+            q.setString(0,type);
 
+            InterestType interestType = (InterestType) q.uniqueResult();
+
+            if (interestType==null){
+
+                interestType = new InterestType();
+                interestType.setName(type);
+                interestType.setCreater(memberId);
+                interestType.setParent_id("");
+
+                interestTypeDao.save(interestType);
+            }
+
+            typeSet.add(interestType);
+
+//            interestBar.getTypes().add(interestType);
 
         }
 
-//        interestBar.setTypes();
+        interestBar.setTypes(typeSet);
 
-        return null;
+        interestBar.setCreater(memberId);
+
+        interestBar.setCtime(new Date());
+
+        interestBar.setTimestamp(System.currentTimeMillis());
+
+        interestBarDao.save(interestBar);
+
+        Map<String,Object> response = new HashMap<String,Object>();
+
+//      response.put("moments",this.fromMomentToResponse(memberId, moments));
+
+        return RespCode.getRespData(RespCode.SUCCESS,response);
+
     }
-
-
-
-
-
-
-
 
 }

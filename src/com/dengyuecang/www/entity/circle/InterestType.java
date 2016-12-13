@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Created by acang on 2016/12/12.
@@ -16,7 +17,11 @@ public class InterestType implements Serializable{
 
     private String name;
 
+    private String creater;
+
     private String parent_id;
+
+    private Set<InterestBar> interestBars;
 
     @GenericGenerator(name = "generator", strategy = "uuid")
     @Id
@@ -45,5 +50,24 @@ public class InterestType implements Serializable{
 
     public void setParent_id(String parent_id) {
         this.parent_id = parent_id;
+    }
+
+    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE},fetch=FetchType.EAGER)
+    @JoinTable(name="dyc_circle_interest_bar_type",joinColumns={@JoinColumn(name="type_id")},inverseJoinColumns={@JoinColumn(name="bar_id")})
+    @OrderBy("id")
+    public Set<InterestBar> getInterestBars() {
+        return interestBars;
+    }
+
+    public void setInterestBars(Set<InterestBar> interestBars) {
+        this.interestBars = interestBars;
+    }
+
+    public String getCreater() {
+        return creater;
+    }
+
+    public void setCreater(String creater) {
+        this.creater = creater;
     }
 }

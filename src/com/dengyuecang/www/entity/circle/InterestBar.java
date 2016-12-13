@@ -4,7 +4,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by acang on 2016/12/12.
@@ -19,7 +20,13 @@ public class InterestBar implements Serializable{
 
     private String detail;
 
-    private List<InterestType> types;
+    private String creater;
+
+    private Date ctime;
+
+    private long timestamp;
+
+    private Set<InterestType> types;
 
     @GenericGenerator(name = "generator", strategy = "uuid")
     @Id
@@ -50,11 +57,38 @@ public class InterestBar implements Serializable{
         this.detail = detail;
     }
 
-    public List<InterestType> getTypes() {
+    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE},fetch=FetchType.EAGER)
+    @JoinTable(name="dyc_circle_interest_bar_type",joinColumns={@JoinColumn(name="bar_id")},inverseJoinColumns={@JoinColumn(name="type_id")})
+    @OrderBy("id")
+    public Set<InterestType> getTypes() {
         return types;
     }
 
-    public void setTypes(List<InterestType> types) {
+    public void setTypes(Set<InterestType> types) {
         this.types = types;
+    }
+
+    public String getCreater() {
+        return creater;
+    }
+
+    public void setCreater(String creater) {
+        this.creater = creater;
+    }
+
+    public Date getCtime() {
+        return ctime;
+    }
+
+    public void setCtime(Date ctime) {
+        this.ctime = ctime;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }
