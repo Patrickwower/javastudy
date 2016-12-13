@@ -19,6 +19,8 @@ public class InterestBar implements Serializable{
 
     private String detail;
 
+    private List<InterestType> types;
+
     @GenericGenerator(name = "generator", strategy = "uuid")
     @Id
     @GeneratedValue(generator = "generator")
@@ -46,5 +48,13 @@ public class InterestBar implements Serializable{
 
     public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    public List<InterestType> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<InterestType> types) {
+        this.types = types;
     }
 }
