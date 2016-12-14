@@ -1,6 +1,7 @@
 package com.dengyuecang.www.service.circle.impl;
 
 import com.dengyuecang.www.controller.api.circle.model.MomentEvaluateRequest;
+import com.dengyuecang.www.controller.api.circle.model.MomentPublishRequest;
 import com.dengyuecang.www.controller.api.circle.model.MomentRequest;
 import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.circle.InterestBar;
@@ -20,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.text.Format;
@@ -41,6 +43,13 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
     @Resource(name="hibernateBaseDao")
     private BaseDao<MomentEvaluation> momentEvaluationDao;
+
+    @Resource(name="hibernateBaseDao")
+    private BaseDao<InterestBar> interestBarDao;
+
+    @Resource(name="hibernateBaseDao")
+    private BaseDao<MomentImage> momentImageDao;
+
 
     @Override
     public BaseDao<Moment> getSuperDao() {
@@ -296,6 +305,67 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
         }
 
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
+    }
+
+    @Override
+    public RespData add(HttpHeaders headers, MultipartFile file, MomentPublishRequest momentPublishRequest) {
+
+
+        try {
+
+            Moment moment = new Moment();
+
+            moment.setCtime(new Date());
+
+            moment.setTimestamp(System.currentTimeMillis());
+
+            moment.setContent(momentPublishRequest.getContent());
+
+            String memberId = headers.getFirst("memberId");
+            Member creater = memberDao.get(Member.class,memberId);
+            if (creater!=null)moment.setCreater(creater);
+
+            String interestBarId = momentPublishRequest.getInterestBarId();
+            InterestBar interestBar = interestBarDao.get(InterestBar.class,interestBarId);
+            if (interestBar!=null)moment.setInterestBar(interestBar);
+
+            moment.setPublic_level(momentPublishRequest.getPublic_level());
+
+            momentDao.save(moment);
+
+            MomentImage momentImage = new MomentImage();
+
+            momentImage.setMoment(moment);
+
+            momentImage.setSort("1");
+
+            momentImage.setSource_url_path("");
+
+            momentImage.setThumbnail_url_path("");
+
+            momentImageDao.save(momentImage);
+
+            return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
+    }
+
+    private Map<String,String> getMomentImgUrlAndStoreImg(MultipartFile file){
+
+        Map<String,String> urls = new HashMap<String,String>();
+
+
+
+
+
+
+
+
+        return urls;
     }
 
     private String zanCount(String momentId){
