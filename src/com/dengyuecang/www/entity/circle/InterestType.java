@@ -46,4 +46,5 @@ public class InterestType implements Serializable{
     public void setParent_id(String parent_id) {
         this.parent_id = parent_id;
     }
+    
 }

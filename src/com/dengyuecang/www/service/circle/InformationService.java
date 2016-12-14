@@ -16,5 +16,6 @@ public interface InformationService extends IBaseService<MemberInfo> {
 
     public RespData information(HttpHeaders headers, String memberId);
 
+    public RespData interestType();
 
 }

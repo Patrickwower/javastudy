@@ -19,7 +19,7 @@ public class InterestBar implements Serializable{
 
     private String detail;
 
-    private List<InterestType> types;
+//    private List<InterestType> types;
 
     @GenericGenerator(name = "generator", strategy = "uuid")
     @Id
@@ -50,11 +50,11 @@ public class InterestBar implements Serializable{
         this.detail = detail;
     }
 
-    public List<InterestType> getTypes() {
-        return types;
-    }
-
-    public void setTypes(List<InterestType> types) {
-        this.types = types;
-    }
+//    public List<InterestType> getTypes() {
+//        return types;
+//    }
+//
+//    public void setTypes(List<InterestType> types) {
+//        this.types = types;
+//    }
 }

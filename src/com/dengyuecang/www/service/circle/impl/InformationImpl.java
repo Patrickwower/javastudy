@@ -3,6 +3,8 @@ package com.dengyuecang.www.service.circle.impl;
 import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.MemberInfo;
 import com.dengyuecang.www.entity.Weixin;
+import com.dengyuecang.www.entity.circle.InterestType;
+import com.dengyuecang.www.entity.circle.Moment;
 import com.dengyuecang.www.service.circle.InformationService;
 import com.dengyuecang.www.service.members.model.CommunityMemberResponse;
 import com.dengyuecang.www.service.members.model.RelatedAccount;
@@ -11,6 +13,7 @@ import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
 import com.longinf.lxcommon.service.BaseService;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,7 @@ import javax.annotation.Resource;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -117,5 +121,27 @@ public class InformationImpl extends BaseService<MemberInfo> implements Informat
 
         return RespCode.getRespData(RespCode.SUCCESS,response);
     }
+
+    @Resource(name="hibernateBaseDao")
+    private BaseDao<InterestType> interestTypeDao;
+
+    @Override
+    public RespData interestType() {
+
+        String hql = "from InterestType";
+
+        Query q = interestTypeDao.createQuery(hql);
+
+        List<InterestType> interestTypes = q.list();
+
+        Map<String,Object> response = new HashMap<String,Object>();
+
+        response.put("interestTypes",interestTypes);
+
+        return RespCode.getRespData(RespCode.SUCCESS,response);
+
+    }
+
+
 
 }
