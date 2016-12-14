@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
+import com.dengyuecang.www.utils.img.ImgUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -46,7 +47,116 @@ public class StaticResourceImpl extends BaseService<StaticResource> implements I
 	
 	@Resource(name = "hibernateBaseDao")
 	private BaseDao<MemberInfo> infoDao;
-	
+
+
+	@Override
+	public Map<String,String> storeImageForCircleMoment(HttpHeaders headers, MultipartFile file,HttpServletRequest request){
+
+		Map<String,String> urls = new HashMap<String,String>();
+
+		FileUploadRequest fileUploadRequest = new FileUploadRequest();
+
+		fileUploadRequest.setType("image");
+
+		fileUploadRequest.setUsefor("circle");
+
+		//获取文件名
+		String fileName = this.getFileName(file.getOriginalFilename().toString());
+
+		//获取网络路径
+		String urlPath = CommonConstant.STATIC_URL;
+
+		//获取服务器实际路径
+		String realPath = getRealPath(request, fileUploadRequest);
+
+		//二阶目录
+
+		String secondPath = getSecondPath(fileUploadRequest.getUsefor());
+
+		urlPath += secondPath;
+		realPath += secondPath;
+
+		String source_url = urlPath+fileName;
+
+		urls.put("source_url",source_url);
+
+		String source_path = realPath+fileName;
+
+		urls.put("source_path",source_path);
+
+		this.storeImage(headers,file,urlPath,realPath,fileName);
+
+		String thumbnail_url = source_url.substring(0,source_url.lastIndexOf("."))+"_thumbnail"+source_url.substring(source_url.lastIndexOf("."));
+
+		String thumbnail_path = source_path.substring(0,source_path.lastIndexOf("."))+"_thumbnail"+source_path.substring(source_path.lastIndexOf("."));
+
+		urls.put("thumbnail_url",thumbnail_url);
+
+		urls.put("thumbnail_path",thumbnail_path);
+
+		try {
+			ImgUtils.setFromToScaleHW(source_path, thumbnail_path, "0.5", "375", "370");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return urls;
+
+	}
+
+	private void storeImage(HttpHeaders headers, MultipartFile file, String source_url,String source_path,String fileName) {
+
+		log.info("上传图片开始");
+
+		try {
+
+			String urlPath = source_url;
+			String realPath = source_path;
+
+
+			File targetFile = new File(realPath,fileName);
+
+			if(!targetFile.exists()){
+				targetFile.mkdirs();
+			}
+
+			try {
+				file.transferTo(targetFile);
+				log.info("上传图片保存完成");
+
+				urlPath += fileName;
+				realPath += fileName;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+
+			StaticResource sr = new StaticResource();
+
+			String memberId = headers.getFirst("memberId");
+
+			sr.setCreater(memberId);
+
+			sr.setCtime(new Date());
+
+			sr.setUrlPath(urlPath);
+
+			sr.setPath(realPath);
+
+			sr.setType("image");
+
+			sr.setUseFor("circle");
+
+			staticResourceDao.save(sr);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+
 	@Override
 	public RespData imgUpload(HttpHeaders headers, MultipartFile file, HttpServletRequest request,FileUploadRequest fileUploadRequest) {
 		

@@ -15,6 +15,20 @@ import net.coobird.thumbnailator.geometry.Positions;
 
 
 public class ImgUtils {
+
+
+    /**
+     * 指定源地址,输出地址,指定缩放比例和最终大小
+     */
+    public static void setFromToScaleHW(String from,String to,String scale,String height,String width)throws  Exception{
+
+        Thumbnails.of(from).size(810, 600).toFile(to);
+
+    }
+
+
+
+
     /**
      * 按照指定大小缩放  按照比例
      * @throws Exception

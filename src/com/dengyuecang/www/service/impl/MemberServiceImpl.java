@@ -427,9 +427,14 @@ public class MemberServiceImpl extends BaseService<Member> implements
 			member.setCity(mi.getCity());
 			member.setOrganization(mi.getOrganization());
 		}
-		if (StringUtils.isEmpty(member.getMemberInfo().getQr())) {
-			staticResourceServiceImpl.saveQr(member.getId());
+		if (member!=null){
+			if (member.getMemberInfo()!=null){
+				if (StringUtils.isEmpty(member.getMemberInfo().getQr())) {
+					staticResourceServiceImpl.saveQr(member.getId());
+				}
+			}
 		}
+
 		
 		return RespCode.getRespData(RespCode.SUCCESS,member);
 		

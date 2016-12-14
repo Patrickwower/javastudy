@@ -15,6 +15,11 @@ import com.longinf.lxcommon.service.IBaseService;
 public interface IStaticResourceService extends IBaseService<StaticResource>{
 
 	/**
+	 * 保存图片
+	 */
+	public Map<String,String> storeImageForCircleMoment(HttpHeaders headers, MultipartFile file,HttpServletRequest request);
+
+	/**
 	 * 图片上传
 	 * @param headers
 	 * @param file

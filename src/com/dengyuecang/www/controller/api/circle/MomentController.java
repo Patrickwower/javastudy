@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by acang on 16/7/11.
@@ -54,10 +55,10 @@ public class MomentController {
 
     @RequestMapping("/publish")
     @ResponseBody
-    public RespData publish(@RequestHeader HttpHeaders headers, @RequestParam(value = "file", required = true) MultipartFile file, MomentPublishRequest momentPublishRequest) {
+    public RespData publish(@RequestHeader HttpHeaders headers, HttpServletRequest servletRequest,  @RequestParam(value = "file", required = true) MultipartFile file, MomentPublishRequest momentPublishRequest) {
 
         try {
-            return momentServiceImpl.add(headers,file,momentPublishRequest);
+            return momentServiceImpl.add(headers,file,momentPublishRequest,servletRequest);
         } catch (Exception e) {
             e.printStackTrace();
         }
