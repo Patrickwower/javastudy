@@ -4,13 +4,14 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.ManyToAny;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by acang on 2016/12/12.
  */
 @Entity
 @Table(name = "dyc_circle_moment_image")
-public class MomentImage {
+public class MomentImage implements Serializable{
 
     private String id;
 

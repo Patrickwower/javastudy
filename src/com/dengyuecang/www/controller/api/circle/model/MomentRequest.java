@@ -13,8 +13,6 @@ public class MomentRequest {
 
     public String memberId;
 
-    public String restingId;
-
     public String status;
 
     public MomentRequest() {
