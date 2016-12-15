@@ -1103,62 +1103,62 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 
 		//计算总的关注人数      下一步关注列表接口
 
-		int focusCount = 0;
-
-		focusCount = focusCount(memberId);
-
-		cMemberResponse.setFocusCount(focusCount+"");
+//		int focusCount = 0;
+//
+//		focusCount = focusCount(memberId);
+//
+//		cMemberResponse.setFocusCount(focusCount+"");
 
 		//计算总的被关注次数(粉丝数)   下一步关注我的人的列表
 
-		int focusedCount = 0;
-
-		focusedCount = focusedCount(memberId);
-
-		cMemberResponse.setFocusedCount(focusedCount+"");
-
-		//header中的memberId 是否已关注了当前查询用户
-
-		cMemberResponse.setIfFocus(ifFocus(headers.getFirst("memberId"),memberId)+"");
+//		int focusedCount = 0;
+//
+//		focusedCount = focusedCount(memberId);
+//
+//		cMemberResponse.setFocusedCount(focusedCount+"");
+//
+//		//header中的memberId 是否已关注了当前查询用户
+//
+//		cMemberResponse.setIfFocus(ifFocus(headers.getFirst("memberId"),memberId)+"");
 
 		//总的被赞数   包含文章和评论被赞
 
-		int zanCount = 0;
+//		int zanCount = 0;
+//
+//		zanCount = zanCount(memberId);
+//
+//		cMemberResponse.setZanCount(zanCount+"");
+//
+//		//关联账号:微信,邮箱,手机
 
-		zanCount = zanCount(memberId);
-
-		cMemberResponse.setZanCount(zanCount+"");
-
-		//关联账号:微信,邮箱,手机
-
-		if (member.getWeixin()!=null){
-
-			Weixin weixin = member.getWeixin();
-
-			RelatedAccount ra = new RelatedAccount();
-
-			ra.setAccountId(weixin.getId());
-
-			ra.setAccountNickname(weixin.getNickname());
-
-			ra.setPlatform("weixin");
-
-			cMemberResponse.getAccounts().add(ra);
-		}
-
-		if (StringUtils.isNotEmpty(member.getMemberInfo().getMobile())){
-
-			RelatedAccount ra = new RelatedAccount();
-
-			ra.setAccountId(member.getMemberInfo().getId());
-
-			ra.setAccountNickname(member.getMemberInfo().getMobile());
-
-			ra.setPlatform("mobile");
-
-			cMemberResponse.getAccounts().add(ra);
-
-		}
+//		if (member.getWeixin()!=null){
+//
+//			Weixin weixin = member.getWeixin();
+//
+//			RelatedAccount ra = new RelatedAccount();
+//
+//			ra.setAccountId(weixin.getId());
+//
+//			ra.setAccountNickname(weixin.getNickname());
+//
+//			ra.setPlatform("weixin");
+//
+//			cMemberResponse.getAccounts().add(ra);
+//		}
+//
+//		if (StringUtils.isNotEmpty(member.getMemberInfo().getMobile())){
+//
+//			RelatedAccount ra = new RelatedAccount();
+//
+//			ra.setAccountId(member.getMemberInfo().getId());
+//
+//			ra.setAccountNickname(member.getMemberInfo().getMobile());
+//
+//			ra.setPlatform("mobile");
+//
+		//			cMemberResponse.getAccounts().add(ra);
+//
+//		}
 
 		Map<String, Object> response = new HashMap<String, Object>();
 
@@ -1311,35 +1311,11 @@ public class MembersServiceImpl extends BaseService<Member> implements IMembersS
 		return 0;
 	}
 
-	private int zanCount(String memberId){
+	@Override
+	public RespData updatepassword(HttpHeaders headers, VerifyRequest verifyRequest) {
 
-		return articleZanCount(memberId)+commentZanCount(memberId);
-	}
 
-	private int articleZanCount(String memberId){
-
-		String hqlArticleZanCount = "select count(b.id) from Article a,ArticleEvaluate b where a.member.id=? and a.id=b.article.id ";
-
-		Query q = memberDao.createQuery(hqlArticleZanCount);
-
-		q.setString(0,memberId);
-
-		long articleZanCount = (long)q.uniqueResult();
-
-		return (int)articleZanCount;
-	}
-
-	private int commentZanCount(String memberId){
-
-		String hqlCommentZanCount = "select count(b.id) from ArticleComment a,ArticleCommentEvaluate b where a.discussant.id=? and a.id=b.comment.id and a.article.id=b.article.id";
-
-		Query q = memberDao.createQuery(hqlCommentZanCount);
-
-		q.setString(0,memberId);
-
-		long commentZanCount = (long)q.uniqueResult();
-
-		return (int)commentZanCount;
+		return null;
 	}
 
 	@Override

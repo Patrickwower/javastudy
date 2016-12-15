@@ -6,6 +6,7 @@ import com.dengyuecang.www.entity.Weixin;
 import com.dengyuecang.www.entity.circle.InterestType;
 import com.dengyuecang.www.entity.circle.Moment;
 import com.dengyuecang.www.service.circle.InformationService;
+import com.dengyuecang.www.service.circle.model.UpdateInfo;
 import com.dengyuecang.www.service.members.model.CommunityMemberResponse;
 import com.dengyuecang.www.service.members.model.RelatedAccount;
 import com.dengyuecang.www.utils.RespCode;
@@ -16,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.Format;
@@ -44,8 +46,12 @@ public class InformationImpl extends BaseService<MemberInfo> implements Informat
     public RespData memberInfo(HttpHeaders headers) {
         return null;
     }
+
     @Resource(name = "hibernateBaseDao")
     private BaseDao<Member> memberDao;
+
+    @Resource(name = "hibernateBaseDao")
+    private BaseDao<MemberInfo> memberInfoDao;
 
     @Override
     public RespData information(HttpHeaders headers, String memberId) {
@@ -68,7 +74,7 @@ public class InformationImpl extends BaseService<MemberInfo> implements Informat
 
         cMemberResponse.setCtime(member.getMemberInfo().getCreateTime());
 
-        cMemberResponse.setIntroduction(member.getMemberInfo().getIntroduction());
+//        cMemberResponse.setIntroduction(member.getMemberInfo().getIntroduction());
 
         cMemberResponse.setSex(member.getMemberInfo().getGender()==null?"男":member.getMemberInfo().getGender());
 
@@ -78,42 +84,42 @@ public class InformationImpl extends BaseService<MemberInfo> implements Informat
 
 //		cMemberResponse.setTimestamp(member.getMemberIn);
 
-        if (member.getMemberInfo().getEnrollmentDate()!=null){
+//        if (member.getMemberInfo().getEnrollmentDate()!=null){
+//
+//            Format f = new SimpleDateFormat("yyyy");
+//
+//            cMemberResponse.setEnrollment(f.format(member.getMemberInfo().getEnrollmentDate()));
+//
+//        }
 
-            Format f = new SimpleDateFormat("yyyy");
+//        if (member.getWeixin()!=null){
+//
+//            Weixin weixin = member.getWeixin();
+//
+//            RelatedAccount ra = new RelatedAccount();
+//
+//            ra.setAccountId(weixin.getId());
+//
+//            ra.setAccountNickname(weixin.getNickname());
+//
+//            ra.setPlatform("weixin");
+//
+//            cMemberResponse.getAccounts().add(ra);
+//        }
 
-            cMemberResponse.setEnrollment(f.format(member.getMemberInfo().getEnrollmentDate()));
-
-        }
-
-        if (member.getWeixin()!=null){
-
-            Weixin weixin = member.getWeixin();
-
-            RelatedAccount ra = new RelatedAccount();
-
-            ra.setAccountId(weixin.getId());
-
-            ra.setAccountNickname(weixin.getNickname());
-
-            ra.setPlatform("weixin");
-
-            cMemberResponse.getAccounts().add(ra);
-        }
-
-        if (StringUtils.isNotEmpty(member.getMemberInfo().getMobile())){
-
-            RelatedAccount ra = new RelatedAccount();
-
-            ra.setAccountId(member.getMemberInfo().getId());
-
-            ra.setAccountNickname(member.getMemberInfo().getMobile());
-
-            ra.setPlatform("mobile");
-
-            cMemberResponse.getAccounts().add(ra);
-
-        }
+//        if (StringUtils.isNotEmpty(member.getMemberInfo().getMobile())){
+//
+//            RelatedAccount ra = new RelatedAccount();
+//
+//            ra.setAccountId(member.getMemberInfo().getId());
+//
+//            ra.setAccountNickname(member.getMemberInfo().getMobile());
+//
+//            ra.setPlatform("mobile");
+//
+//            cMemberResponse.getAccounts().add(ra);
+//
+//        }
 
         Map<String, Object> response = new HashMap<String, Object>();
 
@@ -142,6 +148,44 @@ public class InformationImpl extends BaseService<MemberInfo> implements Informat
 
     }
 
+    @Override
+    public RespData updateinfo(HttpHeaders headers, UpdateInfo updateInfo) {
+
+        String memberId = headers.getFirst("memberId");
+
+        Member member =  memberDao.get(Member.class,memberId);
+
+        MemberInfo memberInfo = member.getMemberInfo();
+
+//        UpdateInfo updateInfo = new UpdateInfo();
+
+        if (updateInfo.getNickname() != null){
+            memberInfo.setNickname(updateInfo.getNickname());
+        }
+        if (updateInfo.getIntroduction() != null){
+            memberInfo.setIntroduction(updateInfo.getIntroduction());
+        }
+        if (updateInfo.getSchool() != null){
+            memberInfo.setSchool(updateInfo.getSchool());
+        }
+        if (updateInfo.getCity() != null){
+            memberInfo.setCity(updateInfo.getCity());
+        }
+
+        try {
+            memberInfoDao.saveOrUpdate(memberInfo);
+//            memberInfoDao.update(memberInfo);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        Map<String,Object> response = new HashMap<String,Object>();
+
+        response.put(memberId,memberInfo);
+
+        return RespCode.getRespData(RespCode.SUCCESS,response);
+
+    }
 
 
 }

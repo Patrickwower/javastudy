@@ -136,4 +136,13 @@ public interface IMembersService extends IBaseService<Member>{
 	 */
 	public int ifFocus(String memberId,String focusId);
 
+	/**
+	 * new 修改密码
+	 */
+	public  RespData updatepassword(HttpHeaders headers,VerifyRequest verifyRequest);
+
+	/**
+	 * new 修改个人信息
+	 */
+
 }

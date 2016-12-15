@@ -15,13 +15,13 @@ public class CommunityMemberResponse {
 
     private String introduction;
 
-    private String focusCount;
-
-    private String focusedCount;
-
-    private String ifFocus;
-
-    private String zanCount;
+//    private String focusCount;
+//
+//    private String focusedCount;
+//
+//    private String ifFocus;
+//
+//    private String zanCount;
 
     private String sex;
 
@@ -35,7 +35,7 @@ public class CommunityMemberResponse {
 
     private String timestamp;
 
-    private List<RelatedAccount> accounts = new ArrayList<RelatedAccount>();
+//    private List<RelatedAccount> accounts = new ArrayList<RelatedAccount>();
 
     public CommunityMemberResponse() {
     }
@@ -88,37 +88,37 @@ public class CommunityMemberResponse {
         this.timestamp = timestamp;
     }
 
-    public String getFocusCount() {
-        return focusCount;
-    }
-
-    public void setFocusCount(String focusCount) {
-        this.focusCount = focusCount;
-    }
-
-    public String getFocusedCount() {
-        return focusedCount;
-    }
-
-    public void setFocusedCount(String focusedCount) {
-        this.focusedCount = focusedCount;
-    }
-
-    public String getIfFocus() {
-        return ifFocus;
-    }
-
-    public void setIfFocus(String ifFocus) {
-        this.ifFocus = ifFocus;
-    }
-
-    public String getZanCount() {
-        return zanCount;
-    }
-
-    public void setZanCount(String zanCount) {
-        this.zanCount = zanCount;
-    }
+//    public String getFocusCount() {
+//        return focusCount;
+//    }
+//
+//    public void setFocusCount(String focusCount) {
+//        this.focusCount = focusCount;
+//    }
+//
+//    public String getFocusedCount() {
+//        return focusedCount;
+//    }
+//
+//    public void setFocusedCount(String focusedCount) {
+//        this.focusedCount = focusedCount;
+//    }
+//
+//    public String getIfFocus() {
+//        return ifFocus;
+//    }
+//
+//    public void setIfFocus(String ifFocus) {
+//        this.ifFocus = ifFocus;
+//    }
+//
+//    public String getZanCount() {
+//        return zanCount;
+//    }
+//
+//    public void setZanCount(String zanCount) {
+//        this.zanCount = zanCount;
+//    }
 
     public String getSex() {
         return sex;
@@ -152,11 +152,11 @@ public class CommunityMemberResponse {
         this.enrollment = enrollment;
     }
 
-    public List<RelatedAccount> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(List<RelatedAccount> accounts) {
-        this.accounts = accounts;
-    }
+//    public List<RelatedAccount> getAccounts() {
+//        return accounts;
+//    }
+//
+//    public void setAccounts(List<RelatedAccount> accounts) {
+//        this.accounts = accounts;
+//    }
 }
