@@ -3,7 +3,6 @@ package com.dengyuecang.www.controller.api.circle;
 import com.dengyuecang.www.controller.api.circle.model.MomentEvaluateRequest;
 import com.dengyuecang.www.controller.api.circle.model.MomentPublishRequest;
 import com.dengyuecang.www.controller.api.circle.model.MomentRequest;
-import com.dengyuecang.www.controller.api.community.model.*;
 import com.dengyuecang.www.service.circle.IMomentService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
