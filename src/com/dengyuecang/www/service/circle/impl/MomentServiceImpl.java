@@ -8,6 +8,7 @@ import com.dengyuecang.www.entity.circle.InterestBar;
 import com.dengyuecang.www.entity.circle.Moment;
 import com.dengyuecang.www.entity.circle.MomentEvaluation;
 import com.dengyuecang.www.entity.circle.MomentImage;
+import com.dengyuecang.www.service.IStaticResourceService;
 import com.dengyuecang.www.service.circle.IMomentService;
 import com.dengyuecang.www.service.circle.model.MomentCreater;
 import com.dengyuecang.www.service.circle.model.MomentImg;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -49,6 +51,9 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
     @Resource(name="hibernateBaseDao")
     private BaseDao<MomentImage> momentImageDao;
+
+    @Resource
+    private IStaticResourceService staticResourceServiceImpl;
 
 
     @Override
@@ -308,7 +313,7 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
     }
 
     @Override
-    public RespData add(HttpHeaders headers, MultipartFile file, MomentPublishRequest momentPublishRequest) {
+    public RespData add(HttpHeaders headers, MultipartFile file, MomentPublishRequest momentPublishRequest, HttpServletRequest servletRequest) {
 
 
         try {
@@ -339,9 +344,11 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             momentImage.setSort("1");
 
-            momentImage.setSource_url_path("");
+            Map<String,String> urls = staticResourceServiceImpl.storeImageForCircleMoment(headers,file,servletRequest);
 
-            momentImage.setThumbnail_url_path("");
+            momentImage.setSource_url_path(urls.get("source_url"));
+
+            momentImage.setThumbnail_url_path(urls.get("thumbnail_url"));
 
             momentImageDao.save(momentImage);
 
@@ -354,19 +361,6 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
     }
 
-    private Map<String,String> getMomentImgUrlAndStoreImg(MultipartFile file){
-
-        Map<String,String> urls = new HashMap<String,String>();
-
-
-
-
-
-
-
-
-        return urls;
-    }
 
     private String zanCount(String momentId){
 
