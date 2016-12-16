@@ -3,12 +3,9 @@ package com.dengyuecang.www.service.circle.impl;
 import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.MemberInfo;
 import com.dengyuecang.www.entity.Weixin;
-import com.dengyuecang.www.entity.circle.InterestBar;
 import com.dengyuecang.www.entity.circle.InterestType;
 import com.dengyuecang.www.entity.circle.Moment;
 import com.dengyuecang.www.service.circle.InformationService;
-import com.dengyuecang.www.service.circle.model.MomentInterest;
-import com.dengyuecang.www.service.circle.model.UpdateInfo;
 import com.dengyuecang.www.service.members.model.CommunityMemberResponse;
 import com.dengyuecang.www.service.members.model.RelatedAccount;
 import com.dengyuecang.www.utils.RespCode;
@@ -19,12 +16,10 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,15 +44,8 @@ public class InformationImpl extends BaseService<MemberInfo> implements Informat
     public RespData memberInfo(HttpHeaders headers) {
         return null;
     }
-
     @Resource(name = "hibernateBaseDao")
     private BaseDao<Member> memberDao;
-
-    @Resource(name = "hibernateBaseDao")
-    private BaseDao<MemberInfo> memberInfoDao;
-
-    @Resource(name = "hibernateBaseDao")
-    private  BaseDao<InterestBar> interestBarBaseDao;
 
     @Override
     public RespData information(HttpHeaders headers, String memberId) {
@@ -80,7 +68,7 @@ public class InformationImpl extends BaseService<MemberInfo> implements Informat
 
         cMemberResponse.setCtime(member.getMemberInfo().getCreateTime());
 
-//        cMemberResponse.setIntroduction(member.getMemberInfo().getIntroduction());
+        cMemberResponse.setIntroduction(member.getMemberInfo().getIntroduction());
 
         cMemberResponse.setSex(member.getMemberInfo().getGender()==null?"男":member.getMemberInfo().getGender());
 
@@ -88,42 +76,42 @@ public class InformationImpl extends BaseService<MemberInfo> implements Informat
 
         cMemberResponse.setSchool(member.getMemberInfo().getSchool()==null?"":member.getMemberInfo().getSchool());
 
-//
-        try {
+//		cMemberResponse.setTimestamp(member.getMemberIn);
 
-            String hql = "from InterestBar ib where ib.creater=? ";
+        if (member.getMemberInfo().getEnrollmentDate()!=null){
 
-            Query q = interestBarBaseDao.createQuery(hql);
+            Format f = new SimpleDateFormat("yyyy");
 
-            q.setString(0,memberId);
+            cMemberResponse.setEnrollment(f.format(member.getMemberInfo().getEnrollmentDate()));
 
-            List<InterestBar> interestBars = q.list();
+        }
 
-            List<MomentInterest> mis = new ArrayList<MomentInterest>();
+        if (member.getWeixin()!=null){
 
-            for (InterestBar ib:interestBars){
+            Weixin weixin = member.getWeixin();
 
-                MomentInterest mi = new MomentInterest();
+            RelatedAccount ra = new RelatedAccount();
 
-                mi.setBar_id(ib.getId());
+            ra.setAccountId(weixin.getId());
 
-                mi.setName(ib.getName());
+            ra.setAccountNickname(weixin.getNickname());
 
-                for (InterestType it:ib.getTypes()){
+            ra.setPlatform("weixin");
 
-                    mi.getTypes().add(it.getName());
+            cMemberResponse.getAccounts().add(ra);
+        }
 
-                }
-                mis.add(mi);
+        if (StringUtils.isNotEmpty(member.getMemberInfo().getMobile())){
 
-            }
+            RelatedAccount ra = new RelatedAccount();
 
+            ra.setAccountId(member.getMemberInfo().getId());
 
-            cMemberResponse.setInterestBars(mis);
+            ra.setAccountNickname(member.getMemberInfo().getMobile());
 
-        }catch (Exception e){
+            ra.setPlatform("mobile");
 
-            e.printStackTrace();
+            cMemberResponse.getAccounts().add(ra);
 
         }
 
@@ -154,44 +142,6 @@ public class InformationImpl extends BaseService<MemberInfo> implements Informat
 
     }
 
-    @Override
-    public RespData updateinfo(HttpHeaders headers, UpdateInfo updateInfo) {
-
-        String memberId = headers.getFirst("memberId");
-
-        Member member =  memberDao.get(Member.class,memberId);
-
-        MemberInfo memberInfo = member.getMemberInfo();
-
-//        UpdateInfo updateInfo = new UpdateInfo();
-
-        if (updateInfo.getNickname() != null){
-            memberInfo.setNickname(updateInfo.getNickname());
-        }
-        if (updateInfo.getIntroduction() != null){
-            memberInfo.setIntroduction(updateInfo.getIntroduction());
-        }
-        if (updateInfo.getSchool() != null){
-            memberInfo.setSchool(updateInfo.getSchool());
-        }
-        if (updateInfo.getCity() != null){
-            memberInfo.setCity(updateInfo.getCity());
-        }
-
-        try {
-            memberInfoDao.saveOrUpdate(memberInfo);
-//            memberInfoDao.update(memberInfo);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        Map<String,Object> response = new HashMap<String,Object>();
-
-        response.put(memberId,memberInfo);
-
-        return RespCode.getRespData(RespCode.SUCCESS,response);
-
-    }
 
 
 }

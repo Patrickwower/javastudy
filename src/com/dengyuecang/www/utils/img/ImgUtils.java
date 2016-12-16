@@ -22,7 +22,16 @@ public class ImgUtils {
      */
     public static void setFromToScaleHW(String from,String to,String scale,String height,String width)throws  Exception{
 
-        Thumbnails.of(from).size(810, 600).toFile(to);
+        Thumbnails
+                .of(from)
+                .scale(Double.parseDouble(scale))
+                .toFile(to);
+
+        Thumbnails
+                .of(to)
+                .sourceRegion(Positions.CENTER, Integer.parseInt(width), Integer.parseInt(height))
+                .size(375,334).keepAspectRatio(true)
+                .toFile(to);
 
     }
 
@@ -134,7 +143,10 @@ public class ImgUtils {
 
     public static void main(String[] args) throws Exception {
 
-            ImgUtils.makeWord();
+        Thumbnails
+                .of("/Users/acang/intelligIDEA/dyc/circle/2016/12/16/16/f84deee5-20ac-4d19-acdd-b2a3ff5420f0_thumbnail.jpeg")
+                .sourceRegion(Positions.TOP_LEFT, Integer.parseInt("375"), Integer.parseInt("334"))
+                .toFile("/Users/acang/intelligIDEA/dyc/circle/2016/12/16/16/f84deee5-20ac-4d19-acdd-b2a3ff5420f0_thumbnail.jpeg");
 
     }
 
@@ -176,6 +188,7 @@ public class ImgUtils {
 
 
     }
+
 
 
 

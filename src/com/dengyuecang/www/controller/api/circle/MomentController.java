@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -57,6 +58,9 @@ public class MomentController {
     public RespData publish(@RequestHeader HttpHeaders headers, HttpServletRequest servletRequest,  @RequestParam(value = "file", required = true) MultipartFile file, MomentPublishRequest momentPublishRequest) {
 
         try {
+
+            ImageIO.read(file.getInputStream()).getHeight();
+
             return momentServiceImpl.add(headers,file,momentPublishRequest,servletRequest);
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,7 +1,6 @@
 package com.dengyuecang.www.controller.api.circle;
 
 import com.dengyuecang.www.service.circle.InformationService;
-import com.dengyuecang.www.service.circle.model.UpdateInfo;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import org.springframework.http.HttpHeaders;
@@ -30,21 +29,6 @@ public class CircleMemberController {
         }
 
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
-    }
-
-    @RequestMapping(value="/update",method = RequestMethod.POST)
-    @ResponseBody
-    public RespData updateinfo(@RequestHeader HttpHeaders headers, UpdateInfo updateInfo){
-
-        try {
-            return  infoServiceImpl.updateinfo(headers,updateInfo);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
-
-
     }
 
 }

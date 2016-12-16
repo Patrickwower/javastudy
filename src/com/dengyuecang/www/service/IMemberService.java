@@ -32,4 +32,6 @@ public interface IMemberService extends IBaseService<Member>{
 	
 	public RespData updateNickname(HttpHeaders headers,String nickname);
 
+	public Member getMemberByUniqueIdAndChannel(String uniqueId, String channel);
+
 }
