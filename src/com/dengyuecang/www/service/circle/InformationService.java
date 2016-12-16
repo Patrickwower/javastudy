@@ -1,6 +1,7 @@
 package com.dengyuecang.www.service.circle;
 
 import com.dengyuecang.www.entity.MemberInfo;
+import com.dengyuecang.www.service.circle.model.UpdateInfo;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.service.IBaseService;
 import org.springframework.http.HttpHeaders;
@@ -17,5 +18,7 @@ public interface InformationService extends IBaseService<MemberInfo> {
     public RespData information(HttpHeaders headers, String memberId);
 
     public RespData interestType();
+
+    public RespData updateinfo(HttpHeaders headers, UpdateInfo updateinfo);
 
 }
