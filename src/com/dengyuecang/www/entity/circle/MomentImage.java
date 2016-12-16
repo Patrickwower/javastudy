@@ -23,6 +23,10 @@ public class MomentImage implements Serializable{
 
     private Moment moment;
 
+    private String height;
+
+    private String width;
+
     @GenericGenerator(name = "generator", strategy = "uuid")
     @Id
     @GeneratedValue(generator = "generator")
@@ -68,5 +72,21 @@ public class MomentImage implements Serializable{
 
     public void setMoment(Moment moment) {
         this.moment = moment;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public String getWidth() {
+        return width;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
     }
 }

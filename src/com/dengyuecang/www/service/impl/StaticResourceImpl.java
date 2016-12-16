@@ -95,7 +95,23 @@ public class StaticResourceImpl extends BaseService<StaticResource> implements I
 		urls.put("thumbnail_path",thumbnail_path);
 
 		try {
-			ImgUtils.setFromToScaleHW(source_path, thumbnail_path, "0.5", "375", "370");
+
+			int height = ImageIO.read(new File(urls.get("source_path"))).getHeight();
+
+			int width = ImageIO.read(new File(urls.get("source_path"))).getWidth();
+
+			double scale_height = (double)334/height;
+
+			double scale_width = (double)375/width;
+
+			Double scale = scale_width;
+
+			if (scale_height>scale_width){
+				scale = scale_height;
+			}
+
+			ImgUtils.setFromToScaleHW(source_path, thumbnail_path, String.valueOf(scale), "334", "375");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

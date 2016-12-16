@@ -25,7 +25,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -172,6 +174,10 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
                 MomentImage momentImage = moment.getImageList().get(0);
 
                 momentImg.setSource_url(momentImage.getSource_url_path());
+
+                momentImg.setHeight(momentImage.getHeight());
+
+                momentImg.setWidth(momentImage.getWidth());
 
                 momentResponse.getImgs().add(momentImg);
 
@@ -349,6 +355,10 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
             momentImage.setSource_url_path(urls.get("source_url"));
 
             momentImage.setThumbnail_url_path(urls.get("thumbnail_url"));
+
+            momentImage.setHeight(ImageIO.read(new File(urls.get("source_path"))).getHeight()+"");
+
+            momentImage.setWidth(ImageIO.read(new File(urls.get("source_path"))).getWidth()+"");
 
             momentImageDao.save(momentImage);
 

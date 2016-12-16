@@ -208,7 +208,8 @@ public class MemberServiceImpl extends BaseService<Member> implements
 		return null;
 	}
 
-	private Member getMemberByUniqueIdAndChannel(String uniqueId, String channel) {
+	@Override
+	public Member getMemberByUniqueIdAndChannel(String uniqueId, String channel) {
 
 		if (CommonConstant.REGISTER_CHANNEL_APP.equals(channel)) {
 
