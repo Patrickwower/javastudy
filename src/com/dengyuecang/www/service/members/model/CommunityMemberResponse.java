@@ -1,5 +1,7 @@
 package com.dengyuecang.www.service.members.model;
 
+import com.dengyuecang.www.service.circle.model.MomentInterest;
+
 import java.util.*;
 
 /**
@@ -34,6 +36,8 @@ public class CommunityMemberResponse {
     private Date ctime;
 
     private String timestamp;
+
+    private List<MomentInterest> interestBars;
 
 //    private List<RelatedAccount> accounts = new ArrayList<RelatedAccount>();
 
@@ -159,4 +163,13 @@ public class CommunityMemberResponse {
 //    public void setAccounts(List<RelatedAccount> accounts) {
 //        this.accounts = accounts;
 //    }
+
+
+    public List getInterestBars() {
+        return interestBars;
+    }
+
+    public void setInterestBars(List<MomentInterest> interestBars) {
+        this.interestBars = interestBars;
+    }
 }

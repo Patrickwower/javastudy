@@ -3,9 +3,11 @@ package com.dengyuecang.www.service.circle.impl;
 import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.MemberInfo;
 import com.dengyuecang.www.entity.Weixin;
+import com.dengyuecang.www.entity.circle.InterestBar;
 import com.dengyuecang.www.entity.circle.InterestType;
 import com.dengyuecang.www.entity.circle.Moment;
 import com.dengyuecang.www.service.circle.InformationService;
+import com.dengyuecang.www.service.circle.model.MomentInterest;
 import com.dengyuecang.www.service.circle.model.UpdateInfo;
 import com.dengyuecang.www.service.members.model.CommunityMemberResponse;
 import com.dengyuecang.www.service.members.model.RelatedAccount;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +56,9 @@ public class InformationImpl extends BaseService<MemberInfo> implements Informat
     @Resource(name = "hibernateBaseDao")
     private BaseDao<MemberInfo> memberInfoDao;
 
+    @Resource(name = "hibernateBaseDao")
+    private  BaseDao<InterestBar> interestBarBaseDao;
+
     @Override
     public RespData information(HttpHeaders headers, String memberId) {
 
@@ -82,44 +88,44 @@ public class InformationImpl extends BaseService<MemberInfo> implements Informat
 
         cMemberResponse.setSchool(member.getMemberInfo().getSchool()==null?"":member.getMemberInfo().getSchool());
 
-//		cMemberResponse.setTimestamp(member.getMemberIn);
+//
+        try {
 
-//        if (member.getMemberInfo().getEnrollmentDate()!=null){
-//
-//            Format f = new SimpleDateFormat("yyyy");
-//
-//            cMemberResponse.setEnrollment(f.format(member.getMemberInfo().getEnrollmentDate()));
-//
-//        }
+            String hql = "from InterestBar ib where ib.creater=? ";
 
-//        if (member.getWeixin()!=null){
-//
-//            Weixin weixin = member.getWeixin();
-//
-//            RelatedAccount ra = new RelatedAccount();
-//
-//            ra.setAccountId(weixin.getId());
-//
-//            ra.setAccountNickname(weixin.getNickname());
-//
-//            ra.setPlatform("weixin");
-//
-//            cMemberResponse.getAccounts().add(ra);
-//        }
+            Query q = interestBarBaseDao.createQuery(hql);
 
-//        if (StringUtils.isNotEmpty(member.getMemberInfo().getMobile())){
-//
-//            RelatedAccount ra = new RelatedAccount();
-//
-//            ra.setAccountId(member.getMemberInfo().getId());
-//
-//            ra.setAccountNickname(member.getMemberInfo().getMobile());
-//
-//            ra.setPlatform("mobile");
-//
-//            cMemberResponse.getAccounts().add(ra);
-//
-//        }
+            q.setString(0,memberId);
+
+            List<InterestBar> interestBars = q.list();
+
+            List<MomentInterest> mis = new ArrayList<MomentInterest>();
+
+            for (InterestBar ib:interestBars){
+
+                MomentInterest mi = new MomentInterest();
+
+                mi.setBar_id(ib.getId());
+
+                mi.setName(ib.getName());
+
+                for (InterestType it:ib.getTypes()){
+
+                    mi.getTypes().add(it.getName());
+
+                }
+                mis.add(mi);
+
+            }
+
+
+            cMemberResponse.setInterestBars(mis);
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+
+        }
 
         Map<String, Object> response = new HashMap<String, Object>();
 

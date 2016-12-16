@@ -66,5 +66,16 @@ public class MomentController {
 
     }
 
+    @RequestMapping("/edit")
+    @ResponseBody
+    public RespData edit(@RequestHeader HttpHeaders headers, String id, @RequestParam(value="file")MultipartFile file, MomentPublishRequest momentPublishRequest, HttpServletRequest servletRequest){
+
+        try {
+            return edit(headers,id,file,momentPublishRequest,servletRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
 
 }

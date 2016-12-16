@@ -1,5 +1,6 @@
 package com.dengyuecang.www.service.circle.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ public class MomentInterest {
 
     private String name;
 
-    private List<String> types;
+    private List<String> types = new ArrayList<String>();
 
     private String imgurl;
 

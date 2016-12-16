@@ -361,6 +361,54 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
     }
 
+    @Override
+    public RespData edit(HttpHeaders headers, String id, MultipartFile file, MomentPublishRequest momentPublishRequest, HttpServletRequest servletRequest) {
+
+        try {
+
+//            Moment moment = momentDao.get(Moment.class,id);
+            Moment moment = new Moment();
+
+            moment.setCtime(new Date());
+
+            moment.setTimestamp(System.currentTimeMillis());
+
+            moment.setContent(momentPublishRequest.getContent());
+
+            InterestBar interestBar = interestBarDao.get(InterestBar.class, id);
+
+//            String memberId = headers.getFirst("memberId");
+
+            moment.setPublic_level(momentPublishRequest.getPublic_level());
+
+            if (interestBar!=null)moment.setInterestBar(interestBar);
+
+            momentDao.save(moment);
+
+            MomentImage momentImage = new MomentImage();
+
+            momentImage.setMoment(moment);
+
+            momentImage.setSort("1");
+
+            Map<String,String> urls = staticResourceServiceImpl.storeImageForCircleMoment(headers,file,servletRequest);
+
+            momentImage.setSource_url_path(urls.get("source_url"));
+
+            momentImage.setThumbnail_url_path(urls.get("thumbnail_url"));
+
+            momentImageDao.save(momentImage);
+
+            return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+
+        }
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
+    }
+
 
     private String zanCount(String momentId){
 
@@ -397,5 +445,6 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
         return false;
     }
+
 
 }
