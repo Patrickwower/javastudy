@@ -33,6 +33,8 @@ public class Member implements Serializable{
 	
 	private String token;
 
+	private String username;
+
 	@GenericGenerator(name = "generator", strategy = "uuid")
 	@Id
 	@GeneratedValue(generator = "generator")
@@ -68,6 +70,14 @@ public class Member implements Serializable{
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	private Qq qq;
