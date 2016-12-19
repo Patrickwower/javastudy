@@ -1,10 +1,7 @@
 package com.dengyuecang.www.controller.api.circle;
 
 import com.dengyuecang.www.controller.api.circle.model.AddInterestBarRequest;
-import com.dengyuecang.www.controller.api.circle.model.MomentEvaluateRequest;
-import com.dengyuecang.www.controller.api.circle.model.MomentRequest;
 import com.dengyuecang.www.service.circle.IInterestBarService;
-import com.dengyuecang.www.service.circle.IMomentService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +24,7 @@ public class InterestBarController {
     private IInterestBarService interestBarServiceImpl;
 
     @RequestMapping("/add")
+    @ResponseBody
     public RespData evaluate(@RequestHeader HttpHeaders headers, AddInterestBarRequest addInterestBarRequest){
 
         try {
