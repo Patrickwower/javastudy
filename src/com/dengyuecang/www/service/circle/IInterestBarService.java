@@ -16,4 +16,6 @@ public interface IInterestBarService extends IBaseService<InterestBar>{
 
     public RespData queryList(HttpHeaders headers);
 
+    public RespData update(HttpHeaders headers, AddInterestBarRequest addInterestBarRequest);
+
 }

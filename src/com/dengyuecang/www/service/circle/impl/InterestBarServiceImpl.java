@@ -117,6 +117,71 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
 
         return RespCode.getRespData(RespCode.SUCCESS,response);
 
+
+
+
+    }
+
+    @Override
+    public RespData update(HttpHeaders headers, AddInterestBarRequest addInterestBarRequest) {
+
+        String memberId = headers.getFirst("memberId");
+
+        InterestBar interestBar = new InterestBar();
+
+        String bar_id = addInterestBarRequest.getBar_id();
+
+        if (bar_id!=null){
+            interestBar = interestBarDao.get(InterestBar.class,bar_id);
+        }
+
+        interestBar.setName(addInterestBarRequest.getName());
+
+        interestBar.setDetail(addInterestBarRequest.getDetail());
+
+        String types = addInterestBarRequest.getTypes();
+
+        String[] typeArray = types.split(",");
+
+        String hql = "from InterestType where name=? ";
+
+        Set<InterestType> typeSet = new HashSet<InterestType>();
+
+        for (String type :
+                typeArray) {
+            Query q = interestTypeDao.createQuery(hql);
+
+            q.setString(0,type);
+
+            InterestType interestType = (InterestType) q.uniqueResult();
+
+            if (interestType==null){
+
+                interestType = new InterestType();
+                interestType.setName(type);
+                interestType.setCreater(memberId);
+                interestType.setParent_id("");
+
+                interestTypeDao.save(interestType);
+            }
+
+            typeSet.add(interestType);
+
+        }
+
+        interestBar.setTypes(typeSet);
+
+        interestBar.setCreater(memberId);
+
+        interestBar.setCtime(new Date());
+
+        interestBar.setTimestamp(System.currentTimeMillis());
+
+        interestBarDao.save(interestBar);
+
+        Map<String,Object> response = new HashMap<String,Object>();
+
+        return RespCode.getRespData(RespCode.SUCCESS,response);
     }
 
 }
