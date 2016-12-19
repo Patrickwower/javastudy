@@ -52,16 +52,16 @@ public class InterestType implements Serializable{
         this.parent_id = parent_id;
     }
 
-    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE},fetch=FetchType.EAGER)
-    @JoinTable(name="dyc_circle_interest_bar_type",joinColumns={@JoinColumn(name="type_id")},inverseJoinColumns={@JoinColumn(name="bar_id")})
-    @OrderBy("id")
-    public Set<InterestBar> getInterestBars() {
-        return interestBars;
-    }
-
-    public void setInterestBars(Set<InterestBar> interestBars) {
-        this.interestBars = interestBars;
-    }
+//    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE},fetch=FetchType.EAGER)
+//    @JoinTable(name="dyc_circle_interest_bar_type",joinColumns={@JoinColumn(name="type_id")},inverseJoinColumns={@JoinColumn(name="bar_id")})
+//    @OrderBy("id")
+//    public Set<InterestBar> getInterestBars() {
+//        return interestBars;
+//    }
+//
+//    public void setInterestBars(Set<InterestBar> interestBars) {
+//        this.interestBars = interestBars;
+//    }
 
     public String getCreater() {
         return creater;

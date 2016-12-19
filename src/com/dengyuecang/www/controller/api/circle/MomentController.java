@@ -42,6 +42,7 @@ public class MomentController {
 
 
     @RequestMapping("/evaluate")
+    @ResponseBody
     public RespData evaluate(@RequestHeader HttpHeaders headers, MomentEvaluateRequest momentEvaluateRequest) {
 
         try {

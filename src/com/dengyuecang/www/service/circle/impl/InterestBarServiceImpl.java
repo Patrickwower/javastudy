@@ -95,7 +95,25 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
 
         Map<String,Object> response = new HashMap<String,Object>();
 
-//      response.put("moments",this.fromMomentToResponse(memberId, moments));
+        return RespCode.getRespData(RespCode.SUCCESS,response);
+
+    }
+
+    @Override
+    public RespData queryList(HttpHeaders headers) {
+
+        String hql = "from InterestBar";
+
+//        String memberId = headers.getFirst("memberId");
+
+        Query q = interestBarDao.createQuery(hql);
+
+        List<InterestBar> interestBars = q.list();
+
+        Map<String,Object> response = new HashMap<String,Object>();
+
+        response.put("interestBars",interestBars);
+
 
         return RespCode.getRespData(RespCode.SUCCESS,response);
 
