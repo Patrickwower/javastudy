@@ -36,6 +36,11 @@ public class InterestBarController {
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
     }
 
+    @RequestMapping("/list")
+    @ResponseBody
+    public RespData list(@RequestHeader HttpHeaders headers){
 
+        return interestBarServiceImpl.queryList(headers);
+    }
 
 }

@@ -3,7 +3,7 @@ package com.dengyuecang.www.controller.api.circle;
 import com.dengyuecang.www.controller.api.circle.model.ImproveInformationRequest;
 import com.dengyuecang.www.controller.api.circle.model.LoginRequest;
 import com.dengyuecang.www.controller.api.circle.model.RegisterRequest;
-import com.dengyuecang.www.service.circle.InformationService;
+import com.dengyuecang.www.service.circle.IInformationService;
 import com.dengyuecang.www.service.circle.model.UpdateInfo;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 public class CircleMemberController {
 
     @Resource
-    private InformationService infoServiceImpl;
+    private IInformationService infoServiceImpl;
 
     @RequestMapping(value = "/information",method = RequestMethod.POST)
     @ResponseBody

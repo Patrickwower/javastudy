@@ -7,15 +7,13 @@ import com.dengyuecang.www.controller.tool.model.FileUploadRequest;
 import com.dengyuecang.www.entity.*;
 import com.dengyuecang.www.entity.circle.InterestBar;
 import com.dengyuecang.www.entity.circle.InterestType;
-import com.dengyuecang.www.entity.circle.Moment;
 import com.dengyuecang.www.service.IMemberService;
 import com.dengyuecang.www.service.IStaticResourceService;
-import com.dengyuecang.www.service.circle.InformationService;
+import com.dengyuecang.www.service.circle.IInformationService;
 import com.dengyuecang.www.service.circle.model.MomentInterest;
 import com.dengyuecang.www.service.circle.model.UpdateInfo;
 import com.dengyuecang.www.service.common.CommonConstant;
 import com.dengyuecang.www.service.members.model.CommunityMemberResponse;
-import com.dengyuecang.www.service.members.model.RelatedAccount;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.dengyuecang.www.utils.sharesdk.SmsUtil;
@@ -26,33 +24,20 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.text.Format;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
  * Created by lxrent on 2016/12/13.
  */
 @Service
-public class InformationImpl extends BaseService<MemberInfo> implements InformationService {
+public class InformationServiceImpl extends BaseService<MemberInfo> implements IInformationService {
 
     @Override
     public BaseDao<MemberInfo> getSuperDao() {
-        return null;
-    }
-
-    @Override
-    public RespData personInformation(HttpHeaders headers) {
-        return null;
-    }
-
-    @Override
-    public RespData memberInfo(HttpHeaders headers) {
         return null;
     }
 
@@ -151,23 +136,6 @@ public class InformationImpl extends BaseService<MemberInfo> implements Informat
 
     @Resource(name="hibernateBaseDao")
     private BaseDao<InterestType> interestTypeDao;
-
-    @Override
-    public RespData interestType() {
-
-        String hql = "from InterestType";
-
-        Query q = interestTypeDao.createQuery(hql);
-
-        List<InterestType> interestTypes = q.list();
-
-        Map<String,Object> response = new HashMap<String,Object>();
-
-        response.put("interestTypes",interestTypes);
-
-        return RespCode.getRespData(RespCode.SUCCESS,response);
-
-    }
 
     @Override
     public RespData updateinfo(HttpHeaders headers, UpdateInfo updateInfo) {

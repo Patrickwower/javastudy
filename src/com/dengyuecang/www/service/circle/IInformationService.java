@@ -15,15 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Created by lxrent on 2016/12/13.
  */
-public interface InformationService extends IBaseService<MemberInfo> {
-
-    public RespData personInformation(HttpHeaders headers);
-
-    public RespData memberInfo(HttpHeaders headers);
+public interface IInformationService extends IBaseService<MemberInfo> {
 
     public RespData information(HttpHeaders headers, String memberId);
-
-    public RespData interestType();
 
     public RespData updateinfo(HttpHeaders headers, UpdateInfo updateinfo);
 
@@ -32,7 +26,5 @@ public interface InformationService extends IBaseService<MemberInfo> {
     public RespData improveInformation(HttpHeaders headers, MultipartFile file, ImproveInformationRequest improveInformationRequest, HttpServletRequest servletRequest);
 
     public RespData login(HttpHeaders headers,LoginRequest loginRequest);
-
-
 
 }
