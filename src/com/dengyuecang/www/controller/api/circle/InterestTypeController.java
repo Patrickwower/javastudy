@@ -2,6 +2,7 @@ package com.dengyuecang.www.controller.api.circle;
 
 import com.dengyuecang.www.service.circle.InformationService;
 import com.dengyuecang.www.utils.RespData;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ public class InterestTypeController {
 
     @RequestMapping("/list")
     @ResponseBody
-    public RespData interestType(){
+    public RespData interestType(HttpHeaders headers){
 
         return informationServiceImpl.interestType();
 
