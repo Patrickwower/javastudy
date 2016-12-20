@@ -1,8 +1,6 @@
 package com.dengyuecang.www.controller.api.circle;
 
-import com.dengyuecang.www.controller.api.circle.model.ImproveInformationRequest;
-import com.dengyuecang.www.controller.api.circle.model.LoginRequest;
-import com.dengyuecang.www.controller.api.circle.model.RegisterRequest;
+import com.dengyuecang.www.controller.api.circle.model.*;
 import com.dengyuecang.www.service.circle.IInformationService;
 import com.dengyuecang.www.service.circle.model.UpdateInfo;
 import com.dengyuecang.www.utils.RespCode;
@@ -91,6 +89,43 @@ public class CircleMemberController {
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
     }
 
+    @RequestMapping(value = "/modifyPwd",method = RequestMethod.POST)
+    @ResponseBody
+    public RespData modifyPwd(@RequestHeader HttpHeaders headers,ModifyPwdRequest modifyPwdRequest){
 
+        try {
+            return infoServiceImpl.modifyPwd(headers, modifyPwdRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
+
+    @RequestMapping(value = "/findPwdByVerify")
+    @ResponseBody
+    public RespData findPwdByVerify(@RequestHeader HttpHeaders headers, FindPwdByVerifyRequest findPwdByVerifyRequest){
+
+        try {
+            return infoServiceImpl.findPwdByVerify(headers,findPwdByVerifyRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
+
+    @RequestMapping(value = "/resetPwd")
+    @ResponseBody
+    public RespData resetPwd(@RequestHeader HttpHeaders headers, ResetPwdRequest resetPwdRequest){
+
+        try {
+            return infoServiceImpl.resetPwd(headers,resetPwdRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
 
 }

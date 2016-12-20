@@ -1,12 +1,11 @@
 package com.dengyuecang.www.service.circle.impl;
 
-import com.dengyuecang.www.controller.api.circle.model.ImproveInformationRequest;
-import com.dengyuecang.www.controller.api.circle.model.LoginRequest;
-import com.dengyuecang.www.controller.api.circle.model.RegisterRequest;
+import com.dengyuecang.www.controller.api.circle.model.*;
 import com.dengyuecang.www.controller.tool.model.FileUploadRequest;
 import com.dengyuecang.www.entity.*;
 import com.dengyuecang.www.entity.circle.InterestBar;
 import com.dengyuecang.www.entity.circle.InterestType;
+import com.dengyuecang.www.entity.circle.ResetPwdLog;
 import com.dengyuecang.www.service.IMemberService;
 import com.dengyuecang.www.service.IStaticResourceService;
 import com.dengyuecang.www.service.circle.IInformationService;
@@ -52,6 +51,9 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
     @Resource(name = "hibernateBaseDao")
     private BaseDao<InviteCode> codeDao;
+
+    @Resource(name = "hibernateBaseDao")
+    private BaseDao<ResetPwdLog> resetPwdLogDao;
 
     @Resource
     private IMemberService memberServiceImpl;
@@ -389,7 +391,7 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
         if (member==null){
 
-            RespCode.getRespData(RespCode.MEMBER_NOT_EXIST_OR_PWD_ERROR);
+           return RespCode.getRespData(RespCode.MEMBER_NOT_EXIST_OR_PWD_ERROR);
 
         }
 
@@ -398,6 +400,113 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
         Map<String,String> response = new HashMap<String,String>();
 
         response.put("memberId",member.getId());
+
+        return RespCode.getRespData(RespCode.SUCCESS,response);
+    }
+
+    @Override
+    public RespData modifyPwd(HttpHeaders headers, ModifyPwdRequest modifyPwdRequest) {
+
+        String memberId = headers.getFirst("memberId");
+
+        Map<String,String> response = new HashMap<String,String>();
+        try {
+
+
+
+             if (memberId!=null){
+                 Member member = memberDao.get(Member.class,memberId);
+
+                 if (member!=null){
+
+                     if (member.getPwd().equals(modifyPwdRequest.getOldPwd())){
+
+                         if (modifyPwdRequest.getNewPwd().equals(modifyPwdRequest.getComfirmPwd())){
+
+                             member.setPwd(modifyPwdRequest.getNewPwd());
+
+                             memberDao.saveOrUpdate(member);
+
+                             return RespCode.getRespData(RespCode.SUCCESS,response);
+                         }
+
+                     }else {
+
+                     }
+
+                 }else {
+                     return  RespCode.getRespData(RespCode.COMMENT_NOT_CURRENT_MEMBER,response);
+                 }
+             }else {
+                 return  RespCode.getRespData(RespCode.HEADER_MEMBERID_NEEDED,response);
+             }
+
+         }catch (Exception e){
+             e.printStackTrace();
+         }
+
+        return RespCode.getRespData(RespCode.HEADER_MEMBERID_NEEDED,response);
+    }
+
+    @Override
+    public RespData findPwdByVerify(HttpHeaders headers, FindPwdByVerifyRequest findPwdByVerifyRequest) {
+
+        String mobile = findPwdByVerifyRequest.getMobile();
+
+        //验证手机验证码
+
+        RespData rdVerifyCode = checkVerifyCode(findPwdByVerifyRequest.getAppkey(),findPwdByVerifyRequest.getMobile(),findPwdByVerifyRequest.getZone(),findPwdByVerifyRequest.getVerifyCode());
+
+        if (!RespCode.SUCCESS.equals(rdVerifyCode.getRespCode())){
+            return rdVerifyCode;
+        }
+
+        //验证手机是否存在
+        Member member = memberServiceImpl.getMemberByUniqueIdAndChannel(mobile, CommonConstant.REGISTER_CHANNEL_APP);
+
+        if (member==null){
+            return RespCode.getRespData(RespCode.MEMBER_NOT_EXIST);
+        }
+
+        ResetPwdLog rpl = new ResetPwdLog();
+
+        rpl.setMobile(mobile);
+
+        rpl.setStatus("100");
+
+        resetPwdLogDao.save(rpl);
+
+        Map<String,String> response = new HashMap<String,String>();
+
+        response.put("apply_id",rpl.getId());
+
+        return RespCode.getRespData(RespCode.SUCCESS,response);
+    }
+
+    @Override
+    public RespData resetPwd(HttpHeaders headers, ResetPwdRequest resetPwdRequest) {
+
+        String hql = "from ResetPwdLog where id=? and mobile=? and status='100' ";
+
+        Query q = resetPwdLogDao.createQuery(hql);
+
+        q.setString(0,resetPwdRequest.getApply_id());
+
+        q.setString(1,resetPwdRequest.getMobile());
+
+        ResetPwdLog rpl = (ResetPwdLog) q.uniqueResult();
+
+        if (rpl!=null);
+
+        Member member = memberServiceImpl.getMemberByUniqueIdAndChannel(rpl.getMobile(), CommonConstant.REGISTER_CHANNEL_APP);
+
+        member.setPwd(resetPwdRequest.getPwd());
+
+        memberDao.saveOrUpdate(member);
+
+        Map<String,String> response = new HashMap<String,String>();
+
+        response.put("msg","密码重置成功,请登录");
 
         return RespCode.getRespData(RespCode.SUCCESS,response);
     }

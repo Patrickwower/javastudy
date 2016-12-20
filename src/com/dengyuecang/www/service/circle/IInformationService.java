@@ -1,8 +1,6 @@
 package com.dengyuecang.www.service.circle;
 
-import com.dengyuecang.www.controller.api.circle.model.ImproveInformationRequest;
-import com.dengyuecang.www.controller.api.circle.model.LoginRequest;
-import com.dengyuecang.www.controller.api.circle.model.RegisterRequest;
+import com.dengyuecang.www.controller.api.circle.model.*;
 import com.dengyuecang.www.entity.MemberInfo;
 import com.dengyuecang.www.service.circle.model.UpdateInfo;
 import com.dengyuecang.www.utils.RespData;
@@ -26,5 +24,11 @@ public interface IInformationService extends IBaseService<MemberInfo> {
     public RespData improveInformation(HttpHeaders headers, MultipartFile file, ImproveInformationRequest improveInformationRequest, HttpServletRequest servletRequest);
 
     public RespData login(HttpHeaders headers,LoginRequest loginRequest);
+
+    public RespData modifyPwd(HttpHeaders headers, ModifyPwdRequest modifyPwdRequest);
+
+    public RespData findPwdByVerify(HttpHeaders headers, FindPwdByVerifyRequest findPwdByVerifyRequest);
+
+    public RespData resetPwd(HttpHeaders headers,ResetPwdRequest resetPwdRequest);
 
 }

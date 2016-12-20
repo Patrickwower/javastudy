@@ -13,7 +13,7 @@ import javax.annotation.Resource;
  * Created by lxrent on 2016/12/8.
  */
 @RestController
-@RequestMapping("/api/feedback")
+@RequestMapping("/api/sys/feedback")
 public class FeedbackController {
 
     @Resource

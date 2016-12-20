@@ -12,7 +12,7 @@ import javax.annotation.Resource;
  * Created by lxrent on 2016/12/12.
  */
 @RestController
-@RequestMapping("/startlog")
+@RequestMapping("/api/sys/startlog")
 public class StartLogController {
 
     @Resource
@@ -24,7 +24,7 @@ public class StartLogController {
 
         try {
 
-            return startLogServiceImpl.save(headers);
+//            return startLogServiceImpl.save(headers);
 
         }catch (Exception e){
             e.printStackTrace();
