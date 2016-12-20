@@ -5,11 +5,21 @@ package com.dengyuecang.www.controller.api.circle.model;
  */
 public class AddInterestBarRequest {
 
+    private String bar_id;
+
     private String name;
 
     private String types;
 
     private String detail;
+
+    public String getBar_id() {
+        return bar_id;
+    }
+
+    public void setBar_id(String bar_id) {
+        this.bar_id = bar_id;
+    }
 
     public String getName() {
         return name;

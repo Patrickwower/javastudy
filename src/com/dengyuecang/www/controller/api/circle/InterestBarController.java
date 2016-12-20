@@ -40,7 +40,30 @@ public class InterestBarController {
     @ResponseBody
     public RespData list(@RequestHeader HttpHeaders headers){
 
-        return interestBarServiceImpl.queryList(headers);
+        try {
+
+            return interestBarServiceImpl.queryList(headers);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
+
+    @RequestMapping("/update")
+    @ResponseBody
+    public RespData update(@RequestHeader HttpHeaders headers, AddInterestBarRequest addInterestBarRequest){
+
+        try {
+
+            return interestBarServiceImpl.update(headers, addInterestBarRequest);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
     }
 
 }

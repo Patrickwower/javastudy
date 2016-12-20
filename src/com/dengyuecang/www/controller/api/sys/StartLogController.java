@@ -1,7 +1,6 @@
-package com.dengyuecang.www.controller.api.startlog;
+package com.dengyuecang.www.controller.api.sys;
 
 import com.dengyuecang.www.service.startlog.StartLogService;
-import com.dengyuecang.www.service.startlog.model.StartLogRequest;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import org.springframework.http.HttpHeaders;
@@ -13,7 +12,7 @@ import javax.annotation.Resource;
  * Created by lxrent on 2016/12/12.
  */
 @RestController
-@RequestMapping("/startlog")
+@RequestMapping("/api/sys/startlog")
 public class StartLogController {
 
     @Resource
@@ -25,7 +24,7 @@ public class StartLogController {
 
         try {
 
-            return startLogServiceImpl.save(headers);
+//            return startLogServiceImpl.save(headers);
 
         }catch (Exception e){
             e.printStackTrace();

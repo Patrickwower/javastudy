@@ -9,8 +9,6 @@ public class ImproveInformationRequest {
 
     private String sex;
 
-
-
     public String getNickname() {
         return nickname;
     }
