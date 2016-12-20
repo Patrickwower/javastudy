@@ -161,6 +161,13 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
             memberInfo.setCity(updateInfo.getCity());
         }
 
+        if (updateInfo.getProvince() != null){
+            memberInfo.setProvince(updateInfo.getProvince());
+        }
+        if (updateInfo.getArea() != null){
+            memberInfo.setArea(updateInfo.getArea());
+        }
+
         try {
             memberInfoDao.saveOrUpdate(memberInfo);
 //            memberInfoDao.update(memberInfo);

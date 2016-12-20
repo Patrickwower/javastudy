@@ -9,18 +9,22 @@ public class UpdateInfo {
     private String nickname;
     private String introduction;
     private String sex;
+    private String province;
     private String city;
+    private String area;
     private String school;
 
     public UpdateInfo() {
     }
 
-    public UpdateInfo(String memberId, String nickname, String introduction, String sex, String city, String school) {
+    public UpdateInfo(String memberId, String nickname, String introduction, String sex, String province, String city, String area, String school) {
         this.memberId = memberId;
         this.nickname = nickname;
         this.introduction = introduction;
         this.sex = sex;
+        this.province = province;
         this.city = city;
+        this.area = area;
         this.school = school;
     }
 
@@ -72,4 +76,19 @@ public class UpdateInfo {
         this.school = school;
     }
 
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
 }
