@@ -27,6 +27,10 @@ public class CommunityMemberResponse {
 
     private String sex;
 
+    private String province;
+
+    private String area;
+
     private String city;
 
     private String school;
@@ -39,15 +43,18 @@ public class CommunityMemberResponse {
 
     private List<MomentInterest> interestBars;
 
-    private String img_url;
 
-    public String getImg_url() {
-        return img_url;
+    private String username;
+
+    public String getUsername() {
+        return username;
     }
 
-    public void setImg_url(String img_url) {
-        this.img_url = img_url;
+    public void setUsername(String username) {
+        this.username = username;
     }
+
+
     //    private List<RelatedAccount> accounts = new ArrayList<RelatedAccount>();
 
     public CommunityMemberResponse() {
@@ -180,5 +187,21 @@ public class CommunityMemberResponse {
 
     public void setInterestBars(List<MomentInterest> interestBars) {
         this.interestBars = interestBars;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }
