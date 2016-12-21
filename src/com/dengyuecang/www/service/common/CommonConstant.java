@@ -24,9 +24,9 @@ public class CommonConstant {
 	 * 静态资源文件的网络访问路径+“资源用途名称”+“文件名”
 	 * 暂时：上线时需要修改为
 	 */
-//	public static final String STATIC_URL = "http://test.static.dengyuecang.com";//开发
+	public static final String STATIC_URL = "http://test.static.dengyuecang.com";//开发
 //	public static final String STATIC_URL = "http://localhost:8080/dyc";//开发
-	public static final String STATIC_URL = "http://static.dengyuecang.com";//生产
+//	public static final String STATIC_URL = "http://static.dengyuecang.com";//生产
 	
 	
 	/**

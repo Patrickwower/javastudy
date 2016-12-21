@@ -4,6 +4,7 @@ import com.dengyuecang.www.controller.api.circle.model.AddInterestBarRequest;
 import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.circle.*;
 import com.dengyuecang.www.service.circle.IInterestBarService;
+import com.dengyuecang.www.service.circle.common.InterestBarCommonConstant;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
@@ -91,6 +92,8 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
 
         interestBar.setTimestamp(System.currentTimeMillis());
 
+        interestBar.setImg_url(prepareInterestBarCover(memberId));
+
         interestBarDao.save(interestBar);
 
         Map<String,Object> response = new HashMap<String,Object>();
@@ -99,27 +102,48 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
 
     }
 
+    private String prepareInterestBarCover(String memberId){
+
+        List<InterestBar> barList = queryList(memberId);
+
+        List<String> imgs = InterestBarCommonConstant.INTEREST_BAR_COVER;
+
+        for (InterestBar interestBar:barList
+             ) {
+//            if (imgs.contains(interestBar.getImg_url())){
+                imgs.remove(interestBar.getImg_url());
+//            }
+        }
+
+        Random r = new Random();
+
+        return imgs.get(r.nextInt(imgs.size()));
+    }
+
     @Override
     public RespData queryList(HttpHeaders headers) {
 
-        String hql = "from InterestBar";
-
-//        String memberId = headers.getFirst("memberId");
-
-        Query q = interestBarDao.createQuery(hql);
-
-        List<InterestBar> interestBars = q.list();
+        String memberId = headers.getFirst("memberId");
 
         Map<String,Object> response = new HashMap<String,Object>();
 
-        response.put("interestBars",interestBars);
-
+        response.put("interestBars",this.queryList(memberId));
 
         return RespCode.getRespData(RespCode.SUCCESS,response);
 
+    }
 
+    private List<InterestBar> queryList(String memberId){
 
+        String hql = "from InterestBar ib where ib.creater=? ";
 
+        Query q = interestBarDao.createQuery(hql);
+
+        q.setString(0,memberId);
+
+        List<InterestBar> interestBars = q.list();
+
+        return interestBars;
     }
 
     @Override

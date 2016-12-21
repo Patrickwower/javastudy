@@ -28,6 +28,8 @@ public class InterestBar implements Serializable{
 
     private Set<InterestType> types;
 
+    private String img_url;
+
     @GenericGenerator(name = "generator", strategy = "uuid")
     @Id
     @GeneratedValue(generator = "generator")
@@ -90,5 +92,13 @@ public class InterestBar implements Serializable{
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getImg_url() {
+        return img_url;
+    }
+
+    public void setImg_url(String img_url) {
+        this.img_url = img_url;
     }
 }

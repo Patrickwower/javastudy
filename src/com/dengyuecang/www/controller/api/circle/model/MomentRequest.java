@@ -5,8 +5,6 @@ package com.dengyuecang.www.controller.api.circle.model;
  */
 public class MomentRequest {
 
-//    private String
-
     public String timestamp;
 
     public String pageSize = "10";
@@ -14,6 +12,8 @@ public class MomentRequest {
     public String memberId;
 
     public String status;
+
+    public String interestBar_id;
 
     public MomentRequest() {
     }
@@ -50,5 +50,11 @@ public class MomentRequest {
         this.status = status;
     }
 
+    public String getInterestBar_id() {
+        return interestBar_id;
+    }
 
+    public void setInterestBar_id(String interestBar_id) {
+        this.interestBar_id = interestBar_id;
+    }
 }

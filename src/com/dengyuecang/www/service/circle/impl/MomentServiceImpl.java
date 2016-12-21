@@ -90,9 +90,13 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
                 status = momentRequest.getStatus();
             }
 
-            String hql = "from Moment where public_level='"+status+"' and timestamp<"+timestamp+" order by timestamp desc ";
+            String hql = "from Moment where public_level='"+status+"' and timestamp<"+timestamp;
 
-//          hql = "select b from ArticleIndex a,Article b where a.article.id=b.id and a.timestamp < "+timestamp+" order by a.sort,a.index_time desc";
+            if (StringUtils.isNotEmpty(momentRequest.getInterestBar_id())){
+                hql += " and interestBar.id='"+momentRequest.getInterestBar_id()+"' ";
+            }
+
+            hql += " order by timestamp desc ";
 
             //查询文章列表
             Query q = momentDao.createQuery(hql);
@@ -133,6 +137,8 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
         Format f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        f = new SimpleDateFormat("MMM.d,yyyy,h:maa", Locale.ENGLISH);
+
         try {
 
             for (Moment moment:moments){
@@ -149,7 +155,12 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
                 momentResponse.setCoverimg(moment.getImageList().get(0).getThumbnail_url_path());
                 momentResponse.setTimestamp(moment.getTimestamp()+"");
-                momentResponse.setDate(f.format(moment.getCtime()));
+
+                //返回时间格式
+
+                momentResponse.setDate(f.format(moment.getCtime()).toUpperCase());
+
+
                 momentResponse.setContent(moment.getContent());
                 momentResponse.setMomentId(moment.getId());
                 momentResponse.setZanCount(zanCount(moment.getId()));

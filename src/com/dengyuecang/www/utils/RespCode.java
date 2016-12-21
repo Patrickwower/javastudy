@@ -102,8 +102,11 @@ public class RespCode implements Serializable{
 	
 	public static String UPDATE_HEAD_EXCEPTION = "2102";
 
-	public static String UPDATE_INTRODUCTION_EXCEPTION = "2102";
+	public static String UPDATE_INTRODUCTION_EXCEPTION = "2103";
 
+	public static String OLD_PWD_ERROR = "2104";
+
+	public static String PWD_NOT_SAME = "2105";
 
 	//管理平台权限部分异常
 	public static String USERNAME_OR_PWD_WRONG = "3001";
@@ -259,7 +262,9 @@ public class RespCode implements Serializable{
 
 		respCodeMap.put(USERNAME_OR_PWD_WRONG,new RespCode(USERNAME_OR_PWD_WRONG,"管理平台,用户名或密码错误"));
 
+		respCodeMap.put(OLD_PWD_ERROR,new RespCode(OLD_PWD_ERROR,"原密码错误"));
 
+		respCodeMap.put(PWD_NOT_SAME,new RespCode(PWD_NOT_SAME,"两个密码不一致"));
 		//
 
 

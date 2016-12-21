@@ -428,10 +428,12 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
                              memberDao.saveOrUpdate(member);
 
                              return RespCode.getRespData(RespCode.SUCCESS,response);
+                         }else {
+                             return RespCode.getRespData(RespCode.PWD_NOT_SAME,response);
                          }
 
                      }else {
-
+                         return RespCode.getRespData(RespCode.OLD_PWD_ERROR,response);
                      }
 
                  }else {
@@ -445,7 +447,7 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
              e.printStackTrace();
          }
 
-        return RespCode.getRespData(RespCode.HEADER_MEMBERID_NEEDED,response);
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,response);
     }
 
     @Override
