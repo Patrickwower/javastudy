@@ -118,11 +118,12 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
                     mi.getTypes().add(it.getName());
 
                 }
+
+                mi.setImgurl(ib.getImg_url());
+
                 mis.add(mi);
 
             }
-
-//            cMemberResponse.setImg_url();
 
             cMemberResponse.setInterestBars(mis);
 
@@ -131,15 +132,6 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
             e.printStackTrace();
 
         }
-
-        try{
-
-
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-
 
         Map<String, Object> response = new HashMap<String, Object>();
 
