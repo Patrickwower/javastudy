@@ -47,7 +47,11 @@ public class MemberInfo implements Serializable{
 
 	private String introduction;
 
+	private String province;
+
 	private String city;
+
+	private String area;
 
 	private String school;
 
@@ -58,13 +62,15 @@ public class MemberInfo implements Serializable{
 	}
 
 	public MemberInfo(String id, Member member, String mobile, Date createTime,
-			String createChannel) {
+			String createChannel,String province,String area) {
 		super();
 		this.id = id;
 		this.member = member;
 		this.mobile = mobile;
 		this.createTime = createTime;
 		this.createChannel = createChannel;
+		this.province = province;
+		this.area = area;
 	}
 
 	
@@ -212,5 +218,21 @@ public class MemberInfo implements Serializable{
 
 	public void setEnrollmentDate(Date enrollmentDate) {
 		this.enrollmentDate = enrollmentDate;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
 	}
 }

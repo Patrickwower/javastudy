@@ -46,9 +46,13 @@ public class MomentController {
     public RespData evaluate(@RequestHeader HttpHeaders headers, MomentEvaluateRequest momentEvaluateRequest) {
 
         try {
+
             return momentServiceImpl.evaluate(headers, momentEvaluateRequest);
+
         } catch (Exception e) {
+
             e.printStackTrace();
+
         }
 
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
@@ -63,8 +67,11 @@ public class MomentController {
             ImageIO.read(file.getInputStream()).getHeight();
 
             return momentServiceImpl.add(headers,file,momentPublishRequest,servletRequest);
+
         } catch (Exception e) {
+
             e.printStackTrace();
+
         }
 
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
@@ -76,11 +83,17 @@ public class MomentController {
     public RespData edit(@RequestHeader HttpHeaders headers, String id, @RequestParam(value="file")MultipartFile file, MomentPublishRequest momentPublishRequest, HttpServletRequest servletRequest){
 
         try {
+
             return edit(headers,id,file,momentPublishRequest,servletRequest);
+
         }catch (Exception e){
+
             e.printStackTrace();
+
         }
+
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
     }
 
 }

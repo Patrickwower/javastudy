@@ -150,17 +150,27 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
 //        UpdateInfo updateInfo = new UpdateInfo();
 
-        if (updateInfo.getNickname() != null){
+        if (StringUtils.isNotEmpty(updateInfo.getNickname())){
             memberInfo.setNickname(updateInfo.getNickname());
         }
-        if (updateInfo.getIntroduction() != null){
+        if (StringUtils.isNotEmpty(updateInfo.getIntroduction())){
             memberInfo.setIntroduction(updateInfo.getIntroduction());
         }
-        if (updateInfo.getSchool() != null){
+        if (StringUtils.isNotEmpty(updateInfo.getSchool())){
             memberInfo.setSchool(updateInfo.getSchool());
         }
-        if (updateInfo.getCity() != null){
+        if (StringUtils.isNotEmpty(updateInfo.getCity())){
             memberInfo.setCity(updateInfo.getCity());
+        }
+
+        if (StringUtils.isNotEmpty(updateInfo.getProvince())){
+            memberInfo.setProvince(updateInfo.getProvince());
+        }
+        if (StringUtils.isNotEmpty(updateInfo.getArea())){
+            memberInfo.setArea(updateInfo.getArea());
+        }
+        if (StringUtils.isNotEmpty(updateInfo.getSex())){
+            memberInfo.setGender(updateInfo.getSex());
         }
 
         try {
