@@ -13,11 +13,12 @@ public class UpdateInfo {
     private String city;
     private String area;
     private String school;
+    private String username;
 
     public UpdateInfo() {
     }
 
-    public UpdateInfo(String memberId, String nickname, String introduction, String sex, String province, String city, String area, String school) {
+    public UpdateInfo(String memberId, String nickname, String introduction, String sex, String province, String city, String area, String school,String username) {
         this.memberId = memberId;
         this.nickname = nickname;
         this.introduction = introduction;
@@ -26,6 +27,15 @@ public class UpdateInfo {
         this.city = city;
         this.area = area;
         this.school = school;
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getMemberId() {

@@ -90,6 +90,14 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
         cMemberResponse.setSchool(member.getMemberInfo().getSchool()==null?"":member.getMemberInfo().getSchool());
 
+        cMemberResponse.setProvince(member.getMemberInfo().getProvince()==null?"":member.getMemberInfo().getProvince());
+
+        cMemberResponse.setArea(member.getMemberInfo().getArea()==null?"":member.getMemberInfo().getArea());
+
+        cMemberResponse.setUsername(member.getUsername()==null?"":member.getUsername());
+
+
+
 //
 
 
@@ -118,6 +126,9 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
                     mi.getTypes().add(it.getName());
 
                 }
+
+                mi.setImgurl(ib.getImg_url());
+
                 mis.add(mi);
 
             }
@@ -185,8 +196,14 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
             memberInfo.setGender(updateInfo.getSex());
         }
 
+        if (StringUtils.isNotEmpty(updateInfo.getUsername())){
+            member.setUsername(updateInfo.getUsername());
+        }
+
+
         try {
             memberInfoDao.saveOrUpdate(memberInfo);
+            memberDao.saveOrUpdate(member);
 //            memberInfoDao.update(memberInfo);
         }catch (Exception e){
             e.printStackTrace();
