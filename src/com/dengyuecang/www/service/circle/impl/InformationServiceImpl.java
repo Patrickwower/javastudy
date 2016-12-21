@@ -91,6 +91,8 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
         cMemberResponse.setSchool(member.getMemberInfo().getSchool()==null?"":member.getMemberInfo().getSchool());
 
 //
+
+
         try {
 
             String hql = "from InterestBar ib where ib.creater=? ";
@@ -120,6 +122,7 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
             }
 
+//            cMemberResponse.setImg_url();
 
             cMemberResponse.setInterestBars(mis);
 
@@ -128,6 +131,15 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
             e.printStackTrace();
 
         }
+
+        try{
+
+
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
 
         Map<String, Object> response = new HashMap<String, Object>();
 
@@ -182,7 +194,7 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
         Map<String,Object> response = new HashMap<String,Object>();
 
-        response.put(memberId,memberInfo);
+        response.put("update","成功");
 
         return RespCode.getRespData(RespCode.SUCCESS,response);
 

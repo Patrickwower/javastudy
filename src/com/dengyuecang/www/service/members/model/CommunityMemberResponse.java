@@ -39,7 +39,16 @@ public class CommunityMemberResponse {
 
     private List<MomentInterest> interestBars;
 
-//    private List<RelatedAccount> accounts = new ArrayList<RelatedAccount>();
+    private String img_url;
+
+    public String getImg_url() {
+        return img_url;
+    }
+
+    public void setImg_url(String img_url) {
+        this.img_url = img_url;
+    }
+    //    private List<RelatedAccount> accounts = new ArrayList<RelatedAccount>();
 
     public CommunityMemberResponse() {
     }
