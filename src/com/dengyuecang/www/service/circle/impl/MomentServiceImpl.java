@@ -445,9 +445,9 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
     }
 
-    public boolean ifZan(String memberId,String momentId){
+    public int ifZan(String memberId,String momentId){
 
-        if (memberId==null)return false;
+        if (memberId==null)return 0;
 
         //话题点赞数
         String hqlZanCount = "from MomentEvaluation me where me.moment.id=? and me.operator.id=? ";
@@ -461,10 +461,10 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
         List<MomentEvaluation> l = q.list();
 
         if (l.size()>0){
-            return true;
+            return 1;
         }
 
-        return false;
+        return 0;
     }
 
 
