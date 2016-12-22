@@ -114,16 +114,12 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
 
         for (InterestBar interestBar:barList
              ) {
-            if (imgs.contains(interestBar.getImg_url())){
-//                imgs.remove(interestBar.getImg_url());
-            }else {
-                tmp.add(interestBar.getImg_url());
-            }
+            imgs.remove(interestBar.getImg_url());
         }
 
         Random r = new Random();
 
-        return tmp.get(r.nextInt(tmp.size()));
+        return imgs.get(r.nextInt(imgs.size()));
     }
 
     @Override
