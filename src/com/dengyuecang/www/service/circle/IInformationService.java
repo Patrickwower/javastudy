@@ -31,4 +31,6 @@ public interface IInformationService extends IBaseService<MemberInfo> {
 
     public RespData resetPwd(HttpHeaders headers,ResetPwdRequest resetPwdRequest);
 
+    public RespData updateHead(HttpHeaders headers, MultipartFile file, HttpServletRequest servletRequest);
+
 }

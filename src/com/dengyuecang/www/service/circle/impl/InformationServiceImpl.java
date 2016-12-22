@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -550,6 +551,29 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
         response.put("msg","密码重置成功,请登录");
 
         return RespCode.getRespData(RespCode.SUCCESS,response);
+    }
+
+    @Override
+    public RespData updateHead(HttpHeaders headers, MultipartFile file, HttpServletRequest servletRequest) {
+
+        Map<String,Object> response = new HashMap<String,Object>();
+
+        String memberId = headers.getFirst("memberId");
+
+        Member member = memberDao.get(Member.class,memberId);
+
+        String headurl = this.saveHead(headers,file,servletRequest);
+
+        MemberInfo memberInfo = member.getMemberInfo();
+
+        memberInfo.setIcon(headurl);
+
+        memberInfoDao.saveOrUpdate(memberInfo);
+
+        response.put("msg","头像更换成功");
+
+        return RespCode.getRespData(RespCode.SUCCESS,response);
+
     }
 
 

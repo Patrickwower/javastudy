@@ -76,6 +76,21 @@ public class CircleMemberController {
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
     }
 
+    @RequestMapping(value = "/updatehead",method = RequestMethod.POST)
+    @ResponseBody
+    public RespData updateHead(@RequestHeader HttpHeaders headers, @RequestParam(value = "file", required = true) MultipartFile file, HttpServletRequest servletRequest){
+        try{
+
+            return infoServiceImpl.updateHead(headers,file,servletRequest);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
+    }
+
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
     public RespData login(@RequestHeader HttpHeaders headers,LoginRequest loginRequest){
