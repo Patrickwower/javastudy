@@ -106,18 +106,24 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
 
         List<InterestBar> barList = queryList(memberId);
 
-        List<String> imgs = InterestBarCommonConstant.INTEREST_BAR_COVER;
+        List<String> imgs = new ArrayList<String>();
+
+        imgs.addAll(InterestBarCommonConstant.INTEREST_BAR_COVER);
+
+        List<String> tmp = new ArrayList<String>();
 
         for (InterestBar interestBar:barList
              ) {
-//            if (imgs.contains(interestBar.getImg_url())){
-                imgs.remove(interestBar.getImg_url());
-//            }
+            if (imgs.contains(interestBar.getImg_url())){
+//                imgs.remove(interestBar.getImg_url());
+            }else {
+                tmp.add(interestBar.getImg_url());
+            }
         }
 
         Random r = new Random();
 
-        return imgs.get(r.nextInt(imgs.size()));
+        return tmp.get(r.nextInt(tmp.size()));
     }
 
     @Override

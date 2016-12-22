@@ -114,17 +114,6 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             return RespCode.getRespData(RespCode.SUCCESS,response);
 
-
-
-//            List<Moment> ll = momentDao.createQuery("from Moment").list();
-//
-//            List<MomentResponse> momentList = new ArrayList<MomentResponse>();
-//
-//            Map<String,Object> response = new HashMap<String,Object>();
-//
-//            response.put("moments",prepareMoment());
-//
-//            return RespCode.getRespData(RespCode.SUCCESS,response);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -136,9 +125,7 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
         List<MomentResponse> response = new ArrayList<MomentResponse>();
 
-        Format f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        f = new SimpleDateFormat("MMM.d,yyyy,h:maa", Locale.ENGLISH);
+        Format f = new SimpleDateFormat("MMM.d,yyyy,h:maa", Locale.ENGLISH);
 
         try {
 
@@ -362,7 +349,7 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             momentImage.setSort("1");
 
-            Map<String,String> urls = staticResourceServiceImpl.storeImageForCircleMoment(headers,file,servletRequest);
+            Map<String,String> urls = staticResourceServiceImpl.storeImageForCircleMoment(headers,file,servletRequest,momentPublishRequest.getImg_height(),momentPublishRequest.getImg_width());
 
             momentImage.setSource_url_path(urls.get("source_url"));
 
@@ -413,11 +400,15 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             momentImage.setSort("1");
 
-            Map<String,String> urls = staticResourceServiceImpl.storeImageForCircleMoment(headers,file,servletRequest);
+            Map<String,String> urls = staticResourceServiceImpl.storeImageForCircleMoment(headers,file,servletRequest,momentPublishRequest.getImg_height(),momentPublishRequest.getImg_width());
 
             momentImage.setSource_url_path(urls.get("source_url"));
 
             momentImage.setThumbnail_url_path(urls.get("thumbnail_url"));
+
+            momentImage.setWidth(momentPublishRequest.getImg_width());
+
+            momentPublishRequest.setImg_height(momentPublishRequest.getImg_height());
 
             momentImageDao.save(momentImage);
 

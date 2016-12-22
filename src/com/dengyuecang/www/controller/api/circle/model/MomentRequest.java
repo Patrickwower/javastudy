@@ -7,7 +7,7 @@ public class MomentRequest {
 
     public String timestamp;
 
-    public String pageSize = "10";
+    public String pageSize = "5";
 
     public String memberId;
 
