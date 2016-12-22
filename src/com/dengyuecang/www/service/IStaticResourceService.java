@@ -17,7 +17,7 @@ public interface IStaticResourceService extends IBaseService<StaticResource>{
 	/**
 	 * 保存图片
 	 */
-	public Map<String,String> storeImageForCircleMoment(HttpHeaders headers, MultipartFile file,HttpServletRequest request);
+	public Map<String,String> storeImageForCircleMoment(HttpHeaders headers, MultipartFile file,HttpServletRequest request,String height,String width);
 
 	/**
 	 * 图片上传

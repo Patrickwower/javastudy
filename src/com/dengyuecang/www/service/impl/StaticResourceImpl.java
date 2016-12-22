@@ -2,15 +2,15 @@ package com.dengyuecang.www.service.impl;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import javax.servlet.http.HttpServletRequest;
 
 import com.dengyuecang.www.utils.img.ImgUtils;
@@ -50,7 +50,7 @@ public class StaticResourceImpl extends BaseService<StaticResource> implements I
 
 
 	@Override
-	public Map<String,String> storeImageForCircleMoment(HttpHeaders headers, MultipartFile file,HttpServletRequest request){
+	public Map<String,String> storeImageForCircleMoment(HttpHeaders headers, MultipartFile file,HttpServletRequest request,String img_height,String img_width){
 
 		Map<String,String> urls = new HashMap<String,String>();
 
@@ -96,13 +96,13 @@ public class StaticResourceImpl extends BaseService<StaticResource> implements I
 
 		try {
 
-			int height = ImageIO.read(new File(urls.get("source_path"))).getHeight();
+			int height = Integer.valueOf(img_height);
 
-			int width = ImageIO.read(new File(urls.get("source_path"))).getWidth();
+			int width = Integer.valueOf(img_width);
 
-			double scale_height = (double)334/height;
+			double scale_height = (double)668/height;
 
-			double scale_width = (double)375/width;
+			double scale_width = (double)750/width;
 
 			Double scale = scale_width;
 
@@ -110,7 +110,7 @@ public class StaticResourceImpl extends BaseService<StaticResource> implements I
 				scale = scale_height;
 			}
 
-			ImgUtils.setFromToScaleHW(source_path, thumbnail_path, String.valueOf(scale), "334", "375");
+			ImgUtils.setFromToScaleHW(source_path, thumbnail_path, String.valueOf(scale), "668", "750");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -118,6 +118,30 @@ public class StaticResourceImpl extends BaseService<StaticResource> implements I
 
 		return urls;
 
+	}
+
+	private static Map<String,String> getSizeByImageReader(String path){
+
+		Map<String,String> size = new HashMap<String,String>();
+
+		File file = new File(path);
+		try {
+			Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("jpg");
+			ImageReader reader = (ImageReader) readers.next();
+			ImageInputStream iis = ImageIO.createImageInputStream(file);
+			reader.setInput(iis, true);
+				System.out.println("width:" + reader.getWidth(0));
+				System.out.println("height:" + reader.getHeight(0));
+
+			size.put("width",reader.getWidth(0)+"");
+
+			size.put("height",reader.getHeight(0)+"");
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		return size;
 	}
 
 	private void storeImage(HttpHeaders headers, MultipartFile file, String source_url,String source_path,String fileName) {
@@ -466,5 +490,19 @@ public class StaticResourceImpl extends BaseService<StaticResource> implements I
 
 	}
 
+	public static void main(String[] args) {
+
+		try {
+//			BufferedImage bf = ImageIO.read(new File("/Users/acang/Desktop/12/21/19/d7fd11a1-6bdb-441c-ac19-c2bb72cc1c8b.jpg"));
+
+			Map<String,String> size = StaticResourceImpl.getSizeByImageReader("/Users/acang/Desktop/12/22/15/82de5ee8-cc6e-49d1-a9dd-3f45eb5e7838.jpg");
+
+			System.out.println("宽:"+size.get("width"));
+			System.out.println("高:"+size.get("height"));
+		}catch (Exception e){
+
+		}
+
+	}
 
 }

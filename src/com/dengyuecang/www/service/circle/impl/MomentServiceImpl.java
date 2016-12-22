@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -367,9 +368,9 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             momentImage.setThumbnail_url_path(urls.get("thumbnail_url"));
 
-            momentImage.setHeight(ImageIO.read(new File(urls.get("source_path"))).getHeight()+"");
+            momentImage.setHeight(momentPublishRequest.getImg_height());
 
-            momentImage.setWidth(ImageIO.read(new File(urls.get("source_path"))).getWidth()+"");
+            momentImage.setWidth(momentPublishRequest.getImg_width());
 
             momentImageDao.save(momentImage);
 
@@ -466,6 +467,5 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
         return 0;
     }
-
 
 }
