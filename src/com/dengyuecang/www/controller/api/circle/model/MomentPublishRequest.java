@@ -11,6 +11,10 @@ public class MomentPublishRequest {
 
     private String public_level;
 
+    private String img_height;
+
+    private String img_width;
+
     public String getContent() {
         return content;
     }
@@ -33,5 +37,21 @@ public class MomentPublishRequest {
 
     public void setPublic_level(String public_level) {
         this.public_level = public_level;
+    }
+
+    public String getImg_height() {
+        return img_height;
+    }
+
+    public void setImg_height(String img_height) {
+        this.img_height = img_height;
+    }
+
+    public String getImg_width() {
+        return img_width;
+    }
+
+    public void setImg_width(String img_width) {
+        this.img_width = img_width;
     }
 }

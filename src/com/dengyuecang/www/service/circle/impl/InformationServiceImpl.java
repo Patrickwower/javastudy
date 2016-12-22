@@ -134,8 +134,6 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
             }
 
-//            cMemberResponse.setImg_url();
-
             cMemberResponse.setInterestBars(mis);
 
         }catch (Exception e){
@@ -143,15 +141,6 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
             e.printStackTrace();
 
         }
-
-        try{
-
-
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-
 
         Map<String, Object> response = new HashMap<String, Object>();
 

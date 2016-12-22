@@ -30,7 +30,7 @@ public class ImgUtils {
         Thumbnails
                 .of(to)
                 .sourceRegion(Positions.CENTER, Integer.parseInt(width), Integer.parseInt(height))
-                .size(375,334).keepAspectRatio(true)
+                .size(750,668).keepAspectRatio(true)
                 .toFile(to);
 
     }

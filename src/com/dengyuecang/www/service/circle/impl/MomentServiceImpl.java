@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -367,9 +368,9 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             momentImage.setThumbnail_url_path(urls.get("thumbnail_url"));
 
-            momentImage.setHeight(ImageIO.read(new File(urls.get("source_path"))).getHeight()+"");
+            momentImage.setHeight(momentPublishRequest.getImg_height());
 
-            momentImage.setWidth(ImageIO.read(new File(urls.get("source_path"))).getWidth()+"");
+            momentImage.setWidth(momentPublishRequest.getImg_width());
 
             momentImageDao.save(momentImage);
 
@@ -445,9 +446,9 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
     }
 
-    public boolean ifZan(String memberId,String momentId){
+    public int ifZan(String memberId,String momentId){
 
-        if (memberId==null)return false;
+        if (memberId==null)return 0;
 
         //话题点赞数
         String hqlZanCount = "from MomentEvaluation me where me.moment.id=? and me.operator.id=? ";
@@ -461,11 +462,10 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
         List<MomentEvaluation> l = q.list();
 
         if (l.size()>0){
-            return true;
+            return 1;
         }
 
-        return false;
+        return 0;
     }
-
 
 }
