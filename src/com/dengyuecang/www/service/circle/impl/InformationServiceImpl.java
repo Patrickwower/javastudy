@@ -310,6 +310,10 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
     private RespData checkInviteCode(HttpHeaders headers,String inviteCode){
 
+        if(CommonConstant.SDK_MSG_LOCK){
+            return RespCode.getRespData(RespCode.SUCCESS);
+        }
+
         if (StringUtils.isEmpty(inviteCode)){
 
             return RespCode.getRespData(RespCode.INVATE_CODE_NEED);
