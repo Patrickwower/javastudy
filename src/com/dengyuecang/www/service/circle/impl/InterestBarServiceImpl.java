@@ -5,6 +5,7 @@ import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.circle.*;
 import com.dengyuecang.www.service.circle.IInterestBarService;
 import com.dengyuecang.www.service.circle.common.InterestBarCommonConstant;
+import com.dengyuecang.www.service.circle.model.MomentInterest;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
@@ -206,6 +207,37 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
         interestBarDao.save(interestBar);
 
         Map<String,Object> response = new HashMap<String,Object>();
+
+        return RespCode.getRespData(RespCode.SUCCESS,response);
+    }
+
+    public RespData detail(HttpHeaders headers, AddInterestBarRequest addInterestBarRequest){
+
+        String bar_id = addInterestBarRequest.getBar_id();
+
+        InterestBar interestBar = interestBarDao.get(InterestBar.class,bar_id);
+
+        if (interestBar==null){
+            return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,"不存在此兴趣档案");
+        }
+
+        MomentInterest mi = new MomentInterest();
+
+        mi.setImgurl(interestBar.getImg_url());
+
+        mi.setName(interestBar.getName());
+
+        mi.setBar_id(interestBar.getId());
+
+        for (InterestType it:interestBar.getTypes()){
+
+            mi.getTypes().add(it.getName());
+
+        }
+
+        Map<String,Object> response = new HashMap<String,Object>();
+
+        response.put("interestBar",mi);
 
         return RespCode.getRespData(RespCode.SUCCESS,response);
     }

@@ -66,4 +66,19 @@ public class InterestBarController {
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
     }
 
+    @RequestMapping("/detail")
+    @ResponseBody
+    public RespData detail(@RequestHeader HttpHeaders headers, AddInterestBarRequest addInterestBarRequest){
+
+        try {
+
+            return interestBarServiceImpl.detail(headers, addInterestBarRequest);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
+
 }
