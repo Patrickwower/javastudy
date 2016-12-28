@@ -230,13 +230,17 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
         }
 
         //保存
-        InviteCode code = codeDao.get(InviteCode.class,registerRequest.getInviteCode());
+        if (CommonConstant.SDK_MSG_LOCK){
 
-        code.setEtime(new Date());
+        }else {
+            InviteCode code = codeDao.get(InviteCode.class,registerRequest.getInviteCode());
 
-        code.setStatus("200");
+            code.setEtime(new Date());
 
-        codeDao.saveOrUpdate(code);
+            code.setStatus("200");
+
+            codeDao.saveOrUpdate(code);
+        }
 
         member = saveMemberApp(headers,registerRequest);
 
