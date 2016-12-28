@@ -83,7 +83,7 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
         cMemberResponse.setCtime(member.getMemberInfo().getCreateTime());
 
-//        cMemberResponse.setIntroduction(member.getMemberInfo().getIntroduction());
+        cMemberResponse.setIntroduction(member.getMemberInfo().getIntroduction());
 
         cMemberResponse.setSex(member.getMemberInfo().getGender()==null?"男":member.getMemberInfo().getGender());
 
@@ -97,9 +97,6 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
         cMemberResponse.setUsername(member.getUsername()==null?"":member.getUsername());
 
-
-
-//
 
 
         try {

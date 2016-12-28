@@ -84,14 +84,14 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
                 timestamp = Long.valueOf(momentRequest.getTimestamp());
             }
 
-            String status = "0";
+            String status = "100";
 
             if (StringUtils.isNotEmpty(momentRequest.getStatus())){
 
                 status = momentRequest.getStatus();
             }
 
-            String hql = "from Moment where public_level='"+status+"' and timestamp<"+timestamp;
+            String hql = "from Moment where public_level='0' and status='"+status+"' and timestamp<"+timestamp;
 
             if (StringUtils.isNotEmpty(momentRequest.getInterestBar_id())){
                 hql += " and interestBar.id='"+momentRequest.getInterestBar_id()+"' ";
@@ -341,6 +341,8 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             moment.setPublic_level(momentPublishRequest.getPublic_level());
 
+            moment.setStatus("100");
+
             momentDao.save(moment);
 
             MomentImage momentImage = new MomentImage();
@@ -419,6 +421,43 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
             e.printStackTrace();
 
         }
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
+    }
+
+    @Override
+    public RespData delete(HttpHeaders headers, String momentId) {
+
+        try {
+
+            String memberId = headers.getFirst("memberId");
+
+            String hql = "from Moment m where m.id=? and m.creater.id=? ";
+
+            Query q = momentDao.createQuery(hql);
+
+            q.setString(0,momentId);
+
+            q.setString(1,memberId);
+
+            Moment moment = (Moment) q.uniqueResult();
+
+            Map<String,String> response = new HashMap<String,String>();
+            if (moment==null){
+                response.put("msg","非本人动态,或其他异常,动态无法删除");
+                return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,response);
+            }
+
+            moment.setStatus("200");
+
+            momentDao.saveOrUpdate(moment);
+
+            response.put("msg","删除成功");
+            return RespCode.getRespData(RespCode.SUCCESS,response);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
     }
 

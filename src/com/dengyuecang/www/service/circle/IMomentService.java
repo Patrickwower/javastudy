@@ -25,5 +25,9 @@ public interface IMomentService extends IBaseService<Moment>{
 
     public RespData add(HttpHeaders headers, MultipartFile file, MomentPublishRequest momentPublishRequest, HttpServletRequest servletRequest);
 
+    //存有大问题
     public RespData edit(HttpHeaders headers,String id,MultipartFile file, MomentPublishRequest momentPublishRequest, HttpServletRequest servletRequest);
+
+    public RespData delete(HttpHeaders headers,String momentId);
+
 }

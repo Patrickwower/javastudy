@@ -32,6 +32,9 @@ public class Moment implements Serializable{
 
     private Member creater;
 
+    //状态:100是刚发布都能看,200为删除
+    private String status;
+
     @GenericGenerator(name = "generator", strategy = "uuid")
     @Id
     @GeneratedValue(generator = "generator")
@@ -104,5 +107,13 @@ public class Moment implements Serializable{
 
     public void setCreater(Member creater) {
         this.creater = creater;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

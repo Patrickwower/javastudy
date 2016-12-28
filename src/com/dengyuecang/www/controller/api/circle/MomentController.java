@@ -84,7 +84,24 @@ public class MomentController {
 
         try {
 
-            return edit(headers,id,file,momentPublishRequest,servletRequest);
+            return momentServiceImpl.edit(headers,id,file,momentPublishRequest,servletRequest);
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
+    }
+
+    @RequestMapping("/delete")
+    @ResponseBody
+    public RespData delete(@RequestHeader HttpHeaders headers, String momentId){
+
+        try {
+            return momentServiceImpl.delete(headers,momentId);
 
         }catch (Exception e){
 
