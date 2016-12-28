@@ -67,7 +67,7 @@ public class CommonConstant {
 	/**
 	 * 短信验证码是否验证,true为不验证,false为验证
 	 */
-	public static final boolean SDK_MSG_LOCK = true;
+	public static final boolean SDK_MSG_LOCK = false;
 
 	/**
 	 * 是否直接在文章发布时,直接插入首页热门,true为直接插入,false为不插入
