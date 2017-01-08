@@ -41,6 +41,20 @@ public class MomentController {
     }
 
 
+    @RequestMapping("/listByParam")
+    @ResponseBody
+    public RespData listByParam(@RequestHeader HttpHeaders headers, MomentRequest momentRequest) {
+
+        try {
+            return momentServiceImpl.queryListByParam(headers, momentRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
+    }
+
     @RequestMapping("/evaluate")
     @ResponseBody
     public RespData evaluate(@RequestHeader HttpHeaders headers, MomentEvaluateRequest momentEvaluateRequest) {

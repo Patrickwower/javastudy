@@ -15,6 +15,9 @@ public class MomentRequest {
 
     public String interestBar_id;
 
+    //all是全部,follow是关注的
+    public String filter;
+
     public MomentRequest() {
     }
 
@@ -56,5 +59,13 @@ public class MomentRequest {
 
     public void setInterestBar_id(String interestBar_id) {
         this.interestBar_id = interestBar_id;
+    }
+
+    public String getFilter() {
+        return filter;
+    }
+
+    public void setFilter(String filter) {
+        this.filter = filter;
     }
 }

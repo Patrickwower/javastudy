@@ -121,6 +121,99 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
     }
 
+    @Override
+    public RespData queryListByParam(HttpHeaders headers, MomentRequest momentRequest) {
+
+        try {
+
+            String memberId = headers.getFirst("memberId");
+
+            int limit = 5;
+
+            if (StringUtils.isNotEmpty(momentRequest.getPageSize())){
+                limit = Integer.valueOf(momentRequest.getPageSize());
+            }
+
+            long timestamp = System.currentTimeMillis();
+
+            if (StringUtils.isNotEmpty(momentRequest.getTimestamp())){
+                timestamp = Long.valueOf(momentRequest.getTimestamp());
+            }
+
+            String status = "100";
+
+            if (StringUtils.isNotEmpty(momentRequest.getStatus())){
+
+                status = momentRequest.getStatus();
+            }
+
+            String hql = "";
+
+            if (momentRequest.getFilter()==null||"all".equals(momentRequest.getFilter())){
+
+                hql = "from Moment where public_level='0' and status='"+status+"' and timestamp<"+timestamp;
+
+                if (StringUtils.isNotEmpty(momentRequest.getInterestBar_id())){
+                    hql += " and interestBar.id='"+momentRequest.getInterestBar_id()+"' ";
+                }
+
+                hql += " order by timestamp desc ";
+
+            }else if ("follow".equals(momentRequest.getFilter())){
+
+                hql = "select m from Moment m,MmemberFollow mf where m.creater=mf.follow and mf.followed.id="+memberId+" and m.public_level='0' and m.status='"+status+"' and m.timestamp<"+timestamp;
+
+                hql += " order by m.timestamp desc ";
+
+            }
+
+
+            //查询文章列表
+            Query q = momentDao.createQuery(hql);
+
+            q.setFirstResult(0);
+
+            q.setMaxResults(limit);
+
+            List<Moment> moments = q.list();
+
+            Map<String,Object> response = new HashMap<String,Object>();
+
+            response.put("moments",this.fromMomentToResponse(memberId, moments));
+
+            return RespCode.getRespData(RespCode.SUCCESS,response);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
+
+
+    }
+
+    private List<Moment> queryList(String hql,int limit){
+
+        try {
+
+            //查询文章列表
+            Query q = momentDao.createQuery(hql);
+
+            q.setFirstResult(0);
+
+            q.setMaxResults(limit);
+
+            List<Moment> moments = q.list();
+
+            return moments;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private List<MomentResponse> fromMomentToResponse(String memberId, List<Moment> moments){
 
         List<MomentResponse> response = new ArrayList<MomentResponse>();
