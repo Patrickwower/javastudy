@@ -554,6 +554,12 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
     }
 
+    @Override
+    public RespData evaluationList(HttpHeaders headers, String momentId) {
+        return null;
+    }
+
+
 
     private String zanCount(String momentId){
 

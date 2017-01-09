@@ -32,4 +32,6 @@ public interface IMomentService extends IBaseService<Moment>{
 
     public RespData delete(HttpHeaders headers,String momentId);
 
+    public RespData evaluationList(HttpHeaders headers, String momentId);
+
 }

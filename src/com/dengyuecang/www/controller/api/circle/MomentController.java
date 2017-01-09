@@ -72,6 +72,23 @@ public class MomentController {
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
     }
 
+    @RequestMapping("/evaluate/list")
+    @ResponseBody
+    public RespData evaluateList(@RequestHeader HttpHeaders headers, MomentEvaluateRequest momentEvaluateRequest) {
+
+        try {
+
+            return momentServiceImpl.evaluate(headers, momentEvaluateRequest);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
+
     @RequestMapping("/publish")
     @ResponseBody
     public RespData publish(@RequestHeader HttpHeaders headers, HttpServletRequest servletRequest,  @RequestParam(value = "file", required = true) MultipartFile file, MomentPublishRequest momentPublishRequest) {
