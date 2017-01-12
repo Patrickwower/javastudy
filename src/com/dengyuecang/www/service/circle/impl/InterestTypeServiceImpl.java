@@ -27,6 +27,14 @@ public class InterestTypeServiceImpl extends BaseService<InterestType> implement
     @Resource(name="hibernateBaseDao")
     private BaseDao<InterestType> interestTypeDao;
 
+    @Resource(name="hibernateBaseDao")
+    private BaseDao<InterestBar> interestBarDao;
+
+
+
+    @Resource(name="hibernateBaseDao")
+    private BaseDao<Member> memberDao;
+
     @Override
     public BaseDao<InterestType> getSuperDao() {
         return null;
@@ -48,5 +56,31 @@ public class InterestTypeServiceImpl extends BaseService<InterestType> implement
 
         return RespCode.getRespData(RespCode.SUCCESS,response);
 
+    }
+
+    @Override
+    public List<String> queryInterestTagsByMemberId(String memberId) {
+
+        String hql = "from InterestBar ib where ib.creater.id=? ";
+
+        Query q = interestBarDao.createQuery(hql);
+
+        q.setString(0,memberId);
+
+        List<InterestBar> bars = q.list();
+
+        List<String> tags = new ArrayList<String>();
+
+        for (InterestBar bar :
+                bars) {
+            for (InterestType type :
+                    bar.getTypes()) {
+                if (!tags.contains(type.getName())){
+                    tags.add(type.getName());
+                }
+            }
+        }
+
+        return tags;
     }
 }

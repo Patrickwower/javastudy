@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Created by lxrent on 2016/12/13.
@@ -19,5 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public interface IInterestTypeService extends IBaseService<InterestType> {
 
     public RespData queryList();
+
+    public List<String> queryInterestTagsByMemberId(String memberId);
 
 }
