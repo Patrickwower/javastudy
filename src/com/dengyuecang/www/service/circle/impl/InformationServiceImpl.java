@@ -67,6 +67,8 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
         CommunityMemberResponse cMemberResponse = new CommunityMemberResponse();
 
+        try{
+
         if (StringUtils.isEmpty(memberId)){
 
             memberId = headers.getFirst("memberId");
@@ -74,6 +76,25 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
         }
 
         Member member = memberDao.get(Member.class,memberId);
+
+        cMemberResponse = this.fromMemberToResponse(memberId,member);
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+
+        }
+
+        Map<String, Object> response = new HashMap<String, Object>();
+
+        response.put("memberinfo",cMemberResponse);
+
+        return RespCode.getRespData(RespCode.SUCCESS,response);
+    }
+
+    public CommunityMemberResponse fromMemberToResponse(String memberId, Member member){
+
+        CommunityMemberResponse cMemberResponse = new CommunityMemberResponse();
 
         cMemberResponse.setNickname(member.getMemberInfo().getNickname());
 
@@ -105,13 +126,13 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
             Query q = interestBarBaseDao.createQuery(hql);
 
-            q.setString(0,memberId);
+            q.setString(0, memberId);
 
             List<InterestBar> interestBars = q.list();
 
             List<MomentInterest> mis = new ArrayList<MomentInterest>();
 
-            for (InterestBar ib:interestBars){
+            for (InterestBar ib : interestBars) {
 
                 MomentInterest mi = new MomentInterest();
 
@@ -119,7 +140,7 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
                 mi.setName(ib.getName());
 
-                for (InterestType it:ib.getTypes()){
+                for (InterestType it : ib.getTypes()) {
 
                     mi.getTypes().add(it.getName());
 
@@ -134,16 +155,10 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
             cMemberResponse.setInterestBars(mis);
 
         }catch (Exception e){
-
             e.printStackTrace();
-
         }
 
-        Map<String, Object> response = new HashMap<String, Object>();
-
-        response.put("memberinfo",cMemberResponse);
-
-        return RespCode.getRespData(RespCode.SUCCESS,response);
+        return cMemberResponse;
     }
 
     @Resource(name="hibernateBaseDao")

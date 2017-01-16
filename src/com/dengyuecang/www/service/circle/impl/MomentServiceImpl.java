@@ -3,17 +3,24 @@ package com.dengyuecang.www.service.circle.impl;
 import com.dengyuecang.www.controller.api.circle.model.MomentEvaluateRequest;
 import com.dengyuecang.www.controller.api.circle.model.MomentPublishRequest;
 import com.dengyuecang.www.controller.api.circle.model.MomentRequest;
+import com.dengyuecang.www.controller.api.circle.model.evaluation.EvaluationRequest;
 import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.circle.InterestBar;
 import com.dengyuecang.www.entity.circle.Moment;
 import com.dengyuecang.www.entity.circle.MomentEvaluation;
 import com.dengyuecang.www.entity.circle.MomentImage;
 import com.dengyuecang.www.service.IStaticResourceService;
+import com.dengyuecang.www.service.circle.IInterestTypeService;
+import com.dengyuecang.www.service.circle.IMessageService;
 import com.dengyuecang.www.service.circle.IMomentService;
+import com.dengyuecang.www.service.circle.common.MessageCommonConstant;
 import com.dengyuecang.www.service.circle.model.MomentCreater;
 import com.dengyuecang.www.service.circle.model.MomentImg;
 import com.dengyuecang.www.service.circle.model.MomentInterest;
 import com.dengyuecang.www.service.circle.model.MomentResponse;
+import com.dengyuecang.www.service.circle.model.evaluation.EvaluationDiscussant;
+import com.dengyuecang.www.service.circle.model.evaluation.EvaluationResponse;
+import com.dengyuecang.www.service.circle.model.message.MessageAdd;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
@@ -58,6 +65,11 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
     @Resource
     private IStaticResourceService staticResourceServiceImpl;
 
+    @Resource
+    private IInterestTypeService interestTypeServiceImpl;
+
+    @Resource
+    private IMessageService messageServiceImpl;
 
     @Override
     public BaseDao<Moment> getSuperDao() {
@@ -218,74 +230,79 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
         List<MomentResponse> response = new ArrayList<MomentResponse>();
 
-        Format f = new SimpleDateFormat("MMM.d,yyyy,h:maa", Locale.ENGLISH);
-
         try {
 
             for (Moment moment:moments){
 
-
                 MomentResponse momentResponse = new MomentResponse();
 
-                MomentImg momentImg = new MomentImg();
-
-                MomentCreater momentCreater = new MomentCreater();
-
-                MomentInterest momentInterest = new MomentInterest();
-
-
-                momentResponse.setCoverimg(moment.getImageList().get(0).getThumbnail_url_path());
-                momentResponse.setTimestamp(moment.getTimestamp()+"");
-
-                //返回时间格式
-
-                momentResponse.setDate(f.format(moment.getCtime()).toUpperCase());
-
-
-                momentResponse.setContent(moment.getContent());
-                momentResponse.setMomentId(moment.getId());
-                momentResponse.setZanCount(zanCount(moment.getId()));
-                momentResponse.setIfZan(ifZan(memberId,moment.getId())+"");
-
-                //----------------------------------------------------------------------------------------
-                Member creater = moment.getCreater();
-
-                momentCreater.setMemberId(creater.getId());
-                momentCreater.setHeadUrl(creater.getMemberInfo().getIcon());
-                momentCreater.setNickname(creater.getMemberInfo().getNickname());
-
-                momentResponse.setCreater(momentCreater);
-                //----------------------------------------------------------------------------------------
-                InterestBar interestBar = moment.getInterestBar();
-
-                momentInterest.setBar_id(interestBar.getId());
-                momentInterest.setName(interestBar.getName());
-
-                momentResponse.setInterest(momentInterest);
-                //----------------------------------------------------------------------------------------
-                MomentImage momentImage = moment.getImageList().get(0);
-
-                momentImg.setSource_url(momentImage.getSource_url_path());
-
-                momentImg.setHeight(momentImage.getHeight());
-
-                momentImg.setWidth(momentImage.getWidth());
-
-                momentResponse.getImgs().add(momentImg);
+                momentResponse = this.momentToresponse(memberId,moment);
 
                 response.add(momentResponse);
 
             }
 
-
             return response;
-
 
         }catch (Exception e){
             e.printStackTrace();
         }
 
         return response;
+    }
+
+    @Override
+    public MomentResponse momentToresponse(String memberId,Moment moment){
+
+        MomentResponse momentResponse = new MomentResponse();
+
+        MomentImg momentImg = new MomentImg();
+
+        MomentCreater momentCreater = new MomentCreater();
+
+        MomentInterest momentInterest = new MomentInterest();
+
+
+        momentResponse.setCoverimg(moment.getImageList().get(0).getThumbnail_url_path());
+        momentResponse.setTimestamp(moment.getTimestamp()+"");
+
+        //返回时间格式
+        Format f = new SimpleDateFormat("MMM.d,yyyy,h:maa", Locale.ENGLISH);
+        momentResponse.setDate(f.format(moment.getCtime()).toUpperCase());
+
+
+        momentResponse.setContent(moment.getContent());
+        momentResponse.setMomentId(moment.getId());
+        momentResponse.setZanCount(zanCount(moment.getId()));
+        momentResponse.setIfZan(ifZan(memberId,moment.getId())+"");
+
+        //----------------------------------------------------------------------------------------
+        Member creater = moment.getCreater();
+
+        momentCreater.setMemberId(creater.getId());
+        momentCreater.setHeadUrl(creater.getMemberInfo().getIcon());
+        momentCreater.setNickname(creater.getMemberInfo().getNickname());
+
+        momentResponse.setCreater(momentCreater);
+        //----------------------------------------------------------------------------------------
+        InterestBar interestBar = moment.getInterestBar();
+
+        momentInterest.setBar_id(interestBar.getId());
+        momentInterest.setName(interestBar.getName());
+
+        momentResponse.setInterest(momentInterest);
+        //----------------------------------------------------------------------------------------
+        MomentImage momentImage = moment.getImageList().get(0);
+
+        momentImg.setSource_url(momentImage.getSource_url_path());
+
+        momentImg.setHeight(momentImage.getHeight());
+
+        momentImg.setWidth(momentImage.getWidth());
+
+        momentResponse.getImgs().add(momentImg);
+
+        return momentResponse;
     }
 
     private List<MomentResponse> prepareMoment(){
@@ -390,6 +407,17 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
                 momentEvaluatation.setMoment(moment);
 
                 momentEvaluationDao.save(momentEvaluatation);
+
+                //站内消息
+                MessageAdd messageAdd = new MessageAdd();
+
+                messageAdd.setType(MessageCommonConstant.TYPE_ZAN);
+                messageAdd.setMomentId(moment.getId());
+                messageAdd.setServiceId(momentEvaluatation.getId());
+                messageAdd.setSenderId(memberId);
+                messageAdd.setRecipientId(moment.getCreater().getId());
+
+                messageServiceImpl.add(headers,messageAdd);
 
                 ifZan = 1;
             }
@@ -555,8 +583,87 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
     }
 
     @Override
-    public RespData evaluationList(HttpHeaders headers, String momentId) {
-        return null;
+    public RespData evaluationList(HttpHeaders headers, EvaluationRequest evaluationRequest) {
+
+        try{
+
+            String memberId = headers.getFirst("memberId");
+
+            int limit = 20;
+
+            if (StringUtils.isNotEmpty(evaluationRequest.getPageSize())){
+                limit = Integer.valueOf(evaluationRequest.getPageSize());
+            }
+
+            long timestamp = System.currentTimeMillis();
+
+            if (StringUtils.isNotEmpty(evaluationRequest.getTimestamp())){
+                timestamp = Long.valueOf(evaluationRequest.getTimestamp());
+            }
+
+            String hql = "from MomentEvaluation me where me.moment.id=? and me.timestamp<"+timestamp;
+
+            hql += " order by timestamp desc ";
+
+            //查询文章列表
+            Query q = momentEvaluationDao.createQuery(hql);
+
+            q.setString(0,evaluationRequest.getMomentId());
+
+            q.setFirstResult(0);
+
+            q.setMaxResults(limit);
+
+            List<MomentEvaluation> evaluations = q.list();
+
+            Map<String,Object> response = new HashMap<String,Object>();
+
+            response.put("evaluations",this.fromEvaluationToResponse(memberId, evaluations));
+
+            return RespCode.getRespData(RespCode.SUCCESS,response);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
+    }
+
+    private List<EvaluationResponse> fromEvaluationToResponse(String memberId, List<MomentEvaluation> evaluations){
+
+        List<EvaluationResponse> responses = new ArrayList<EvaluationResponse>();
+
+        for (MomentEvaluation evaluation :
+                evaluations) {
+
+            EvaluationResponse response = new EvaluationResponse();
+
+            response.setEvaluationId(evaluation.getId());
+
+            Format f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            response.setCtime(f.format(evaluation.getCtime()));
+
+            response.setTimestamp(evaluation.getTimestamp()+"");
+
+            Member discussant = evaluation.getOperator();
+
+            EvaluationDiscussant ed = new EvaluationDiscussant();
+
+            ed.setDiscussantId(discussant.getId());
+
+            ed.setHeadUrl(discussant.getMemberInfo().getIcon());
+
+            ed.setNickname(discussant.getMemberInfo().getNickname());
+
+            ed.setInterestTags(interestTypeServiceImpl.queryInterestTagsByMemberId(discussant.getId()));
+
+            response.setDiscussant(ed);
+
+            responses.add(response);
+        }
+
+        return responses;
     }
 
 

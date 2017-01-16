@@ -9,8 +9,10 @@ import com.dengyuecang.www.controller.api.circle.model.comment.CommentRequest;
 import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.circle.*;
 import com.dengyuecang.www.service.IStaticResourceService;
+import com.dengyuecang.www.service.circle.IMessageService;
 import com.dengyuecang.www.service.circle.IMomentCommentService;
 import com.dengyuecang.www.service.circle.IMomentService;
+import com.dengyuecang.www.service.circle.common.MessageCommonConstant;
 import com.dengyuecang.www.service.circle.model.MomentCreater;
 import com.dengyuecang.www.service.circle.model.MomentImg;
 import com.dengyuecang.www.service.circle.model.MomentInterest;
@@ -18,6 +20,7 @@ import com.dengyuecang.www.service.circle.model.MomentResponse;
 import com.dengyuecang.www.service.circle.model.comment.CommentDiscussant;
 import com.dengyuecang.www.service.circle.model.comment.CommentResponse;
 import com.dengyuecang.www.service.circle.model.comment.Reply;
+import com.dengyuecang.www.service.circle.model.message.MessageAdd;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
@@ -50,8 +53,8 @@ public class MomentCommentServiceImpl extends BaseService<MomentComment> impleme
     @Resource(name="hibernateBaseDao")
     private BaseDao<MomentComment> momentCommentDao;
 
-//    @Resource
-//    private IStaticResourceService staticResourceServiceImpl;
+    @Resource
+    private IMessageService messageServiceImpl;
 
 
 
@@ -88,7 +91,22 @@ public class MomentCommentServiceImpl extends BaseService<MomentComment> impleme
 
             momentCommentDao.save(momentComment);
 
-            return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
+            //站内消息
+            MessageAdd messageAdd = new MessageAdd();
+
+            messageAdd.setType(MessageCommonConstant.TYPE_COMMENT);
+            messageAdd.setMomentId(moment.getId());
+            messageAdd.setServiceId(momentComment.getId());
+            messageAdd.setSenderId(memberId);
+            messageAdd.setRecipientId(moment.getCreater().getId());
+
+            messageServiceImpl.add(headers,messageAdd);
+
+            Map<String,String> response = new HashMap<String,String>();
+
+            response.put("commentSize",commentSize(commentAddRequest.getMomentId()));
+
+            return RespCode.getRespData(RespCode.SUCCESS,response);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -114,7 +132,11 @@ public class MomentCommentServiceImpl extends BaseService<MomentComment> impleme
                     momentCommentDao.delete(momentComment);
 
                 }
-                return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
+                Map<String,String> response = new HashMap<String,String>();
+
+                response.put("commentSize",commentSize(momentComment.getMoment().getId()));
+
+                return RespCode.getRespData(RespCode.SUCCESS,response);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,6 +144,8 @@ public class MomentCommentServiceImpl extends BaseService<MomentComment> impleme
 
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
     }
+
+
 
     @Override
     public RespData reply(HttpHeaders headers) {
@@ -234,6 +258,8 @@ public class MomentCommentServiceImpl extends BaseService<MomentComment> impleme
                 commentResponse.getReplys().add(reply);
             }
 
+            commentResponse.setMomentCreater(momentComment.getMoment().getCreater().getId());
+
             commentResponseList.add(commentResponse);
 
         }
@@ -251,5 +277,20 @@ public class MomentCommentServiceImpl extends BaseService<MomentComment> impleme
     @Override
     public RespData listAt(HttpHeaders headers) {
         return null;
+    }
+
+    @Override
+    public String commentSize(String momentId) {
+
+        String hqlCommentSize = "select count(mc.id) from MomentComment mc where mc.moment.id=? ";
+
+        Query q = momentCommentDao.createQuery(hqlCommentSize);
+
+        q.setString(0,momentId);
+
+        long zanCount = (long)q.uniqueResult();
+
+        return zanCount+"";
+
     }
 }

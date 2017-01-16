@@ -61,7 +61,7 @@ public class InterestTypeServiceImpl extends BaseService<InterestType> implement
     @Override
     public List<String> queryInterestTagsByMemberId(String memberId) {
 
-        String hql = "from InterestBar ib where ib.creater.id=? ";
+        String hql = "from InterestBar ib where ib.creater=? ";
 
         Query q = interestBarDao.createQuery(hql);
 

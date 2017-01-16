@@ -1,8 +1,10 @@
 package com.dengyuecang.www.service.circle;
 
 import com.dengyuecang.www.controller.api.circle.model.*;
+import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.MemberInfo;
 import com.dengyuecang.www.service.circle.model.UpdateInfo;
+import com.dengyuecang.www.service.members.model.CommunityMemberResponse;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.service.IBaseService;
 import org.springframework.http.HttpHeaders;
@@ -32,5 +34,7 @@ public interface IInformationService extends IBaseService<MemberInfo> {
     public RespData resetPwd(HttpHeaders headers,ResetPwdRequest resetPwdRequest);
 
     public RespData updateHead(HttpHeaders headers, MultipartFile file, HttpServletRequest servletRequest);
+
+    public CommunityMemberResponse fromMemberToResponse(String memberId, Member member);
 
 }

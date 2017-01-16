@@ -9,10 +9,13 @@ import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.circle.Moment;
 import com.dengyuecang.www.entity.circle.MomentComment;
 import com.dengyuecang.www.entity.circle.MomentCommentReply;
+import com.dengyuecang.www.service.circle.IMessageService;
 import com.dengyuecang.www.service.circle.IMomentCommentService;
 import com.dengyuecang.www.service.circle.IReplyService;
+import com.dengyuecang.www.service.circle.common.MessageCommonConstant;
 import com.dengyuecang.www.service.circle.model.comment.CommentDiscussant;
 import com.dengyuecang.www.service.circle.model.comment.CommentResponse;
+import com.dengyuecang.www.service.circle.model.message.MessageAdd;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
@@ -46,7 +49,8 @@ public class ReplyServiceImpl extends BaseService<MomentCommentReply> implements
     @Resource(name="hibernateBaseDao")
     private BaseDao<MomentCommentReply> replyDao;
 
-
+    @Resource
+    private IMessageService messageServiceImpl;
 
 
     @Override
@@ -97,6 +101,18 @@ public class ReplyServiceImpl extends BaseService<MomentCommentReply> implements
             reply.setAt(at);
 
             replyDao.save(reply);
+
+
+            //站内消息
+            MessageAdd messageAdd = new MessageAdd();
+
+            messageAdd.setType(MessageCommonConstant.TYPE_REPLY);
+            messageAdd.setMomentId(reply.getComment().getMoment().getId());
+            messageAdd.setServiceId(reply.getComment().getId());
+            messageAdd.setSenderId(reply.getDiscussant().getId());
+            messageAdd.setRecipientId(reply.getAt().getId());
+
+            messageServiceImpl.add(headers,messageAdd);
 
             return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
         } catch (Exception e) {

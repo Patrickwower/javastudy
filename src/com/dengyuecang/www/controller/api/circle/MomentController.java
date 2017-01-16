@@ -3,6 +3,7 @@ package com.dengyuecang.www.controller.api.circle;
 import com.dengyuecang.www.controller.api.circle.model.MomentEvaluateRequest;
 import com.dengyuecang.www.controller.api.circle.model.MomentPublishRequest;
 import com.dengyuecang.www.controller.api.circle.model.MomentRequest;
+import com.dengyuecang.www.controller.api.circle.model.evaluation.EvaluationRequest;
 import com.dengyuecang.www.service.circle.IMomentService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
@@ -72,13 +73,13 @@ public class MomentController {
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
     }
 
-    @RequestMapping("/evaluate/list")
+    @RequestMapping("/evaluation/list")
     @ResponseBody
-    public RespData evaluateList(@RequestHeader HttpHeaders headers, MomentEvaluateRequest momentEvaluateRequest) {
+    public RespData evaluateList(@RequestHeader HttpHeaders headers, EvaluationRequest evaluationRequest) {
 
         try {
 
-            return momentServiceImpl.evaluate(headers, momentEvaluateRequest);
+            return momentServiceImpl.evaluationList(headers, evaluationRequest);
 
         } catch (Exception e) {
 

@@ -22,6 +22,8 @@ public class CommentResponse {
 
     private List<Reply> replys = new ArrayList<Reply>();
 
+    private String momentCreater;
+
     public String getCommentId() {
         return commentId;
     }
@@ -76,5 +78,13 @@ public class CommentResponse {
 
     public void setReplys(List<Reply> replys) {
         this.replys = replys;
+    }
+
+    public String getMomentCreater() {
+        return momentCreater;
+    }
+
+    public void setMomentCreater(String momentCreater) {
+        this.momentCreater = momentCreater;
     }
 }

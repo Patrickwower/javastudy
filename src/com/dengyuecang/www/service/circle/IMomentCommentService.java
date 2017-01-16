@@ -27,4 +27,10 @@ public interface IMomentCommentService extends IBaseService<MomentComment>{
 
     public RespData listAt(HttpHeaders headers);
 
+    /**
+     * 获取动态的评论数
+     * @param momentId
+     * @return
+     */
+    public String commentSize(String momentId);
 }
