@@ -1,7 +1,5 @@
 package com.dengyuecang.www.service.circle.model.message;
 
-import com.dengyuecang.www.service.circle.model.MomentResponse;
-
 /**
  * Created by acang on 2017/1/13.
  */
@@ -11,7 +9,7 @@ public class MessageResponse {
 
     private MessageSender sender;
 
-    private MomentResponse moment;
+    private MessageMoment moment;
 
     private String type;
 
@@ -39,11 +37,11 @@ public class MessageResponse {
         this.sender = sender;
     }
 
-    public MomentResponse getMoment() {
+    public MessageMoment getMoment() {
         return moment;
     }
 
-    public void setMoment(MomentResponse moment) {
+    public void setMoment(MessageMoment moment) {
         this.moment = moment;
     }
 

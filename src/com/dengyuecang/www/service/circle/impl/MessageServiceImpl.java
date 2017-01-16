@@ -130,7 +130,7 @@ public class MessageServiceImpl extends BaseService<Message> implements IMessage
 
             response.put("messageSize",this.messageSize(memberId)+"");
 
-            return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
+            return RespCode.getRespData(RespCode.SUCCESS,response);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -157,7 +157,7 @@ public class MessageServiceImpl extends BaseService<Message> implements IMessage
 
             response.put("messageSize",this.messageSize(recipientId)+"");
 
-            return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
+            return RespCode.getRespData(RespCode.SUCCESS,response);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -218,7 +218,7 @@ public class MessageServiceImpl extends BaseService<Message> implements IMessage
     @Override
     public int messageSize(String recipientId) {
 
-            String hqlZanCount = "select count(m.id) from Message m where m.recipient.id=? and m.status='100' ";
+            String hqlZanCount = "select count(m.id) from Message m where m.recipient.id=? ";
 
             Query q = messageDao.createQuery(hqlZanCount);
 
@@ -275,9 +275,7 @@ public class MessageServiceImpl extends BaseService<Message> implements IMessage
 
                 mMoment.setCoverurl(message.getMoment().getImageList().get(0).getThumbnail_url_path());
 
-                MomentResponse momentResponse = momentServiceImpl.momentToresponse(memberId,message.getMoment());
-
-                response.setMoment(momentResponse);
+                response.setMoment(mMoment);
             }
 
             responses.add(response);
