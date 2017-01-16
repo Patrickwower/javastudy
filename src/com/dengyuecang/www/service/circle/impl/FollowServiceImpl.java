@@ -150,6 +150,8 @@ public class FollowServiceImpl extends BaseService<MemberFollow> implements IFol
 
                 fli.setImgurl(memberfollow.getFollowed().getMemberInfo().getIcon());
 
+                fli.setNickname(memberfollow.getFollowed().getMemberInfo().getNickname());
+
                 Format f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
                 fli.setCtime(f.format(memberfollow.getCtime()));
@@ -219,6 +221,8 @@ public class FollowServiceImpl extends BaseService<MemberFollow> implements IFol
                 fli.setFollowedId(memberfollow.getFollowed().getId());
 
                 fli.setImgurl(memberfollow.getFollowed().getMemberInfo().getIcon());
+
+                fli.setNickname(memberfollow.getFollowed().getMemberInfo().getNickname());
 
                 Format f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 

@@ -12,11 +12,20 @@ public class FollowListInfo {
 
     private String followedId;
 
+    private String nickname;
     private String imgurl;
     private String ctime;
     private String timestamp;
     private List<String> interestname;
     private String status;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     public String getImgurl() {
         return imgurl;
