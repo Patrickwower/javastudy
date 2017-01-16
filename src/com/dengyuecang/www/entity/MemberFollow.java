@@ -21,6 +21,16 @@ public class MemberFollow implements Serializable{
 
     private Date ctime;
 
+    private Long timestamp;
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
     @GenericGenerator(name = "generator", strategy = "uuid")
     @Id
     @GeneratedValue(generator = "generator")
