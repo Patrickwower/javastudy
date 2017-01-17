@@ -8,7 +8,9 @@ import com.dengyuecang.www.entity.circle.InterestType;
 import com.dengyuecang.www.entity.circle.ResetPwdLog;
 import com.dengyuecang.www.service.IMemberService;
 import com.dengyuecang.www.service.IStaticResourceService;
+import com.dengyuecang.www.service.circle.IFollowService;
 import com.dengyuecang.www.service.circle.IInformationService;
+import com.dengyuecang.www.service.circle.IMessageService;
 import com.dengyuecang.www.service.circle.model.MomentInterest;
 import com.dengyuecang.www.service.circle.model.UpdateInfo;
 import com.dengyuecang.www.service.common.CommonConstant;
@@ -23,11 +25,12 @@ import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -62,6 +65,12 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
     @Resource
     private IStaticResourceService staticResourceServiceImpl;
 
+    @Resource
+    private IFollowService followServiceImpl;
+
+    @Resource
+    private IMessageService messageServiceImpl;
+
     @Override
     public RespData information(HttpHeaders headers, String memberId) {
 
@@ -69,15 +78,17 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
         try{
 
-        if (StringUtils.isEmpty(memberId)){
+            String myid = headers.getFirst("memberId");
 
-            memberId = headers.getFirst("memberId");
+            if (StringUtils.isEmpty(memberId)){
 
-        }
+                memberId = myid;
 
-        Member member = memberDao.get(Member.class,memberId);
+            }
 
-        cMemberResponse = this.fromMemberToResponse(memberId,member);
+            Member member = memberDao.get(Member.class,memberId);
+
+            cMemberResponse = this.fromMemberToResponse(myid,member);
 
         }catch (Exception e){
 
@@ -118,11 +129,22 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
         cMemberResponse.setUsername(member.getUsername()==null?"":member.getUsername());
 
+        //是否关注
+        cMemberResponse.setIfFollow(followServiceImpl.ifFollow(memberId,member.getId()));
+
+        //关注人数
+        cMemberResponse.setFollowCount(followServiceImpl.followCount(member.getId()));
+
+        //粉丝数
+        cMemberResponse.setFansCount(followServiceImpl.fansCount(member.getId()));
+
+        //消息数
+        cMemberResponse.setMessageCount(messageServiceImpl.messageSize(member.getId())+"");
 
 
         try {
 
-            String hql = "from InterestBar ib where ib.creater=? ";
+            String hql = "from InterestBar ib where ib.creater=? and status='100' ";
 
             Query q = interestBarBaseDao.createQuery(hql);
 
@@ -147,6 +169,14 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
                 }
 
                 mi.setImgurl(ib.getImg_url());
+
+                mi.setDetail(ib.getDetail());
+
+                Format f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                mi.setCtime(f.format(ib.getCtime()));
+
+                mi.setCover(ib.getCover());
 
                 mis.add(mi);
 

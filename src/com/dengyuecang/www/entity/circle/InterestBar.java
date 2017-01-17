@@ -30,6 +30,10 @@ public class InterestBar implements Serializable{
 
     private String img_url;
 
+    private String cover;
+
+    private String status;
+
     @GenericGenerator(name = "generator", strategy = "uuid")
     @Id
     @GeneratedValue(generator = "generator")
@@ -100,5 +104,21 @@ public class InterestBar implements Serializable{
 
     public void setImg_url(String img_url) {
         this.img_url = img_url;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

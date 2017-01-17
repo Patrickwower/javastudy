@@ -28,6 +28,10 @@ public class MomentResponse {
 
     private String ifZan;
 
+    private String commentCount;
+
+    private String ifComment;
+
     public String getMomentId() {
         return momentId;
     }
@@ -106,5 +110,21 @@ public class MomentResponse {
 
     public void setIfZan(String ifZan) {
         this.ifZan = ifZan;
+    }
+
+    public String getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(String commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public String getIfComment() {
+        return ifComment;
+    }
+
+    public void setIfComment(String ifComment) {
+        this.ifComment = ifComment;
     }
 }

@@ -103,6 +103,36 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
 
     }
 
+    @Override
+    public RespData delete(HttpHeaders headers, String interestBarId) {
+
+        try {
+            InterestBar bar = interestBarDao.get(InterestBar.class,interestBarId);
+
+            if (bar!=null){
+                bar.setStatus("200");
+                interestBarDao.saveOrUpdate(bar);
+
+
+                String momentDelHql = "update Moment m set m.status='200' where m.interestBar.id=? ";
+
+                Query q = momentDao.createQuery(momentDelHql);
+
+                q.setString(0,interestBarId);
+
+                q.executeUpdate();
+
+            }
+
+            return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
+    }
+
     private String prepareInterestBarCover(String memberId){
 
         List<InterestBar> barList = queryList(memberId);

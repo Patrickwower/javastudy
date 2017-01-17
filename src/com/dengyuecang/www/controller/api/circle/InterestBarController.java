@@ -25,10 +25,23 @@ public class InterestBarController {
 
     @RequestMapping("/add")
     @ResponseBody
-    public RespData evaluate(@RequestHeader HttpHeaders headers, AddInterestBarRequest addInterestBarRequest){
+    public RespData add(@RequestHeader HttpHeaders headers, AddInterestBarRequest addInterestBarRequest){
 
         try {
             return interestBarServiceImpl.addInterestBar(headers,addInterestBarRequest);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+    }
+
+    @RequestMapping("/delete")
+    @ResponseBody
+    public RespData delete(@RequestHeader HttpHeaders headers, String interestBarId){
+
+        try {
+            return interestBarServiceImpl.delete(headers,interestBarId);
         }catch (Exception e){
             e.printStackTrace();
         }

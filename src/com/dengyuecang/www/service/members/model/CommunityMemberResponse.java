@@ -17,14 +17,6 @@ public class CommunityMemberResponse {
 
     private String introduction;
 
-//    private String focusCount;
-//
-//    private String focusedCount;
-//
-//    private String ifFocus;
-//
-//    private String zanCount;
-
     private String sex;
 
     private String province;
@@ -43,19 +35,15 @@ public class CommunityMemberResponse {
 
     private List<MomentInterest> interestBars;
 
-
     private String username;
 
-    public String getUsername() {
-        return username;
-    }
+    private String ifFollow;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    private String followCount;
 
+    private String fansCount;
 
-    //    private List<RelatedAccount> accounts = new ArrayList<RelatedAccount>();
+    private String messageCount;
 
     public CommunityMemberResponse() {
     }
@@ -108,38 +96,6 @@ public class CommunityMemberResponse {
         this.timestamp = timestamp;
     }
 
-//    public String getFocusCount() {
-//        return focusCount;
-//    }
-//
-//    public void setFocusCount(String focusCount) {
-//        this.focusCount = focusCount;
-//    }
-//
-//    public String getFocusedCount() {
-//        return focusedCount;
-//    }
-//
-//    public void setFocusedCount(String focusedCount) {
-//        this.focusedCount = focusedCount;
-//    }
-//
-//    public String getIfFocus() {
-//        return ifFocus;
-//    }
-//
-//    public void setIfFocus(String ifFocus) {
-//        this.ifFocus = ifFocus;
-//    }
-//
-//    public String getZanCount() {
-//        return zanCount;
-//    }
-//
-//    public void setZanCount(String zanCount) {
-//        this.zanCount = zanCount;
-//    }
-
     public String getSex() {
         return sex;
     }
@@ -172,15 +128,6 @@ public class CommunityMemberResponse {
         this.enrollment = enrollment;
     }
 
-//    public List<RelatedAccount> getAccounts() {
-//        return accounts;
-//    }
-//
-//    public void setAccounts(List<RelatedAccount> accounts) {
-//        this.accounts = accounts;
-//    }
-
-
     public List getInterestBars() {
         return interestBars;
     }
@@ -203,5 +150,45 @@ public class CommunityMemberResponse {
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getIfFollow() {
+        return ifFollow;
+    }
+
+    public void setIfFollow(String ifFollow) {
+        this.ifFollow = ifFollow;
+    }
+
+    public String getFollowCount() {
+        return followCount;
+    }
+
+    public void setFollowCount(String followCount) {
+        this.followCount = followCount;
+    }
+
+    public String getFansCount() {
+        return fansCount;
+    }
+
+    public void setFansCount(String fansCount) {
+        this.fansCount = fansCount;
+    }
+
+    public String getMessageCount() {
+        return messageCount;
+    }
+
+    public void setMessageCount(String messageCount) {
+        this.messageCount = messageCount;
     }
 }

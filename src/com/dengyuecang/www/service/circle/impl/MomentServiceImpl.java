@@ -5,10 +5,7 @@ import com.dengyuecang.www.controller.api.circle.model.MomentPublishRequest;
 import com.dengyuecang.www.controller.api.circle.model.MomentRequest;
 import com.dengyuecang.www.controller.api.circle.model.evaluation.EvaluationRequest;
 import com.dengyuecang.www.entity.Member;
-import com.dengyuecang.www.entity.circle.InterestBar;
-import com.dengyuecang.www.entity.circle.Moment;
-import com.dengyuecang.www.entity.circle.MomentEvaluation;
-import com.dengyuecang.www.entity.circle.MomentImage;
+import com.dengyuecang.www.entity.circle.*;
 import com.dengyuecang.www.service.IStaticResourceService;
 import com.dengyuecang.www.service.circle.IInterestTypeService;
 import com.dengyuecang.www.service.circle.IMessageService;
@@ -55,6 +52,9 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
     @Resource(name="hibernateBaseDao")
     private BaseDao<MomentEvaluation> momentEvaluationDao;
+
+    @Resource(name="hibernateBaseDao")
+    private BaseDao<MomentComment> momentCommentDao;
 
     @Resource(name="hibernateBaseDao")
     private BaseDao<InterestBar> interestBarDao;
@@ -173,7 +173,7 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             }else if ("follow".equals(momentRequest.getFilter())){
 
-                hql = "select m from Moment m,MmemberFollow mf where m.creater=mf.follow and mf.followed.id="+memberId+" and m.public_level='0' and m.status='"+status+"' and m.timestamp<"+timestamp;
+                hql = "select m from Moment m,MemberFollow mf where m.creater=mf.follow and mf.followed.id='"+memberId+"' and m.public_level='0' and m.status='"+status+"' and m.timestamp<"+timestamp;
 
                 hql += " order by m.timestamp desc ";
 
@@ -273,8 +273,18 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
         momentResponse.setContent(moment.getContent());
         momentResponse.setMomentId(moment.getId());
+
+        //点赞数
         momentResponse.setZanCount(zanCount(moment.getId()));
+        //当前用户是否点赞
         momentResponse.setIfZan(ifZan(memberId,moment.getId())+"");
+
+
+
+        //评论数
+        momentResponse.setCommentCount(commentCount(moment.getId()));
+        //当前用户是否评论
+        momentResponse.setIfComment(ifComment(memberId,moment.getId())+"");
 
         //----------------------------------------------------------------------------------------
         Member creater = moment.getCreater();
@@ -299,6 +309,16 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
         momentImg.setHeight(momentImage.getHeight());
 
         momentImg.setWidth(momentImage.getWidth());
+
+
+
+
+
+
+
+
+
+
 
         momentResponse.getImgs().add(momentImg);
 
@@ -510,6 +530,11 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
             momentImage.setWidth(momentPublishRequest.getImg_width());
 
             momentImageDao.save(momentImage);
+
+            if (interestBar.getCover()==null){
+                interestBar.setCover(momentImage.getThumbnail_url_path());
+                interestBarDao.saveOrUpdate(interestBar);
+            }
 
             return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
 
@@ -729,6 +754,43 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
         }
 
         return 0;
+    }
+
+    public String commentCount(String momentId){
+
+        String hqlCommentCount = "select count(mc.id) from MomentComment mc where mc.moment.id=? ";
+
+        Query q = momentCommentDao.createQuery(hqlCommentCount);
+
+        q.setString(0,momentId);
+
+        long commentCount = (long)q.uniqueResult();
+
+        return commentCount+"";
+
+    }
+
+    public int ifComment(String memberId,String momentId){
+
+        if (memberId==null)return 0;
+
+        //话题点赞数
+        String hqlComment = "from MomentComment mc where mc.moment.id=? and mc.discussant.id=? ";
+
+        Query q = momentCommentDao.createQuery(hqlComment);
+
+        q.setString(0,momentId);
+
+        q.setString(1,memberId);
+
+        List<MomentComment> l = q.list();
+
+        if (l.size()>0){
+            return 1;
+        }
+
+        return 0;
+
     }
 
 }

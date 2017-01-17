@@ -14,9 +14,15 @@ public class MomentInterest {
 
     private List<String> types = new ArrayList<String>();
 
+    private String cover;
+
     private String imgurl;
 
     private String sort;
+
+    private String ctime;
+
+    private String detail;
 
     public String getBar_id() {
         return bar_id;
@@ -42,6 +48,14 @@ public class MomentInterest {
         this.types = types;
     }
 
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
     public String getImgurl() {
         return imgurl;
     }
@@ -56,5 +70,21 @@ public class MomentInterest {
 
     public void setSort(String sort) {
         this.sort = sort;
+    }
+
+    public String getCtime() {
+        return ctime;
+    }
+
+    public void setCtime(String ctime) {
+        this.ctime = ctime;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }

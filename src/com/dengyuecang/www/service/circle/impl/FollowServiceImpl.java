@@ -251,6 +251,62 @@ public class FollowServiceImpl extends BaseService<MemberFollow> implements IFol
         return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
     }
 
+
+    public String ifFollow(String memberId,String followedId){
+
+        String hql = "from MemberFollow f where f.followed.id=? and f.follow.id=?";
+
+        Query q = followBaseDao.createQuery(hql);
+
+        q.setString(0,followedId);
+
+        q.setString(1,memberId);
+
+        List l = q.list();
+
+        if (l.size()>0){
+
+            return "1";
+        }
+
+        return "0";
+    }
+
+    @Override
+    public String followCount(String memberId) {
+
+        return this.count(memberId,"follow");
+
+    }
+
+    @Override
+    public String fansCount(String memberId) {
+
+        return this.count(memberId,"fans");
+
+    }
+
+
+    private String count(String memberId,String type){
+
+        String follow = "follow";
+        //type 默认是follow
+        if ("fans".equals(type)){
+            follow = "followed";
+        }
+
+        String hql = "from MemberFollow f where f."+follow+".id=?";
+
+        Query q = followBaseDao.createQuery(hql);
+
+        q.setString(0,memberId);
+
+        List l = q.list();
+
+        return l.size()+"";
+
+    }
+
     @Override
     public BaseDao<MemberFollow> getSuperDao() {
         return null;

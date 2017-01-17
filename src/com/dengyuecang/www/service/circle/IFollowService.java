@@ -19,4 +19,10 @@ public interface IFollowService  extends IBaseService<MemberFollow>{
 
     public RespData fansList(HttpHeaders headers,FollowRequest followRequest);
 
+    public String ifFollow(String memberId, String followedId);
+
+    public String followCount(String memberId);
+
+    public String fansCount(String memberId);
+
 }
