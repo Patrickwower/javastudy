@@ -305,6 +305,33 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
         return momentResponse;
     }
 
+    @Override
+    public RespData detail(HttpHeaders headers, String momentId) {
+
+        try {
+
+            String memberId = headers.getFirst("memberId");
+
+            Member member = memberDao.get(Member.class,memberId);
+
+            Moment moment = momentDao.get(Moment.class,momentId);
+
+            MomentResponse momentResponse = this.momentToresponse(memberId,moment);
+
+            Map<String,Object> response = new HashMap<String,Object>();
+
+            response.put("moment",momentResponse);
+
+            return RespCode.getRespData(RespCode.SUCCESS, response);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
+
+    }
+
     private List<MomentResponse> prepareMoment(){
 
         try {

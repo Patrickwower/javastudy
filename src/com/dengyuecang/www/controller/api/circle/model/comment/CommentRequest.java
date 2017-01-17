@@ -7,9 +7,11 @@ public class CommentRequest {
 
     private String momentId;
 
-    public String timestamp;
+    private String timestamp;
 
-    public String pageSize = "10";
+    private String pageSize = "10";
+
+    private String commentId;
 
     public String getMomentId() {
         return momentId;
@@ -33,5 +35,13 @@ public class CommentRequest {
 
     public void setPageSize(String pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 }

@@ -38,4 +38,6 @@ public interface IMomentService extends IBaseService<Moment>{
 
     public MomentResponse momentToresponse(String memberId, Moment moment);
 
+    public RespData detail(HttpHeaders headers,String momentId);
+
 }

@@ -119,5 +119,19 @@ public class CommentController {
 
     }
 
+    @RequestMapping("/detail")
+    @ResponseBody
+    public RespData detail(@RequestHeader HttpHeaders headers, CommentRequest commentRequest) {
+
+        try {
+            return momentCommentServiceImpl.detail(headers, commentRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
+    }
+
 
 }
