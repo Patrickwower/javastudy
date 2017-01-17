@@ -13,7 +13,7 @@ import javax.annotation.Resource;
  * Created by Administrator on 2017/1/10.
  */
 @RestController
-@RequestMapping("/api/circle")
+@RequestMapping("/api/circle/follow")
 public class FollowController {
 
     @Resource
@@ -21,10 +21,10 @@ public class FollowController {
 
     @RequestMapping("/onfollow")
     @ResponseBody
-    public RespData onfollow(@RequestHeader HttpHeaders headers, String follow_id){
+    public RespData onfollow(@RequestHeader HttpHeaders headers, String followed_id){
 
         try {
-            return followServiceImpl.onFollow(headers,follow_id);
+            return followServiceImpl.onFollow(headers,followed_id);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -34,11 +34,11 @@ public class FollowController {
 
     @RequestMapping("/canclefollow")
     @ResponseBody
-    public RespData canclefollow(@RequestHeader HttpHeaders headers, String follow_id){
+    public RespData canclefollow(@RequestHeader HttpHeaders headers, String followed_id){
 
         try {
 
-            return followServiceImpl.cancleFollow(headers,follow_id);
+            return followServiceImpl.cancleFollow(headers,followed_id);
 
         }catch (Exception e){
             e.printStackTrace();

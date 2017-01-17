@@ -5,9 +5,29 @@ package com.dengyuecang.www.controller.api.circle.model.follow;
  */
 public class FollowRequest {
 
+    private String follow_id;
+
+    private String followed_id;
+
     private String pageSize = "10";
 
     private String timestamp;
+
+    public String getFollow_id() {
+        return follow_id;
+    }
+
+    public void setFollow_id(String follow_id) {
+        this.follow_id = follow_id;
+    }
+
+    public String getFollowed_id() {
+        return followed_id;
+    }
+
+    public void setFollowed_id(String followed_id) {
+        this.followed_id = followed_id;
+    }
 
     public String getPageSize() {
         return pageSize;

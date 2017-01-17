@@ -11,9 +11,9 @@ import org.springframework.http.HttpHeaders;
  */
 public interface IFollowService  extends IBaseService<MemberFollow>{
 
-    public RespData onFollow(HttpHeaders headers, String follow_id);
+    public RespData onFollow(HttpHeaders headers, String followed_id);
 
-    public RespData cancleFollow(HttpHeaders headers,String follow_id);
+    public RespData cancleFollow(HttpHeaders headers,String followed_id);
 
     public RespData followList(HttpHeaders headers, FollowRequest followRequest);
 

@@ -6,7 +6,10 @@ import com.dengyuecang.www.entity.MemberFollow;
 import com.dengyuecang.www.entity.MemberInfo;
 import com.dengyuecang.www.service.circle.IFollowService;
 import com.dengyuecang.www.service.circle.IInterestTypeService;
+import com.dengyuecang.www.service.circle.IMessageService;
+import com.dengyuecang.www.service.circle.common.MessageCommonConstant;
 import com.dengyuecang.www.service.circle.model.FollowListInfo;
+import com.dengyuecang.www.service.circle.model.message.MessageAdd;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import com.longinf.lxcommon.dao.BaseDao;
@@ -37,17 +40,17 @@ public class FollowServiceImpl extends BaseService<MemberFollow> implements IFol
     private IInterestTypeService interestTypeServiceImpl;
 
     @Resource
-    private BaseDao<MemberInfo> memberInfoBaseDao;
+    private IMessageService messageServiceImpl;
 
     @Override
-    public RespData onFollow(HttpHeaders headers, String follow_id) {
+    public RespData onFollow(HttpHeaders headers, String followed_id) {
 
         try {
 
             String hql = "from MemberFollow f where f.followed.id=? and f.follow.id=?";
             Query fd = followBaseDao.createQuery(hql);
 
-            String followed_id = headers.getFirst("memberId");
+            String follow_id = headers.getFirst("memberId");
             fd.setString(0,followed_id);
             fd.setString(1,follow_id);
             int size = fd.list().size();
@@ -56,38 +59,43 @@ public class FollowServiceImpl extends BaseService<MemberFollow> implements IFol
             MemberFollow memberFollow = new MemberFollow();
             memberFollow.setFollow(follow);
             memberFollow.setFollowed(followed);
-            Long timestamp = System.currentTimeMillis();
-            memberFollow.setTimestamp(timestamp);
-            Date ctime = new Date();
-            memberFollow.setCtime(ctime);
+            memberFollow.setTimestamp(System.currentTimeMillis());
+            memberFollow.setCtime(new Date());
 
             if (size == 0){
 
                 followBaseDao.save(memberFollow);
 
+                //站内消息
+                MessageAdd messageAdd = new MessageAdd();
+
+                messageAdd.setType(MessageCommonConstant.TYPE_FOLLOW);
+                messageAdd.setMomentId(null);
+                messageAdd.setServiceId(follow_id);
+                messageAdd.setSenderId(followed_id);
+                messageAdd.setRecipientId(follow_id);
+
+                messageServiceImpl.add(headers,messageAdd);
+
             }
+            Map<String,Object> response = new HashMap<String,Object>();
+            response.put("msg","关注成功!");
+            return RespCode.getRespData(RespCode.SUCCESS,response);
 
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        Map<String,Object> response = new HashMap<String,Object>();
-        response.put("msg","关注成功!");
-        return RespCode.getRespData(RespCode.SUCCESS,response);
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
 
     }
 
     @Override
-    public RespData cancleFollow(HttpHeaders headers, String follow_id) {
+    public RespData cancleFollow(HttpHeaders headers, String followed_id) {
 
         try {
 
-            String followed_id = headers.getFirst("memberId");
-//            Member follow = memberDao.get(Member.class,follow_id);
-//            Member followed = memberDao.get(Member.class,followed_id);
-//            MemberFollow memberFollow = new MemberFollow();
-//            memberFollow.setFollow(follow);
-//            memberFollow.setFollowed(followed);
+            String follow_id = headers.getFirst("memberId");
             String hql = "from MemberFollow f where f.followed.id=? and f.follow.id=?";
             Query cfd = followBaseDao.createQuery(hql);
             cfd.setString(0,followed_id);
@@ -97,13 +105,16 @@ public class FollowServiceImpl extends BaseService<MemberFollow> implements IFol
 
             if (follow != null){
                 followBaseDao.delete(follow);
+                Map<String,Object> response = new HashMap<String,Object>();
+                response.put("msg","取关成功!");
+                return RespCode.getRespData(RespCode.SUCCESS,response);
             }
 
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        return RespCode.getRespData(RespCode.SUCCESS);
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
     }
 
     @Override
@@ -111,7 +122,13 @@ public class FollowServiceImpl extends BaseService<MemberFollow> implements IFol
 
         try {
 
-            String follow_id = headers.getFirst("memberId");
+            String memberId = headers.getFirst("memberId");
+
+            String follow_id = memberId;
+
+            if (StringUtils.isNotEmpty(followRequest.getFollow_id())){
+                follow_id = followRequest.getFollow_id();
+            }
 
             int limit = 10;
 
@@ -162,6 +179,9 @@ public class FollowServiceImpl extends BaseService<MemberFollow> implements IFol
 
                 fli.setInterestname(interestTypes);
 
+                //当前用户和此人关注的人的关注关系
+                fli.setStatus(ifFollow(memberId,memberfollow.getFollowed().getId()));
+
                 newarray.add(fli);
 
             }
@@ -183,7 +203,14 @@ public class FollowServiceImpl extends BaseService<MemberFollow> implements IFol
     public RespData fansList(HttpHeaders headers,FollowRequest followRequest) {
         try {
 
-            String followed_id = headers.getFirst("memberId");
+            String memberId = headers.getFirst("memberId");
+
+            String followed_id = memberId;
+
+            if (StringUtils.isNotEmpty(followRequest.getFollowed_id())){
+                followed_id = followRequest.getFollowed_id();
+            }
+
 
             int limit = 10;
 
@@ -233,6 +260,9 @@ public class FollowServiceImpl extends BaseService<MemberFollow> implements IFol
                 List<String> interestTypes = interestTypeServiceImpl.queryInterestTagsByMemberId(memberfollow.getFollow().getId());
 
                 fli.setInterestname(interestTypes);
+
+                //当前用户和此人粉丝的关注关系
+                fli.setStatus(ifFollow(memberId,memberfollow.getFollow().getId()));
 
                 newarray.add(fli);
 
