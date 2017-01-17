@@ -145,4 +145,22 @@ public class MomentController {
 
     }
 
+    @RequestMapping("/detail")
+    @ResponseBody
+    public RespData detail(@RequestHeader HttpHeaders headers, String momentId){
+
+        try {
+            return momentServiceImpl.detail(headers,momentId);
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION);
+
+    }
+
+
 }

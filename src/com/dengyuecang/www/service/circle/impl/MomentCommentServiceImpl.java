@@ -207,64 +207,72 @@ public class MomentCommentServiceImpl extends BaseService<MomentComment> impleme
         for (MomentComment momentComment :
                 comments) {
 
-            CommentResponse commentResponse = new CommentResponse();
-
-            commentResponse.setCommentId(momentComment.getId());
-
-            commentResponse.setContent(momentComment.getContent());
-
-            Format f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-            commentResponse.setCtime(f.format(momentComment.getCtime()));
-
-            CommentDiscussant discussant = new CommentDiscussant();
-
-            Member commentDiscussant = momentComment.getDiscussant();
-
-            discussant.setMemberId(commentDiscussant.getId());
-
-            discussant.setNickname(commentDiscussant.getMemberInfo().getNickname());
-
-            discussant.setHeadUrl(commentDiscussant.getMemberInfo().getIcon());
-
-            commentResponse.setDiscussant(discussant);
-
-            commentResponse.setTimestamp(momentComment.getTimestamp()+"");
-
-            //0和1  0代表不能删,1代表能删
-            commentResponse.setCanDelete(canDelete(memberId,commentDiscussant.getId()));
-
-            List<MomentCommentReply> commentReplys = momentComment.getReplys();
-
-            for (MomentCommentReply commentReply :
-                    commentReplys) {
-
-                Reply reply = new Reply();
-
-                reply.setReplyId(commentReply.getId());
-
-                reply.setContent(commentReply.getContent());
-
-                reply.setDiscussantId(commentReply.getDiscussant().getId());
-
-                reply.setDiscussanName(commentReply.getDiscussant().getMemberInfo().getNickname());
-
-                reply.setAtId(commentReply.getAt().getId());
-
-                reply.setAtName(commentReply.getAt().getMemberInfo().getNickname());
-
-                reply.setCanDelete(canDelete(memberId,commentReply.getDiscussant().getId()));
-
-                commentResponse.getReplys().add(reply);
-            }
-
-            commentResponse.setMomentCreater(momentComment.getMoment().getCreater().getId());
+            CommentResponse commentResponse = this.commentToResponse(memberId, momentComment);
 
             commentResponseList.add(commentResponse);
 
         }
 
         return commentResponseList;
+    }
+
+    private CommentResponse commentToResponse(String memberId, MomentComment momentComment){
+
+        CommentResponse commentResponse = new CommentResponse();
+
+        commentResponse.setCommentId(momentComment.getId());
+
+        commentResponse.setContent(momentComment.getContent());
+
+        Format f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        commentResponse.setCtime(f.format(momentComment.getCtime()));
+
+        CommentDiscussant discussant = new CommentDiscussant();
+
+        Member commentDiscussant = momentComment.getDiscussant();
+
+        discussant.setMemberId(commentDiscussant.getId());
+
+        discussant.setNickname(commentDiscussant.getMemberInfo().getNickname());
+
+        discussant.setHeadUrl(commentDiscussant.getMemberInfo().getIcon());
+
+        commentResponse.setDiscussant(discussant);
+
+        commentResponse.setTimestamp(momentComment.getTimestamp()+"");
+
+        //0和1  0代表不能删,1代表能删
+        commentResponse.setCanDelete(canDelete(memberId,commentDiscussant.getId()));
+
+        List<MomentCommentReply> commentReplys = momentComment.getReplys();
+
+        for (MomentCommentReply commentReply :
+                commentReplys) {
+
+            Reply reply = new Reply();
+
+            reply.setReplyId(commentReply.getId());
+
+            reply.setContent(commentReply.getContent());
+
+            reply.setDiscussantId(commentReply.getDiscussant().getId());
+
+            reply.setDiscussanName(commentReply.getDiscussant().getMemberInfo().getNickname());
+
+            reply.setAtId(commentReply.getAt().getId());
+
+            reply.setAtName(commentReply.getAt().getMemberInfo().getNickname());
+
+            reply.setCanDelete(canDelete(memberId,commentReply.getDiscussant().getId()));
+
+            commentResponse.getReplys().add(reply);
+        }
+
+        commentResponse.setMomentCreater(momentComment.getMoment().getCreater().getId());
+
+        return commentResponse;
+
     }
 
     private String canDelete(String memberId,String discussantId){
@@ -291,6 +299,31 @@ public class MomentCommentServiceImpl extends BaseService<MomentComment> impleme
         long zanCount = (long)q.uniqueResult();
 
         return zanCount+"";
+
+    }
+
+    @Override
+    public RespData detail(HttpHeaders headers, CommentRequest commentRequest) {
+
+        try {
+
+            String memberId = headers.getFirst("memberId");
+
+            MomentComment momentComment = momentCommentDao.get(MomentComment.class,commentRequest.getCommentId());
+
+            CommentResponse commentResponse = this.commentToResponse(memberId,momentComment);
+
+            Map<String,Object> response = new HashMap<String,Object>();
+
+            response.put("comment",commentResponse);
+
+            return RespCode.getRespData(RespCode.SUCCESS, response);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return RespCode.getRespData(RespCode.UNKNOW_EXCEPTION,new HashMap<String,String>());
 
     }
 }

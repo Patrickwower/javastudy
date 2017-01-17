@@ -33,4 +33,6 @@ public interface IMomentCommentService extends IBaseService<MomentComment>{
      * @return
      */
     public String commentSize(String momentId);
+
+    public RespData detail(HttpHeaders headers, CommentRequest commentRequest);
 }
