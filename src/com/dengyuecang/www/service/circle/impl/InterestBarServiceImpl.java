@@ -95,6 +95,10 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
 
         interestBar.setImg_url(prepareInterestBarCover(memberId));
 
+        interestBar.setStatus("100");
+
+        interestBar.setCover("");
+
         interestBarDao.save(interestBar);
 
         Map<String,Object> response = new HashMap<String,Object>();
