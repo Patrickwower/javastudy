@@ -45,6 +45,8 @@ public class CommunityMemberResponse {
 
     private String messageCount;
 
+    private String unReadMessageCount;
+
     public CommunityMemberResponse() {
     }
 
@@ -190,5 +192,13 @@ public class CommunityMemberResponse {
 
     public void setMessageCount(String messageCount) {
         this.messageCount = messageCount;
+    }
+
+    public String getUnReadMessageCount() {
+        return unReadMessageCount;
+    }
+
+    public void setUnReadMessageCount(String unReadMessageCount) {
+        this.unReadMessageCount = unReadMessageCount;
     }
 }

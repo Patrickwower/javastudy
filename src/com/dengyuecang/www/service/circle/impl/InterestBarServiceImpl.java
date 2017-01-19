@@ -15,6 +15,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -268,6 +270,14 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
             mi.getTypes().add(it.getName());
 
         }
+
+        mi.setDetail(interestBar.getDetail());
+
+        Format f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        mi.setCtime(f.format(interestBar.getCtime()));
+
+        mi.setCover(interestBar.getCover());
 
         Map<String,Object> response = new HashMap<String,Object>();
 

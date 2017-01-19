@@ -230,6 +230,21 @@ public class MessageServiceImpl extends BaseService<Message> implements IMessage
 
     }
 
+    @Override
+    public int unReadMessageSize(String recipientId) {
+
+        String hqlZanCount = "select count(m.id) from Message m where m.status='100' and m.recipient.id=? ";
+
+        Query q = messageDao.createQuery(hqlZanCount);
+
+        q.setString(0,recipientId);
+
+        long messageSize = (long)q.uniqueResult();
+
+        return Integer.valueOf(messageSize+"");
+
+    }
+
     private List<MessageResponse> fromMessageToResponse(String memberId,List<Message> messageList){
 
         List<MessageResponse> responses = new ArrayList<MessageResponse>();

@@ -29,4 +29,6 @@ public interface IMessageService extends IBaseService<Message>{
 
     public int messageSize(String recipientId);
 
+    public int unReadMessageSize(String recipientId);
+
 }

@@ -141,6 +141,7 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
         //消息数
         cMemberResponse.setMessageCount(messageServiceImpl.messageSize(member.getId())+"");
 
+        cMemberResponse.setUnReadMessageCount(messageServiceImpl.unReadMessageSize(member.getId())+"");
 
         try {
 
@@ -148,7 +149,7 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
             Query q = interestBarBaseDao.createQuery(hql);
 
-            q.setString(0, memberId);
+            q.setString(0, member.getId());
 
             List<InterestBar> interestBars = q.list();
 
