@@ -173,7 +173,7 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             }else if ("follow".equals(momentRequest.getFilter())){
 
-                hql = "select m from Moment m,MemberFollow mf where m.creater=mf.follow and mf.followed.id='"+memberId+"' and m.public_level='0' and m.status='"+status+"' and m.timestamp<"+timestamp;
+                hql = "select m from Moment m,MemberFollow mf where m.creater=mf.followed and mf.follow.id='"+memberId+"' and m.public_level='0' and m.status='"+status+"' and m.timestamp<"+timestamp;
 
                 hql += " order by m.timestamp desc ";
 
