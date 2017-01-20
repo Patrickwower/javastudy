@@ -80,6 +80,7 @@ public class FollowServiceImpl extends BaseService<MemberFollow> implements IFol
             }
             Map<String,Object> response = new HashMap<String,Object>();
             response.put("msg","关注成功!");
+            response.put("fansCount",this.fansCount(followed_id));
             return RespCode.getRespData(RespCode.SUCCESS,response);
 
         }catch (Exception e){
@@ -107,6 +108,7 @@ public class FollowServiceImpl extends BaseService<MemberFollow> implements IFol
                 followBaseDao.delete(follow);
                 Map<String,Object> response = new HashMap<String,Object>();
                 response.put("msg","取关成功!");
+                response.put("fansCount",this.fansCount(followed_id));
                 return RespCode.getRespData(RespCode.SUCCESS,response);
             }
 
