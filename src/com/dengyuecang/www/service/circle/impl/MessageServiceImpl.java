@@ -17,6 +17,7 @@ import com.dengyuecang.www.service.circle.model.message.MessageMoment;
 import com.dengyuecang.www.service.circle.model.message.MessageResponse;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
+import com.dengyuecang.www.utils.jpush.JpushUtils;
 import com.longinf.lxcommon.dao.BaseDao;
 import com.longinf.lxcommon.service.BaseService;
 import org.apache.commons.lang.StringUtils;
@@ -68,7 +69,7 @@ public class MessageServiceImpl extends BaseService<Message> implements IMessage
 
             Member recipient = memberDao.get(Member.class,recipientId);
 
-            Message message = new Message();
+            final Message message = new Message();
 
             message.setCtime(new Date());
 
@@ -101,6 +102,19 @@ public class MessageServiceImpl extends BaseService<Message> implements IMessage
             message.setSender(sender);
 
             messageDao.save(message);
+
+
+            Runnable thread = new Runnable() {
+                @Override
+                public void run() {
+                    JpushUtils.sendTo(
+                            message.getRecipient().getMemberInfo().getMobile()
+                            , message.getSender().getMemberInfo().getNickname()+"  "+message.getContent()
+                            , message.getType());
+                }
+            };
+
+            thread.run();
 
             return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
         } catch (Exception e) {
