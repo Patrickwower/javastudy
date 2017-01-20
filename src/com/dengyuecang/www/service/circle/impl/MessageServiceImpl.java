@@ -144,6 +144,8 @@ public class MessageServiceImpl extends BaseService<Message> implements IMessage
 
             response.put("messageSize",this.messageSize(memberId)+"");
 
+            response.put("unReadMessageCount",this.unReadMessageSize(memberId)+"");
+
             return RespCode.getRespData(RespCode.SUCCESS,response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -170,6 +172,8 @@ public class MessageServiceImpl extends BaseService<Message> implements IMessage
             Map<String,String> response = new HashMap<String,String>();
 
             response.put("messageSize",this.messageSize(recipientId)+"");
+
+            response.put("unReadMessageCount",this.unReadMessageSize(recipientId)+"");
 
             return RespCode.getRespData(RespCode.SUCCESS,response);
         } catch (Exception e) {
