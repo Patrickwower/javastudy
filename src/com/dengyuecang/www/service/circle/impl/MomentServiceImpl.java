@@ -531,7 +531,7 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             momentImageDao.save(momentImage);
 
-            if (interestBar.getCover()==null){
+            if (StringUtils.isEmpty(interestBar.getCover())){
                 interestBar.setCover(momentImage.getThumbnail_url_path());
                 interestBarDao.saveOrUpdate(interestBar);
             }
