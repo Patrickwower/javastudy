@@ -495,6 +495,29 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             String interestBarId = momentPublishRequest.getInterestBarId();
             InterestBar interestBar = interestBarDao.get(InterestBar.class,interestBarId);
+
+            boolean useThisPicFlag = false;
+
+            //如果封面为空,就把档案下所有动态的第一条的图作为封面
+            if (StringUtils.isEmpty(interestBar.getCover())){
+
+                    String hqlMoment = "from Moment m where m.interestBar.id=? and m.status='100' order by m.timestamp";
+
+                    Query qMoment = momentDao.createQuery(hqlMoment);
+
+                    qMoment.setString(0,interestBar.getId());
+
+                    List<Moment> ms = qMoment.list();
+
+                    if (ms.size()>0){
+                        interestBar.setCover(ms.get(0).getImageList().get(0).getThumbnail_url_path());
+                    }else{
+                        useThisPicFlag = true;
+                    }
+
+//                interestBarDao.saveOrUpdate(interestBar);
+            }
+
             if (interestBar!=null)moment.setInterestBar(interestBar);
 
             moment.setPublic_level(momentPublishRequest.getPublic_level());
@@ -522,24 +545,8 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
             momentImageDao.save(momentImage);
 
             //如果封面为空,就把档案下所有动态的第一条的图作为封面
-            if (StringUtils.isEmpty(interestBar.getCover())){
-
-                    String hqlMoment = "from Moment m where m.interestBar.id=? and m.status='100' order by m.timestamp";
-
-                    Query qMoment = momentDao.createQuery(hqlMoment);
-
-                    qMoment.setString(0,interestBar.getId());
-
-                    List<Moment> ms = qMoment.list();
-
-                    if (ms.size()>0){
-                        interestBar.setCover(ms.get(0).getImageList().get(0).getThumbnail_url_path());
-                    }else {
-                        interestBar.setCover(momentImage.getThumbnail_url_path());
-                    }
-
-                interestBarDao.saveOrUpdate(interestBar);
-            }
+            if (useThisPicFlag)interestBar.setCover(momentImage.getThumbnail_url_path());
+            interestBarDao.saveOrUpdate(interestBar);
 
             return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
 
