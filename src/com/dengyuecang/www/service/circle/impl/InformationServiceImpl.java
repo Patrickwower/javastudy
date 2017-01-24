@@ -5,6 +5,7 @@ import com.dengyuecang.www.controller.tool.model.FileUploadRequest;
 import com.dengyuecang.www.entity.*;
 import com.dengyuecang.www.entity.circle.InterestBar;
 import com.dengyuecang.www.entity.circle.InterestType;
+import com.dengyuecang.www.entity.circle.Moment;
 import com.dengyuecang.www.entity.circle.ResetPwdLog;
 import com.dengyuecang.www.service.IMemberService;
 import com.dengyuecang.www.service.IStaticResourceService;
@@ -52,6 +53,9 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
     @Resource(name = "hibernateBaseDao")
     private  BaseDao<InterestBar> interestBarBaseDao;
+
+    @Resource(name = "hibernateBaseDao")
+    private  BaseDao<Moment> momentDao;
 
     @Resource(name = "hibernateBaseDao")
     private BaseDao<InviteCode> codeDao;
@@ -176,6 +180,24 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
                 Format f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
                 mi.setCtime(f.format(ib.getCtime()));
+
+                //如果封面为空,就把档案下所有动态的第一条的图作为封面
+                if (StringUtils.isEmpty(ib.getCover())){
+
+                    String hqlMoment = "from Moment m where m.interestBar.id=? and m.status='100' order by m.timestamp";
+
+                    Query qMoment = momentDao.createQuery(hqlMoment);
+
+                    qMoment.setString(0,ib.getId());
+
+                    List<Moment> ms = qMoment.list();
+
+                    if (ms.size()>0){
+                        ib.setCover(ms.get(0).getImageList().get(0).getThumbnail_url_path());
+                    }
+                    interestBarBaseDao.saveOrUpdate(ib);
+
+                }
 
                 mi.setCover(ib.getCover());
 

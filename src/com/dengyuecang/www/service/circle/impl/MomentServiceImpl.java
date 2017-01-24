@@ -310,16 +310,6 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
         momentImg.setWidth(momentImage.getWidth());
 
-
-
-
-
-
-
-
-
-
-
         momentResponse.getImgs().add(momentImg);
 
         return momentResponse;
@@ -531,8 +521,23 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             momentImageDao.save(momentImage);
 
+            //如果封面为空,就把档案下所有动态的第一条的图作为封面
             if (StringUtils.isEmpty(interestBar.getCover())){
-                interestBar.setCover(momentImage.getThumbnail_url_path());
+
+                    String hqlMoment = "from Moment m where m.interestBar.id=? and m.status='100' order by m.timestamp";
+
+                    Query qMoment = momentDao.createQuery(hqlMoment);
+
+                    qMoment.setString(0,interestBar.getId());
+
+                    List<Moment> ms = qMoment.list();
+
+                    if (ms.size()>0){
+                        interestBar.setCover(ms.get(0).getImageList().get(0).getThumbnail_url_path());
+                    }else {
+                        interestBar.setCover(momentImage.getThumbnail_url_path());
+                    }
+
                 interestBarDao.saveOrUpdate(interestBar);
             }
 
