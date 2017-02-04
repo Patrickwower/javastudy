@@ -85,10 +85,12 @@ public class MessageServiceImpl extends BaseService<Message> implements IMessage
 
             String momentId = messageAdd.getMomentId();
 
-            Moment moment = momentDao.get(Moment.class,momentId);
+            if (StringUtils.isNotEmpty(momentId)) {
+                Moment moment = momentDao.get(Moment.class,momentId);
 
-            if (moment!=null){
-                message.setMoment(moment);
+                if (moment!=null){
+                    message.setMoment(moment);
+                }
             }
 
             //消息接收人

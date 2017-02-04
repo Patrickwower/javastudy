@@ -72,8 +72,8 @@ public class FollowServiceImpl extends BaseService<MemberFollow> implements IFol
                 messageAdd.setType(MessageCommonConstant.TYPE_FOLLOW);
                 messageAdd.setMomentId(null);
                 messageAdd.setServiceId(follow_id);
-                messageAdd.setSenderId(followed_id);
-                messageAdd.setRecipientId(follow_id);
+                messageAdd.setSenderId(follow_id);
+                messageAdd.setRecipientId(followed_id);
 
                 messageServiceImpl.add(headers,messageAdd);
 
