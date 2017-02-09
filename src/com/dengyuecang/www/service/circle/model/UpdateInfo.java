@@ -9,6 +9,7 @@ public class UpdateInfo {
     private String nickname;
     private String introduction;
     private String sex;
+    private String age;
     private String province;
     private String city;
     private String area;
@@ -68,6 +69,14 @@ public class UpdateInfo {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
     }
 
     public String getCity() {

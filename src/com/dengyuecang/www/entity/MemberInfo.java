@@ -45,6 +45,8 @@ public class MemberInfo implements Serializable{
 	
 	private String gender;
 
+	private String age;
+
 	private String introduction;
 
 	private String province;
@@ -186,6 +188,14 @@ public class MemberInfo implements Serializable{
 
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	public String getAge() {
+		return age;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
 	}
 
 	public String getIntroduction() {

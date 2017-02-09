@@ -123,6 +123,8 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
 
         cMemberResponse.setSex(member.getMemberInfo().getGender()==null?"男":member.getMemberInfo().getGender());
 
+        cMemberResponse.setAge(member.getMemberInfo().getAge());
+
         cMemberResponse.setCity(member.getMemberInfo().getCity()==null?"":member.getMemberInfo().getCity());
 
         cMemberResponse.setSchool(member.getMemberInfo().getSchool()==null?"":member.getMemberInfo().getSchool());
@@ -249,6 +251,10 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
         }
         if (StringUtils.isNotEmpty(updateInfo.getSex())){
             memberInfo.setGender(updateInfo.getSex());
+        }
+
+        if (StringUtils.isNotEmpty(updateInfo.getAge())){
+            memberInfo.setAge(updateInfo.getAge());
         }
 
         if (StringUtils.isNotEmpty(updateInfo.getUsername())){
@@ -436,6 +442,10 @@ public class InformationServiceImpl extends BaseService<MemberInfo> implements I
         //设置性别
 
         memberInfo.setGender(improveInformationRequest.getSex());
+
+        //设置年龄
+
+        memberInfo.setAge(improveInformationRequest.getAge());
 
         //设置头像
 

@@ -47,6 +47,8 @@ public class CommunityMemberResponse {
 
     private String unReadMessageCount;
 
+    private String age;
+
     public CommunityMemberResponse() {
     }
 
@@ -200,5 +202,13 @@ public class CommunityMemberResponse {
 
     public void setUnReadMessageCount(String unReadMessageCount) {
         this.unReadMessageCount = unReadMessageCount;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
     }
 }
