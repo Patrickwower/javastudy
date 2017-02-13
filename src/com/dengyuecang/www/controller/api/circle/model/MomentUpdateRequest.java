@@ -3,7 +3,9 @@ package com.dengyuecang.www.controller.api.circle.model;
 /**
  * Created by acang on 2016/12/14.
  */
-public class MomentPublishRequest {
+public class MomentUpdateRequest {
+
+    private String momentId;
 
     private String content;
 
@@ -16,6 +18,14 @@ public class MomentPublishRequest {
     private String img_width;
 
     private String occurrence_time;
+
+    public String getMomentId() {
+        return momentId;
+    }
+
+    public void setMomentId(String momentId) {
+        this.momentId = momentId;
+    }
 
     public String getContent() {
         return content;

@@ -3,6 +3,7 @@ package com.dengyuecang.www.controller.api.circle;
 import com.dengyuecang.www.controller.api.circle.model.MomentEvaluateRequest;
 import com.dengyuecang.www.controller.api.circle.model.MomentPublishRequest;
 import com.dengyuecang.www.controller.api.circle.model.MomentRequest;
+import com.dengyuecang.www.controller.api.circle.model.MomentUpdateRequest;
 import com.dengyuecang.www.controller.api.circle.model.evaluation.EvaluationRequest;
 import com.dengyuecang.www.service.circle.IMomentService;
 import com.dengyuecang.www.utils.RespCode;
@@ -112,11 +113,11 @@ public class MomentController {
 
     @RequestMapping("/edit")
     @ResponseBody
-    public RespData edit(@RequestHeader HttpHeaders headers, String id, @RequestParam(value="file")MultipartFile file, MomentPublishRequest momentPublishRequest, HttpServletRequest servletRequest){
+    public RespData edit(@RequestHeader HttpHeaders headers, String id, @RequestParam(value="file", required = false)MultipartFile file, MomentUpdateRequest momentUpdateRequest, HttpServletRequest servletRequest){
 
         try {
 
-            return momentServiceImpl.edit(headers,id,file,momentPublishRequest,servletRequest);
+            return momentServiceImpl.edit(headers,id,file,momentUpdateRequest,servletRequest);
 
         }catch (Exception e){
 

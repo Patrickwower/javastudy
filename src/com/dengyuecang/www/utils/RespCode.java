@@ -131,6 +131,14 @@ public class RespCode implements Serializable{
 
 	public static String COMMENT_NOT_CURRENT_MEMBER = "5003";
 
+
+	//动态类异常
+	public static String MOMENT_DELETED = "6001";
+
+	public static String MOMENT_DENIED = "6002";
+
+
+
 	
 	public static String MOBILE_NOVALID="11";
 	
@@ -234,6 +242,16 @@ public class RespCode implements Serializable{
 		respCodeMap.put(COMMENT_NOT_EXIST,new RespCode(COMMENT_NOT_EXIST,"该评论不存在"));
 
 		respCodeMap.put(COMMENT_NOT_CURRENT_MEMBER,new RespCode(COMMENT_NOT_CURRENT_MEMBER,"非当前用户的评论"));
+
+
+
+		//动态类异常描述
+		respCodeMap.put(MOMENT_DELETED,new RespCode(MOMENT_DELETED,"动态已删除"));
+
+		respCodeMap.put(MOMENT_DENIED,new RespCode(MOMENT_DENIED,"无权查看"));
+
+
+
 
 
 		respCodeMap.put(PWD_NEEDED,new RespCode(PWD_NEEDED,"密码不能为空"));

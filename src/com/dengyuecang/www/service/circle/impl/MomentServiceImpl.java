@@ -3,6 +3,7 @@ package com.dengyuecang.www.service.circle.impl;
 import com.dengyuecang.www.controller.api.circle.model.MomentEvaluateRequest;
 import com.dengyuecang.www.controller.api.circle.model.MomentPublishRequest;
 import com.dengyuecang.www.controller.api.circle.model.MomentRequest;
+import com.dengyuecang.www.controller.api.circle.model.MomentUpdateRequest;
 import com.dengyuecang.www.controller.api.circle.model.evaluation.EvaluationRequest;
 import com.dengyuecang.www.entity.Member;
 import com.dengyuecang.www.entity.circle.*;
@@ -103,13 +104,35 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
                 status = momentRequest.getStatus();
             }
 
-            String hql = "from Moment where public_level='0' and status='"+status+"' and timestamp<"+timestamp;
+            String hql = "from Moment where status='"+status+"' and timestamp<"+timestamp;
+
+            String hqlPublicLevel = " and public_level='0' ";
+
+            String hqlSort = " order by timestamp desc ";
 
             if (StringUtils.isNotEmpty(momentRequest.getInterestBar_id())){
-                hql += " and interestBar.id='"+momentRequest.getInterestBar_id()+"' ";
+
+                String interestBarId = momentRequest.getInterestBar_id();
+
+                InterestBar ib = interestBarDao.get(InterestBar.class,interestBarId);
+
+                hql += " and interestBar.id='"+interestBarId+"' ";
+
+                if (ib!=null){
+
+                    if (ib.getCreater().equals(memberId)){
+
+                        hqlPublicLevel = " ";
+
+                    }
+
+                }
+
+                hqlSort = " order by occurrence_timestamp desc ";
+
             }
 
-            hql += " order by timestamp desc ";
+            hql += hqlPublicLevel + hqlSort;
 
             //查询文章列表
             Query q = momentDao.createQuery(hql);
@@ -122,7 +145,7 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             Map<String,Object> response = new HashMap<String,Object>();
 
-            response.put("moments",this.fromMomentToResponse(memberId, moments));
+            response.put("moments",this.fromMomentToResponse(memberId, moments, momentRequest.getInterestBar_id()));
 
             return RespCode.getRespData(RespCode.SUCCESS,response);
 
@@ -191,7 +214,7 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             Map<String,Object> response = new HashMap<String,Object>();
 
-            response.put("moments",this.fromMomentToResponse(memberId, moments));
+            response.put("moments",this.fromMomentToResponse(memberId, moments, null));
 
             return RespCode.getRespData(RespCode.SUCCESS,response);
 
@@ -226,7 +249,7 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
         return null;
     }
 
-    private List<MomentResponse> fromMomentToResponse(String memberId, List<Moment> moments){
+    private List<MomentResponse> fromMomentToResponse(String memberId, List<Moment> moments,String interestBarId){
 
         List<MomentResponse> response = new ArrayList<MomentResponse>();
 
@@ -237,6 +260,14 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
                 MomentResponse momentResponse = new MomentResponse();
 
                 momentResponse = this.momentToresponse(memberId,moment);
+
+                if (StringUtils.isNotEmpty(interestBarId)){
+                    momentResponse.setTimestamp(moment.getOccurrence_timestamp()+"");
+
+                    //返回时间格式
+                    Format f = new SimpleDateFormat("MMM.d,yyyy,h:maa", Locale.ENGLISH);
+                    momentResponse.setDate(f.format(moment.getOccurrence_time()).toUpperCase());
+                }
 
                 response.add(momentResponse);
 
@@ -325,6 +356,16 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
             Member member = memberDao.get(Member.class,memberId);
 
             Moment moment = momentDao.get(Moment.class,momentId);
+
+            //被删除了的
+            if ("200".equals(moment.getStatus())){
+                return RespCode.getRespData(RespCode.MOMENT_DELETED);
+            }
+
+            //非自的且私密的动态
+            if (!memberId.equals(moment.getCreater().getId())&&"1".equals(moment.getPublic_level())){
+                return RespCode.getRespData(RespCode.MOMENT_DENIED);
+            }
 
             MomentResponse momentResponse = this.momentToresponse(memberId,moment);
 
@@ -524,6 +565,28 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
             moment.setStatus("100");
 
+            //设置发生时间
+
+            if (StringUtils.isNotEmpty(momentPublishRequest.getOccurrence_time())){
+
+                String occurrence_time = momentPublishRequest.getOccurrence_time();
+
+                Format f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                Date oc_time = (Date) f.parseObject(occurrence_time);
+
+                moment.setOccurrence_time(oc_time);
+
+                moment.setOccurrence_timestamp(oc_time.getTime());
+
+            }else {
+
+                moment.setOccurrence_time(moment.getCtime());
+
+                moment.setOccurrence_timestamp(moment.getTimestamp());
+
+            }
+
             momentDao.save(moment);
 
             MomentImage momentImage = new MomentImage();
@@ -558,48 +621,93 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
     }
 
     @Override
-    public RespData edit(HttpHeaders headers, String id, MultipartFile file, MomentPublishRequest momentPublishRequest, HttpServletRequest servletRequest) {
+    public RespData edit(HttpHeaders headers, String id, MultipartFile file, MomentUpdateRequest momentUpdateRequest, HttpServletRequest servletRequest) {
 
         try {
 
-//            Moment moment = momentDao.get(Moment.class,id);
-            Moment moment = new Moment();
+            if (StringUtils.isNotEmpty(momentUpdateRequest.getMomentId())){
 
-            moment.setCtime(new Date());
+                String momentId = momentUpdateRequest.getMomentId();
 
-            moment.setTimestamp(System.currentTimeMillis());
+                Moment moment = momentDao.get(Moment.class,momentId);
 
-            moment.setContent(momentPublishRequest.getContent());
+                String content = momentUpdateRequest.getContent();
 
-            InterestBar interestBar = interestBarDao.get(InterestBar.class, id);
+                if (StringUtils.isNotEmpty(content)){
 
-//            String memberId = headers.getFirst("memberId");
+                    moment.setContent(momentUpdateRequest.getContent());
 
-            moment.setPublic_level(momentPublishRequest.getPublic_level());
+                }
 
-            if (interestBar!=null)moment.setInterestBar(interestBar);
+                String interestBarId = momentUpdateRequest.getInterestBarId();
 
-            momentDao.save(moment);
+                if (StringUtils.isNotEmpty(interestBarId)){
 
-            MomentImage momentImage = new MomentImage();
+                    InterestBar interestBar = interestBarDao.get(InterestBar.class,interestBarId);
 
-            momentImage.setMoment(moment);
+                    if (interestBar!=null){
 
-            momentImage.setSort("1");
+                        moment.setInterestBar(interestBar);
 
-            Map<String,String> urls = staticResourceServiceImpl.storeImageForCircleMoment(headers,file,servletRequest,momentPublishRequest.getImg_height(),momentPublishRequest.getImg_width());
+                    }
 
-            momentImage.setSource_url_path(urls.get("source_url"));
+                }
 
-            momentImage.setThumbnail_url_path(urls.get("thumbnail_url"));
+                String public_level = momentUpdateRequest.getPublic_level();
 
-            momentImage.setWidth(momentPublishRequest.getImg_width());
+                if (StringUtils.isNotEmpty(public_level)){
+                    moment.setPublic_level(public_level);
+                }
 
-            momentPublishRequest.setImg_height(momentPublishRequest.getImg_height());
+                String occurrence_time = momentUpdateRequest.getOccurrence_time();
 
-            momentImageDao.save(momentImage);
+                if (StringUtils.isNotEmpty(occurrence_time)){
 
-            return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
+                    Format f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                    Date oc_time = (Date) f.parseObject(occurrence_time);
+
+                    moment.setOccurrence_time(oc_time);
+
+                    moment.setOccurrence_timestamp(oc_time.getTime());
+
+                }
+
+                List<MomentImage> imageList = new ArrayList<MomentImage>();
+
+                if (file!=null){
+
+                    for (MomentImage mi:
+                            moment.getImageList()) {
+
+                        momentImageDao.delete(mi);
+
+                    }
+
+                    MomentImage momentImage = new MomentImage();
+
+                    momentImage.setMoment(moment);
+
+                    momentImage.setSort("1");
+
+                    Map<String,String> urls = staticResourceServiceImpl.storeImageForCircleMoment(headers,file,servletRequest,momentUpdateRequest.getImg_height(),momentUpdateRequest.getImg_width());
+
+                    momentImage.setSource_url_path(urls.get("source_url"));
+
+                    momentImage.setThumbnail_url_path(urls.get("thumbnail_url"));
+
+                    momentImage.setHeight(momentUpdateRequest.getImg_height());
+
+                    momentImage.setWidth(momentUpdateRequest.getImg_width());
+
+                    momentImageDao.save(momentImage);
+
+                }
+
+                momentDao.saveOrUpdate(moment);
+
+                return RespCode.getRespData(RespCode.SUCCESS,new HashMap<String,String>());
+            }
 
         }catch (Exception e){
 

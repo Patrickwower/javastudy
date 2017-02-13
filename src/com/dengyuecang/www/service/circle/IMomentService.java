@@ -3,6 +3,7 @@ package com.dengyuecang.www.service.circle;
 import com.dengyuecang.www.controller.api.circle.model.MomentEvaluateRequest;
 import com.dengyuecang.www.controller.api.circle.model.MomentPublishRequest;
 import com.dengyuecang.www.controller.api.circle.model.MomentRequest;
+import com.dengyuecang.www.controller.api.circle.model.MomentUpdateRequest;
 import com.dengyuecang.www.controller.api.circle.model.evaluation.EvaluationRequest;
 import com.dengyuecang.www.entity.circle.Moment;
 import com.dengyuecang.www.service.circle.model.MomentResponse;
@@ -30,7 +31,7 @@ public interface IMomentService extends IBaseService<Moment>{
     public RespData add(HttpHeaders headers, MultipartFile file, MomentPublishRequest momentPublishRequest, HttpServletRequest servletRequest);
 
     //存有大问题
-    public RespData edit(HttpHeaders headers,String id,MultipartFile file, MomentPublishRequest momentPublishRequest, HttpServletRequest servletRequest);
+    public RespData edit(HttpHeaders headers, String id, MultipartFile file, MomentUpdateRequest momentUpdateRequest, HttpServletRequest servletRequest);
 
     public RespData delete(HttpHeaders headers,String momentId);
 

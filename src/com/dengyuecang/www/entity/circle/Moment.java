@@ -116,4 +116,26 @@ public class Moment implements Serializable{
     public void setStatus(String status) {
         this.status = status;
     }
+
+
+    //两项为发生时间,第二条时间轴
+    private long occurrence_timestamp;
+
+    private Date occurrence_time;
+
+    public long getOccurrence_timestamp() {
+        return occurrence_timestamp;
+    }
+
+    public void setOccurrence_timestamp(long occurrence_timestamp) {
+        this.occurrence_timestamp = occurrence_timestamp;
+    }
+
+    public Date getOccurrence_time() {
+        return occurrence_time;
+    }
+
+    public void setOccurrence_time(Date occurrence_time) {
+        this.occurrence_time = occurrence_time;
+    }
 }

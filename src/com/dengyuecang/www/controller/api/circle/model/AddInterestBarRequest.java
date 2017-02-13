@@ -13,6 +13,8 @@ public class AddInterestBarRequest {
 
     private String detail;
 
+    private String cover_img;
+
     public String getBar_id() {
         return bar_id;
     }
@@ -43,5 +45,13 @@ public class AddInterestBarRequest {
 
     public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    public String getCover_img() {
+        return cover_img;
+    }
+
+    public void setCover_img(String cover_img) {
+        this.cover_img = cover_img;
     }
 }

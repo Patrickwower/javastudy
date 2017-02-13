@@ -1,8 +1,12 @@
 package com.dengyuecang.www.service.circle.impl;
 
+import cn.jiguang.common.utils.StringUtils;
 import com.dengyuecang.www.controller.api.circle.model.AddInterestBarRequest;
+import com.dengyuecang.www.controller.tool.model.FileUploadRequest;
 import com.dengyuecang.www.entity.Member;
+import com.dengyuecang.www.entity.StaticResource;
 import com.dengyuecang.www.entity.circle.*;
+import com.dengyuecang.www.service.IStaticResourceService;
 import com.dengyuecang.www.service.circle.IInterestBarService;
 import com.dengyuecang.www.service.circle.common.InterestBarCommonConstant;
 import com.dengyuecang.www.service.circle.model.MomentInterest;
@@ -13,8 +17,10 @@ import com.longinf.lxcommon.service.BaseService;
 import org.hibernate.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -37,6 +43,9 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
 
     @Resource(name="hibernateBaseDao")
     private BaseDao<InterestType> interestTypeDao;
+
+    @Resource
+    private IStaticResourceService staticResourceServiceImpl;
 
     @Override
     public BaseDao<InterestBar> getSuperDao() {
@@ -95,7 +104,11 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
 
         interestBar.setTimestamp(System.currentTimeMillis());
 
-        interestBar.setImg_url(prepareInterestBarCover(memberId));
+        if (StringUtils.isNotEmpty(addInterestBarRequest.getCover_img())){
+            interestBar.setImg_url(addInterestBarRequest.getCover_img());
+        }else {
+            interestBar.setImg_url(prepareInterestBarCover(memberId));
+        }
 
         interestBar.setStatus("100");
 
@@ -107,6 +120,39 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
 
         return RespCode.getRespData(RespCode.SUCCESS,response);
 
+    }
+
+    /**
+     * 保存头像
+     */
+    private String saveCover(HttpHeaders headers, MultipartFile file, HttpServletRequest servletRequest){
+
+        FileUploadRequest fileUploadRequest = new FileUploadRequest();
+
+        fileUploadRequest.setType("image");
+
+        fileUploadRequest.setUsefor("circle/interestBar");
+
+        RespData rd = staticResourceServiceImpl.imgUpload(headers,file,servletRequest,fileUploadRequest);
+
+        StaticResource sr = (StaticResource)rd.getData();
+
+        return sr.getUrlPath();
+    }
+
+    @Override
+    public RespData addInterestBar(HttpHeaders headers, MultipartFile file, HttpServletRequest servletRequest, AddInterestBarRequest addInterestBarRequest) {
+
+        if (file!=null){
+
+            String cover_img = this.saveCover(headers,file,servletRequest);
+            addInterestBarRequest.setCover_img(cover_img);
+
+        }else {
+            addInterestBarRequest.setCover_img("");
+        }
+
+        return this.addInterestBar(headers, addInterestBarRequest);
     }
 
     @Override
@@ -155,6 +201,11 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
         }
 
         Random r = new Random();
+
+        if (imgs.size()==0){
+            imgs.addAll(InterestBarCommonConstant.INTEREST_BAR_COVER);
+            return imgs.get(r.nextInt(imgs.size()));
+        }
 
         return imgs.get(r.nextInt(imgs.size()));
     }
@@ -234,17 +285,32 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
 
         interestBar.setTypes(typeSet);
 
-        interestBar.setCreater(memberId);
+        if (StringUtils.isNotEmpty(addInterestBarRequest.getCover_img())){
+            interestBar.setImg_url(addInterestBarRequest.getCover_img());
+        }else {
+            interestBar.setImg_url(prepareInterestBarCover(memberId));
+        }
 
-        interestBar.setCtime(new Date());
-
-        interestBar.setTimestamp(System.currentTimeMillis());
-
-        interestBarDao.save(interestBar);
+        interestBarDao.saveOrUpdate(interestBar);
 
         Map<String,Object> response = new HashMap<String,Object>();
 
         return RespCode.getRespData(RespCode.SUCCESS,response);
+    }
+
+    @Override
+    public RespData update(HttpHeaders headers, MultipartFile file, HttpServletRequest servletRequest, AddInterestBarRequest addInterestBarRequest) {
+
+        if (file!=null){
+
+            String cover_img = this.saveCover(headers,file,servletRequest);
+            addInterestBarRequest.setCover_img(cover_img);
+
+        }else {
+            addInterestBarRequest.setCover_img("");
+        }
+
+        return this.update(headers,addInterestBarRequest);
     }
 
     public RespData detail(HttpHeaders headers, AddInterestBarRequest addInterestBarRequest){

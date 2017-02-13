@@ -5,12 +5,12 @@ import com.dengyuecang.www.service.circle.IInterestBarService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by acang on 16/7/11.
@@ -25,10 +25,10 @@ public class InterestBarController {
 
     @RequestMapping("/add")
     @ResponseBody
-    public RespData add(@RequestHeader HttpHeaders headers, AddInterestBarRequest addInterestBarRequest){
+    public RespData add(@RequestHeader HttpHeaders headers, @RequestParam(value = "file", required = false) MultipartFile file, HttpServletRequest servletRequest, AddInterestBarRequest addInterestBarRequest){
 
         try {
-            return interestBarServiceImpl.addInterestBar(headers,addInterestBarRequest);
+            return interestBarServiceImpl.addInterestBar(headers,file,servletRequest,addInterestBarRequest);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -66,11 +66,11 @@ public class InterestBarController {
 
     @RequestMapping("/update")
     @ResponseBody
-    public RespData update(@RequestHeader HttpHeaders headers, AddInterestBarRequest addInterestBarRequest){
+    public RespData update(@RequestHeader HttpHeaders headers,@RequestParam(value = "file", required = false) MultipartFile file, HttpServletRequest servletRequest, AddInterestBarRequest addInterestBarRequest){
 
         try {
 
-            return interestBarServiceImpl.update(headers, addInterestBarRequest);
+            return interestBarServiceImpl.update(headers,file,servletRequest, addInterestBarRequest);
 
         }catch (Exception e){
             e.printStackTrace();
