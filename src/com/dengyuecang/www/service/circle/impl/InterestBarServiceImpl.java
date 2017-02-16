@@ -105,14 +105,17 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
         interestBar.setTimestamp(System.currentTimeMillis());
 
         if (StringUtils.isNotEmpty(addInterestBarRequest.getCover_img())){
+
             interestBar.setImg_url(addInterestBarRequest.getCover_img());
+            interestBar.setCover(addInterestBarRequest.getCover_img());
+
         }else {
+
             interestBar.setImg_url(prepareInterestBarCover(memberId));
+
         }
 
         interestBar.setStatus("100");
-
-        interestBar.setCover("");
 
         interestBarDao.save(interestBar);
 
@@ -287,6 +290,7 @@ public class InterestBarServiceImpl extends BaseService<InterestBar> implements 
 
         if (StringUtils.isNotEmpty(addInterestBarRequest.getCover_img())){
             interestBar.setImg_url(addInterestBarRequest.getCover_img());
+            interestBar.setCover(addInterestBarRequest.getCover_img());
         }else {
             interestBar.setImg_url(prepareInterestBarCover(memberId));
         }

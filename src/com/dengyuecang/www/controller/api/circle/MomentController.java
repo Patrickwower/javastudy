@@ -8,6 +8,8 @@ import com.dengyuecang.www.controller.api.circle.model.evaluation.EvaluationRequ
 import com.dengyuecang.www.service.circle.IMomentService;
 import com.dengyuecang.www.utils.RespCode;
 import com.dengyuecang.www.utils.RespData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/api/circle/moment")
 public class MomentController {
 
+    private static final Logger log = LoggerFactory.getLogger(MomentController.class);
+
     @Resource
     private IMomentService momentServiceImpl;
 
@@ -33,6 +37,7 @@ public class MomentController {
     public RespData list(@RequestHeader HttpHeaders headers, MomentRequest momentRequest) {
 
         try {
+            log.info("查询动态列表");
             return momentServiceImpl.queryList(headers, momentRequest);
         } catch (Exception e) {
             e.printStackTrace();

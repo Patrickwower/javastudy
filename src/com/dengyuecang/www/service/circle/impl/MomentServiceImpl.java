@@ -293,6 +293,7 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
 
         MomentInterest momentInterest = new MomentInterest();
 
+        momentResponse.setPublic_level(moment.getPublic_level());
 
         momentResponse.setCoverimg(moment.getImageList().get(0).getThumbnail_url_path());
         momentResponse.setTimestamp(moment.getTimestamp()+"");
@@ -674,7 +675,7 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
                 }
 
                 List<MomentImage> imageList = new ArrayList<MomentImage>();
-
+System.out.println("file是:"+file);
                 if (file!=null){
 
                     for (MomentImage mi:

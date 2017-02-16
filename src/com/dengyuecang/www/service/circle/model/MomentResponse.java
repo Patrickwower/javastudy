@@ -32,6 +32,8 @@ public class MomentResponse {
 
     private String ifComment;
 
+    private String public_level;
+
     public String getMomentId() {
         return momentId;
     }
@@ -126,5 +128,13 @@ public class MomentResponse {
 
     public void setIfComment(String ifComment) {
         this.ifComment = ifComment;
+    }
+
+    public String getPublic_level() {
+        return public_level;
+    }
+
+    public void setPublic_level(String public_level) {
+        this.public_level = public_level;
     }
 }
