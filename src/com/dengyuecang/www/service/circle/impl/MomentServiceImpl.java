@@ -265,7 +265,7 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
                     momentResponse.setTimestamp(moment.getOccurrence_timestamp()+"");
 
                     //返回时间格式
-                    Format f = new SimpleDateFormat("MMM.d,yyyy,h:maa", Locale.ENGLISH);
+                    Format f = new SimpleDateFormat("MMM.d,yyyy,hh:mmaa", Locale.ENGLISH);
                     momentResponse.setDate(f.format(moment.getOccurrence_time()).toUpperCase());
                 }
 
@@ -299,7 +299,7 @@ public class MomentServiceImpl extends BaseService<Moment> implements IMomentSer
         momentResponse.setTimestamp(moment.getTimestamp()+"");
 
         //返回时间格式
-        Format f = new SimpleDateFormat("MMM.d,yyyy,h:maa", Locale.ENGLISH);
+        Format f = new SimpleDateFormat("MMM.d,yyyy,hh:mmaa", Locale.ENGLISH);
         momentResponse.setDate(f.format(moment.getCtime()).toUpperCase());
 
 

@@ -100,9 +100,9 @@ public class StaticResourceImpl extends BaseService<StaticResource> implements I
 
 			int width = Integer.valueOf(img_width);
 
-			double scale_height = (double)690/height;
+			double scale_height = (double)640/height;
 
-			double scale_width = (double)690/width;
+			double scale_width = (double)640/width;
 
 			Double scale = scale_width;
 
@@ -110,7 +110,7 @@ public class StaticResourceImpl extends BaseService<StaticResource> implements I
 				scale = scale_height;
 			}
 
-			ImgUtils.setFromToScaleHW(source_path, thumbnail_path, String.valueOf(scale), "690", "690");
+			ImgUtils.setFromToScaleHW(source_path, thumbnail_path, String.valueOf(scale), "640", "640");
 
 		} catch (Exception e) {
 			e.printStackTrace();
